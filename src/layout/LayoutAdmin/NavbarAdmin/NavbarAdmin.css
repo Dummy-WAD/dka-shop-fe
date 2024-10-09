@@ -1,0 +1,9 @@
+#navbar-admin {
+  .logo {
+    width: 100px;
+  }
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
+}
