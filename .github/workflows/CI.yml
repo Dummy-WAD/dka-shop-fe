@@ -66,7 +66,7 @@ jobs:
           echo "ECR_CLIENT_URL=${{ env.ECR_CLIENT_URL }}" >> envfe
           echo "BRANCH=${{ env.BRANCH }}" >> envfe
           echo "SHA=${{ env.SHA }}" >> envfe
-          echo "FRONTEND_PORT=${{ env.PORT }}" >> envfe
+          echo "FRONTEND_PORT=${{ env.FRONTEND_PORT }}" >> envfe
         continue-on-error: false
 
       - name: Build Front-end Client
