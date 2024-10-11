@@ -1,0 +1,107 @@
+name: CI Phase
+
+on:
+  workflow_call:
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      ECR_URL:
+        required: true
+      ECR_CLIENT_URL:
+        required: true
+      VITE_BACKEND_URL:
+        required: true
+      VITE_REDIRECT_URI:
+        required: true
+      VITE_TOKEN_URL:
+        required: true
+      AWS_S3_BUCKET:
+        required: true
+      FRONTEND_PORT:
+        required: true
+
+jobs:
+  build_artifact:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+      ECR_URL: ${{ secrets.ECR_URL }}
+      ECR_CLIENT_URL: ${{ secrets.ECR_CLIENT_URL }}
+      VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL }}
+      VITE_REDIRECT_URI: ${{ secrets.VITE_REDIRECT_URI }}
+      VITE_TOKEN_URL: ${{ secrets.VITE_TOKEN_URL }}
+      FRONTEND_PORT: ${{ secrets.FRONTEND_PORT }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: benjlevesque/short-sha@v3.0
+        id: short-sha
+        with:
+          length: 6
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
+      - name: Check Docker version
+        run: docker --version
+
+      - name: Pre-build Client
+        run: |
+          envsubst < .env.example > .env
+          cat .env
+
+      - name: Build artifact
+        env:
+          SHA: ${{ steps.short-sha.outputs.sha }}
+          BRANCH: ${{ steps.extract_branch.outputs.branch }}
+        run: |
+          touch envfe
+          echo "ECR_CLIENT_URL=${{ env.ECR_CLIENT_URL }}" >> envfe
+          echo "BRANCH=${{ env.BRANCH }}" >> envfe
+          echo "SHA=${{ env.SHA }}" >> envfe
+          echo "FRONTEND_PORT=${{ env.PORT }}" >> envfe
+        continue-on-error: false
+
+      - name: Build Front-end Client
+        env:
+          SHA: ${{ steps.short-sha.outputs.sha }}
+          BRANCH: ${{ steps.extract_branch.outputs.branch }}
+        run: |
+          pwd
+          ls -la 
+          docker build -t dek_client:"${{ env.BRANCH }}-${{ env.SHA }}" .
+          docker tag dek_client:"${{ env.BRANCH }}-${{ env.SHA }}" "${{ env.ECR_CLIENT_URL }}":"${{ env.BRANCH }}-${{ env.SHA }}"
+          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ env.ECR_URL }}
+          docker push "${{ env.ECR_CLIENT_URL }}:${{ env.BRANCH }}-${{ env.SHA }}"
+        continue-on-error: false
+
+      - uses: hkusu/s3-upload-action@v2
+        env:
+          BRANCH: ${{ steps.extract_branch.outputs.branch }}
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "ap-northeast-1"
+          aws-bucket: ${{ env.AWS_S3_BUCKET }}
+          file-path: "envfe"
+          destination-dir: "${{ env.BRANCH }}/"
+          bucket-root: "/"
+
+      - uses: hkusu/s3-upload-action@v2
+        env:
+          BRANCH: ${{ steps.extract_branch.outputs.branch }}
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "ap-northeast-1"
+          aws-bucket: ${{ env.AWS_S3_BUCKET }}
+          file-path: "docker-compose-fe.yml"
+          destination-dir: "${{ env.BRANCH }}/"
+          bucket-root: "/"
