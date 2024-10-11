@@ -26,23 +26,20 @@ jobs:
         run: docker --version
 
       - name: Remote SSH to deploy
+        env:
+          SHA: ${{ steps.short-sha.outputs.sha }}
+          BRANCH: ${{ steps.extract_branch.outputs.branch }}
         uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ secrets.RUNNER_HOST }}
           username: ${{ secrets.RUNNER_USERNAME }}
           password: ${{ secrets.RUNNER_PASSWORD }}
           port: 22
-          script: whoami
-
-      - name: Deploy
-        env:
-          SHA: ${{ steps.short-sha.outputs.sha }}
-          BRANCH: ${{ steps.extract_branch.outputs.branch }}
-        run: |
-          pwd
-          cd /etc/actions-runner/CNPM/dka-shop-fe/dka-shop-fe
-          mkdir -p ${{ env.BRANCH }}
-          aws s3api get-object --bucket ${{ env.AWS_S3_BUCKET }} --key ${{ env.BRANCH }}/docker-compose-fe.yml ${{ env.BRANCH }}/docker-compose-fe.yml
-          aws s3api get-object --bucket ${{ env.AWS_S3_BUCKET }} --key ${{ env.BRANCH }}/envfe ${{ env.BRANCH }}/envfe
-          cd ${{ env.BRANCH }}
-          docker compose -f docker-compose-fe.yml --env-file envfe up -d --build
+          script: |
+            pwd
+            cd /etc/actions-runner/CNPM/dka-shop-fe/dka-shop-fe
+            mkdir -p ${{ env.BRANCH }}
+            aws s3api get-object --bucket ${{ env.AWS_S3_BUCKET }} --key ${{ env.BRANCH }}/docker-compose-fe.yml ${{ env.BRANCH }}/docker-compose-fe.yml
+            aws s3api get-object --bucket ${{ env.AWS_S3_BUCKET }} --key ${{ env.BRANCH }}/envfe ${{ env.BRANCH }}/envfe
+            cd ${{ env.BRANCH }}
+            docker compose -f docker-compose-fe.yml --env-file envfe up -d --build
