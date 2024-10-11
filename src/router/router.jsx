@@ -5,6 +5,7 @@ import LayoutAdmin from "../layout/LayoutAdmin/LayoutAdmin";
 import LayoutUser from "../layout/LayoutUser/LayoutUser";
 import Login from "../pages/Login/Login";
 import Error from "../pages/Error/Error";
+import SignUp from "../pages/SignUp/SignUp";
 
 const router = createBrowserRouter(
   [
@@ -21,6 +22,10 @@ const router = createBrowserRouter(
           path: "login",
           element: <Login />,
         },
+          {
+              path: "signup",
+              element: <SignUp />
+          }
       ],
     },
     {
