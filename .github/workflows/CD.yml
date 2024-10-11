@@ -30,11 +30,9 @@ jobs:
           SHA: ${{ steps.short-sha.outputs.sha }}
           BRANCH: ${{ steps.extract_branch.outputs.branch }}
         run: |
-          echo ${{ env.BRANCH }}
-        # run: |
-        #   pwd
-        #   mkdir -p ${{ env.BRANCH }}
-        #   aws s3api get-object --bucket ${{ env.AWS_S3_BUCKET }} --key ${{ env.BRANCH }}/docker-compose-be.yml ${{ env.BRANCH }}/docker-compose-be.yml
-        #   aws s3api get-object --bucket ${{ env.AWS_S3_BUCKET }} --key ${{ env.BRANCH }}/envbe ${{ env.BRANCH }}/envbe
-        #   cd ${{ env.BRANCH }}
-        #   docker compose -f docker-compose-be.yml --env-file envbe up -d --build
+          pwd
+          mkdir -p ${{ env.BRANCH }}
+          aws s3api get-object --bucket ${{ env.AWS_S3_BUCKET }} --key ${{ env.BRANCH }}/docker-compose-fe.yml ${{ env.BRANCH }}/docker-compose-fe.yml
+          aws s3api get-object --bucket ${{ env.AWS_S3_BUCKET }} --key ${{ env.BRANCH }}/envfe ${{ env.BRANCH }}/envfe
+          cd ${{ env.BRANCH }}
+          docker compose -f docker-compose-fe.yml --env-file envfe up -d --build
