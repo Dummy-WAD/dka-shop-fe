@@ -1,0 +1,84 @@
+name: CICD Trigger
+
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
+
+jobs:
+  test-CI:
+    if: github.ref == 'refs/heads/CI-CD-Testing'
+    uses: Dummy-WAD/dka-shop-fe/.github/workflows/CI.yml@CI-CD-Pipeline
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      ECR_URL: ${{ secrets.ECR_URL }}
+      ECR_CLIENT_URL: ${{ secrets.ECR_CLIENT_URL }}
+      VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL_DEV }}
+      VITE_REDIRECT_URI: ${{ secrets.VITE_REDIRECT_URI_DEV }}
+      VITE_TOKEN_URL: ${{ secrets.VITE_TOKEN_URL_DEV }}
+      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+      FRONTEND_PORT: ${{ secrets.FRONTEND_PORT_DEV }}
+  test-CD:
+    if: github.ref == 'refs/heads/CI-CD-Testing'
+    needs: test-CI
+    uses: Dummy-WAD/dka-shop-fe/.github/workflows/CD.yml@CI-CD-Pipeline
+    secrets: inherit
+
+  dev-CI:
+    if: github.ref == 'refs/heads/develop'
+    uses: Dummy-WAD/dka-shop-fe/.github/workflows/CI.yml@CI-CD-Pipeline
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      ECR_URL: ${{ secrets.ECR_URL }}
+      ECR_CLIENT_URL: ${{ secrets.ECR_CLIENT_URL }}
+      VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL_DEV }}
+      VITE_REDIRECT_URI: ${{ secrets.VITE_REDIRECT_URI_DEV }}
+      VITE_TOKEN_URL: ${{ secrets.VITE_TOKEN_URL_DEV }}
+      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_DEV }}
+      FRONTEND_PORT: ${{ secrets.FRONTEND_PORT_DEV }}
+  dev-CD:
+    if: github.ref == 'refs/heads/develop'
+    needs: dev-CI
+    uses: Dummy-WAD/dka-shop-fe/.github/workflows/CD.yml@CI-CD-Pipeline
+    secrets: inherit
+
+  staging-CI:
+    if: github.ref == 'refs/heads/staging'
+    uses: Dummy-WAD/dka-shop-fe/.github/workflows/CI.yml@CI-CD-Pipeline
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      ECR_URL: ${{ secrets.ECR_URL }}
+      ECR_CLIENT_URL: ${{ secrets.ECR_CLIENT_URL }}
+      VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL_STAGING }}
+      VITE_REDIRECT_URI: ${{ secrets.VITE_REDIRECT_URI_STAGING }}
+      VITE_TOKEN_URL: ${{ secrets.VITE_TOKEN_URL_STAGING }}
+      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_STAGING }}
+      FRONTEND_PORT: ${{ secrets.FRONTEND_PORT_STAGING }}
+  staging-CD:
+    if: github.ref == 'refs/heads/staging'
+    needs: staging-CI
+    uses: Dummy-WAD/dka-shop-fe/.github/workflows/CD.yml@CI-CD-Pipeline
+    secrets: inherit
+
+  prod-CI:
+    if: github.ref == 'refs/heads/main'
+    uses: Dummy-WAD/dka-shop-fe/.github/workflows/CI.yml@CI-CD-Pipeline
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      ECR_URL: ${{ secrets.ECR_URL }}
+      ECR_CLIENT_URL: ${{ secrets.ECR_CLIENT_URL }}
+      VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL }}
+      VITE_REDIRECT_URI: ${{ secrets.VITE_REDIRECT_URI }}
+      VITE_TOKEN_URL: ${{ secrets.VITE_TOKEN_URL }}
+      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+      FRONTEND_PORT: ${{ secrets.FRONTEND_PORT }}
+  prod-CD:
+    if: github.ref == 'refs/heads/main'
+    needs: prod-CI
+    uses: Dummy-WAD/dka-shop-fe/.github/workflows/CD.yml@CI-CD-Pipeline
+    secrets: inherit
