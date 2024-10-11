@@ -1,0 +1,15 @@
+services:
+  frontend:
+    image: $ECR_CLIENT_URL:$BRANCH-$SHA
+    container_name: frontend
+    working_dir: /app
+    ports:
+      - $FRONTEND_PORT:80
+    env_file:
+      - envfe
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
