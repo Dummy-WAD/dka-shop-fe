@@ -36,8 +36,9 @@ jobs:
           password: ${{ secrets.RUNNER_PASSWORD }}
           port: 22
           script: |
-            pwd
+            whoami
             cd /etc/actions-runner/CNPM/dka-shop-fe/dka-shop-fe
+            pwd
             mkdir -p ${{ env.BRANCH }}
             aws s3api get-object --bucket ${{ env.AWS_S3_BUCKET }} --key ${{ env.BRANCH }}/docker-compose-fe.yml ${{ env.BRANCH }}/docker-compose-fe.yml
             aws s3api get-object --bucket ${{ env.AWS_S3_BUCKET }} --key ${{ env.BRANCH }}/envfe ${{ env.BRANCH }}/envfe
