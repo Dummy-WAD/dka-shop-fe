@@ -1,0 +1,133 @@
+.header-signup {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 24px 100px;
+  display: flex;
+  justify-content: space-between;
+}
+.header-signup > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+.header-signup > div:last-child > a {
+  text-decoration: none;
+  color: rgba(234, 88, 12, 1);
+}
+hr {
+  margin: 0;
+}
+.main-container-signup {
+  max-width: 550px;
+  margin: 0 auto;
+  height: 100%;
+  padding: 10px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.container-form-signup {
+  width: 100%;
+  height: 100%;
+  padding: 10px 30px;
+}
+.main-container-signup .logo {
+  width: 350px;
+  height: 120px;
+}
+.main-container-signup .logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.main-container-signup .title {
+  font-size: 24px;
+  font-weight: 500;
+  text-align: center;
+}
+.container-form-signup .form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.container-form-signup .form .container-item-input {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 3px;
+}
+#div-name {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  width: 100%;
+}
+#div-name > div {
+  width: 50%;
+}
+#div-name > div > input {
+  width: 100%;
+  height: 50px;
+  border-radius: 12px;
+  border: 1px solid #bdbdbd;
+  padding-left: 15px;
+  font-size: 14px;
+  line-height: 24px;
+  font-family: "poppins", sans-serif;
+  font-weight: 500;
+  color: rgba(102, 102, 102, 1);
+  &:focus {
+    outline: none;
+  }
+}
+#div-name > div > label {
+  font-size: 15px;
+  font-weight: 400;
+  color: rgb(33, 33, 33);
+}
+.container-form-signup .form .container-item-input > input {
+  width: 100%;
+  height: 50px;
+  border-radius: 12px;
+  border: 1px solid #bdbdbd;
+  padding-left: 15px;
+  font-size: 14px;
+  line-height: 24px;
+  font-family: "poppins", sans-serif;
+  font-weight: 500;
+  color: rgba(102, 102, 102, 1);
+  &:focus {
+    outline: none;
+  }
+}
+.container-form-signup .form .container-item-input > label {
+  font-size: 15px;
+  font-weight: 400;
+  color: rgb(33, 33, 33);
+}
+.container-form-signup .form button {
+  width: 100%;
+  height: 50px;
+  border-radius: 15px;
+  background-color: #c3c3c3;
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  margin-top: 10px;
+  border: none;
+  outline: none;
+  &:hover {
+    background-color: rgba(234, 88, 12, 1);
+  }
+}
+.error-message {
+  color: red;
+  font-size: 0.875em;
+  margin-top: 0.25em;
+}

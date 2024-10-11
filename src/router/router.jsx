@@ -3,9 +3,11 @@ import LayoutUser from "../layout/LayoutUser";
 import CreateCategory from "../pages/CreateCategory/CreateCategory";
 import Home from "../pages/Home/Home";
 import LayoutAdmin from "../layout/LayoutAdmin/LayoutAdmin";
+import SignUp from "../pages/SignUp/SignUp";
 
 const routes = [
   { path: "/", page: Home, layout: LayoutUser },
+  { path: "/signup", page: SignUp },
   { path: "/admin/create-category", page: CreateCategory, layout: LayoutAdmin },
 ];
 
