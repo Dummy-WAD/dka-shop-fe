@@ -37,7 +37,7 @@ jobs:
       VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL_DEV }}
       VITE_REDIRECT_URI: ${{ secrets.VITE_REDIRECT_URI_DEV }}
       VITE_TOKEN_URL: ${{ secrets.VITE_TOKEN_URL_DEV }}
-      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_DEV }}
+      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
       FRONTEND_PORT: ${{ secrets.FRONTEND_PORT_DEV }}
   dev-CD:
     if: github.ref == 'refs/heads/develop'
@@ -56,7 +56,7 @@ jobs:
       VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL_STAGING }}
       VITE_REDIRECT_URI: ${{ secrets.VITE_REDIRECT_URI_STAGING }}
       VITE_TOKEN_URL: ${{ secrets.VITE_TOKEN_URL_STAGING }}
-      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_STAGING }}
+      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
       FRONTEND_PORT: ${{ secrets.FRONTEND_PORT_STAGING }}
   staging-CD:
     if: github.ref == 'refs/heads/staging'
