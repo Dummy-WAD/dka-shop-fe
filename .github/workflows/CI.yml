@@ -54,9 +54,7 @@ jobs:
 
       - name: Pre-build Client
         run: |
-          cd client
           envsubst < .env.example > .env
-          echo "VITE_BASE_URL=" >> .env
           cat .env
 
       - name: Build client
@@ -64,7 +62,6 @@ jobs:
           SHA: ${{ steps.short-sha.outputs.sha }}
           BRANCH: ${{ steps.extract_branch.outputs.branch }}
         run: |
-          cd client
           docker build -t star_client:"${{ env.BRANCH }}-${{ env.SHA }}" .
           docker tag star_client:"${{ env.BRANCH }}-${{ env.SHA }}" "${{ env.ECR_CLIENT_URL }}":"${{ env.BRANCH }}-${{ env.SHA }}"
           aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ env.ECR_URL }}
