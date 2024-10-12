@@ -2,25 +2,33 @@ import { BackIcon } from "../../icon/Icon";
 import { Formik } from "formik";
 import "./SignUp.css";
 import logo from "../../assets/logo.png";
+import { handeSignUp } from "../../api/user";
+import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
+import { email, password, phoneNumber } from "../../validator/index";
 const SignUp = () => {
-  const testEmailRegex = (email) => {
-    const emailRegex = /^[\w.+-]+@([\w-]+\.)+[\w-]{2,4}$/;
-    return emailRegex.test(email);
-  };
-
-  const testPasswordRegex = (password) => {
-    const regexPassword =
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,}$/;
-    return regexPassword.test(password);
-  };
-
-  const validatePhoneNumberWithRegex = (phoneNumber) => {
-    const regexPhoneNumber = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
-    return regexPhoneNumber.test(phoneNumber);
-  };
+  const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
-    console.log(values);
+    try {
+      const response = await handeSignUp(values);
+      if (response) {
+        toast.success("Sign up successfully!");
+        navigate("/login");
+      }
+    } catch (error) {
+      switch (error.response.status) {
+        case 400:
+          toast.error("Bad request!");
+          break;
+        case 409:
+          toast.error("Email already exists!");
+          break;
+        default:
+          toast.error("Sign up failed!");
+          break;
+      }
+    }
   };
 
   return (
@@ -31,7 +39,7 @@ const SignUp = () => {
           <span>Back</span>
         </div>
         <div>
-          Already have an account? <a href="">Login</a>
+          Already have an account? <Link to="/login">Login</Link>
         </div>
       </div>
       <hr />
@@ -68,21 +76,21 @@ const SignUp = () => {
               // Validate email
               if (!values.email) {
                 errors.email = "Email is required.";
-              } else if (!testEmailRegex(values.email)) {
+              } else if (!email(values.email)) {
                 errors.email = "Invalid email format.";
               }
 
               // Validate phone number
               if (!values.phoneNumber) {
                 errors.phoneNumber = "Phone number is required.";
-              } else if (!validatePhoneNumberWithRegex(values.phoneNumber)) {
+              } else if (!phoneNumber(values.phoneNumber)) {
                 errors.phoneNumber = "Invalid phone number.";
               }
 
               // Validate password
               if (!values.password) {
                 errors.password = "Password is required.";
-              } else if (!testPasswordRegex(values.password)) {
+              } else if (!password(values.password)) {
                 errors.password =
                   "Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, one number, and one special character.";
               }
@@ -110,7 +118,9 @@ const SignUp = () => {
               <form className="form" onSubmit={handleSubmit}>
                 <div id="div-name">
                   <div className="container-item-input">
-                    <label htmlFor="firstName">First Name</label>
+                    <label htmlFor="firstName">
+                      First Name <span className="text-required">*</span>
+                    </label>
                     <input
                       type="text"
                       name="firstName"
@@ -125,7 +135,9 @@ const SignUp = () => {
                     )}
                   </div>
                   <div className="container-item-input">
-                    <label htmlFor="lastName">Last Name</label>
+                    <label htmlFor="lastName">
+                      Last Name <span className="text-required">*</span>
+                    </label>
                     <input
                       type="text"
                       name="lastName"
@@ -141,7 +153,9 @@ const SignUp = () => {
                   </div>
                 </div>
                 <div className="container-item-input">
-                  <label htmlFor="email">Email</label>
+                  <label htmlFor="email">
+                    Email <span className="text-required">*</span>
+                  </label>
                   <input
                     type="email"
                     name="email"
@@ -156,7 +170,9 @@ const SignUp = () => {
                   )}
                 </div>
                 <div className="container-item-input">
-                  <label htmlFor="phoneNumber">Phone number</label>
+                  <label htmlFor="phoneNumber">
+                    Phone number <span className="text-required">*</span>
+                  </label>
                   <input
                     type="text"
                     name="phoneNumber"
@@ -171,7 +187,9 @@ const SignUp = () => {
                   )}
                 </div>
                 <div className="container-item-input">
-                  <label htmlFor="password">Password</label>
+                  <label htmlFor="password">
+                    Password <span className="text-required">*</span>
+                  </label>
                   <input
                     type="password"
                     name="password"
@@ -186,7 +204,9 @@ const SignUp = () => {
                   )}
                 </div>
                 <div className="container-item-input">
-                  <label htmlFor="confirmPassword">Confirm Password</label>
+                  <label htmlFor="confirmPassword">
+                    Confirm Password <span className="text-required">*</span>
+                  </label>
                   <input
                     type="password"
                     name="confirmPassword"

@@ -36,8 +36,8 @@ hr {
   padding: 10px 30px;
 }
 .main-container-signup .logo {
-  width: 350px;
-  height: 120px;
+  width: 250px;
+  height: 100px;
 }
 .main-container-signup .logo img {
   width: 100%;
@@ -45,7 +45,7 @@ hr {
   object-fit: cover;
 }
 .main-container-signup .title {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 500;
   text-align: center;
 }
@@ -130,4 +130,7 @@ hr {
   color: red;
   font-size: 0.875em;
   margin-top: 0.25em;
+}
+.text-required {
+  color: red;
 }
