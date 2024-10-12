@@ -13,4 +13,8 @@ const handleCreateAccessToken = (refresh_token) => {
   });
 };
 
-export { handleLogin, handleCreateAccessToken };
+const handeSignUp = (data) => {
+  return axiosInstance.post("/auth/sign-up", data);
+};
+
+export { handleLogin, handleCreateAccessToken, handeSignUp };

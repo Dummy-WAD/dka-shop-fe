@@ -215,3 +215,5 @@ ChartIcon.propTypes = iconPropTypes;
 SearchIcon.propTypes = iconPropTypes;
 NotificationIcon.propTypes = iconPropTypes;
 BackIcon.propTypes = iconPropTypes;
+UserRegularIcon.propTypes = iconPropTypes;
+CartIcon.propTypes = iconPropTypes;

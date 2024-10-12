@@ -1,48 +1,56 @@
 import { BackIcon } from "../../icon/Icon";
 import { Formik } from "formik";
-import "./SignUp.css";
 import logo from "../../assets/logo.png";
+import { handeSignUp } from "../../api/user";
+import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
+import { email, password, phoneNumber } from "../../validator/index";
+import styles from "./SignUp.module.css";
 const SignUp = () => {
-  const testEmailRegex = (email) => {
-    const emailRegex = /^[\w.+-]+@([\w-]+\.)+[\w-]{2,4}$/;
-    return emailRegex.test(email);
-  };
-
-  const testPasswordRegex = (password) => {
-    const regexPassword =
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,}$/;
-    return regexPassword.test(password);
-  };
-
-  const validatePhoneNumberWithRegex = (phoneNumber) => {
-    const regexPhoneNumber = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
-    return regexPhoneNumber.test(phoneNumber);
-  };
+  const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
-    console.log(values);
+    try {
+      const response = await handeSignUp(values);
+      if (response) {
+        toast.success("Sign up successfully!");
+        navigate("/login");
+      }
+    } catch (error) {
+      switch (error.response.status) {
+        case 400:
+          toast.error("Bad request!");
+          break;
+        case 409:
+          toast.error("Email already exists!");
+          break;
+        default:
+          toast.error("Sign up failed!");
+          break;
+      }
+    }
   };
 
   return (
     <>
-      <div className="header-signup">
+      <div className={styles.headerSignup}>
         <div>
           <BackIcon />
           <span>Back</span>
         </div>
         <div>
-          Already have an account? <a href="">Login</a>
+          Already have an account? <Link to="/login">Login</Link>
         </div>
       </div>
       <hr />
-      <div className="main-container-signup">
-        <div className="logo">
+      <div className={styles.mainContainerSignup}>
+        <div className={styles.logo}>
           <img src={logo} alt="" />
         </div>
-        <div className="title">
+        <div className={styles.title}>
           Unlock your style – Sign up now for exclusive fashion deals!
         </div>
-        <div className="container-form-signup">
+        <div className={styles.containerFormSignup}>
           <Formik
             initialValues={{
               email: "",
@@ -68,21 +76,21 @@ const SignUp = () => {
               // Validate email
               if (!values.email) {
                 errors.email = "Email is required.";
-              } else if (!testEmailRegex(values.email)) {
+              } else if (!email(values.email)) {
                 errors.email = "Invalid email format.";
               }
 
               // Validate phone number
               if (!values.phoneNumber) {
                 errors.phoneNumber = "Phone number is required.";
-              } else if (!validatePhoneNumberWithRegex(values.phoneNumber)) {
+              } else if (!phoneNumber(values.phoneNumber)) {
                 errors.phoneNumber = "Invalid phone number.";
               }
 
               // Validate password
               if (!values.password) {
                 errors.password = "Password is required.";
-              } else if (!testPasswordRegex(values.password)) {
+              } else if (!password(values.password)) {
                 errors.password =
                   "Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, one number, and one special character.";
               }
@@ -107,10 +115,12 @@ const SignUp = () => {
               handleChange,
               handleBlur,
             }) => (
-              <form className="form" onSubmit={handleSubmit}>
-                <div id="div-name">
-                  <div className="container-item-input">
-                    <label htmlFor="firstName">First Name</label>
+              <form className={styles.form} onSubmit={handleSubmit}>
+                <div id={styles.divName}>
+                  <div className={styles.containerItemInput}>
+                    <label htmlFor="firstName">
+                      First Name <span className={styles.textRequired}>*</span>
+                    </label>
                     <input
                       type="text"
                       name="firstName"
@@ -121,11 +131,15 @@ const SignUp = () => {
                       onBlur={handleBlur}
                     />
                     {errors.firstName && touched.firstName && (
-                      <div className="error-message">{errors.firstName}</div>
+                      <div className={styles.errorMessage}>
+                        {errors.firstName}
+                      </div>
                     )}
                   </div>
-                  <div className="container-item-input">
-                    <label htmlFor="lastName">Last Name</label>
+                  <div className={styles.containerItemInput}>
+                    <label htmlFor="lastName">
+                      Last Name <span className={styles.textRequired}>*</span>
+                    </label>
                     <input
                       type="text"
                       name="lastName"
@@ -136,12 +150,16 @@ const SignUp = () => {
                       onBlur={handleBlur}
                     />
                     {errors.lastName && touched.lastName && (
-                      <div className="error-message">{errors.lastName}</div>
+                      <div className={styles.errorMessage}>
+                        {errors.lastName}
+                      </div>
                     )}
                   </div>
                 </div>
-                <div className="container-item-input">
-                  <label htmlFor="email">Email</label>
+                <div className={styles.containerItemInput}>
+                  <label htmlFor="email">
+                    Email <span className={styles.textRequired}>*</span>
+                  </label>
                   <input
                     type="email"
                     name="email"
@@ -152,11 +170,13 @@ const SignUp = () => {
                     onBlur={handleBlur}
                   />
                   {errors.email && touched.email && (
-                    <div className="error-message">{errors.email}</div>
+                    <div className={styles.errorMessage}>{errors.email}</div>
                   )}
                 </div>
-                <div className="container-item-input">
-                  <label htmlFor="phoneNumber">Phone number</label>
+                <div className={styles.containerItemInput}>
+                  <label htmlFor="phoneNumber">
+                    Phone number <span className={styles.textRequired}>*</span>
+                  </label>
                   <input
                     type="text"
                     name="phoneNumber"
@@ -167,11 +187,15 @@ const SignUp = () => {
                     onBlur={handleBlur}
                   />
                   {errors.phoneNumber && touched.phoneNumber && (
-                    <div className="error-message">{errors.phoneNumber}</div>
+                    <div className={styles.errorMessage}>
+                      {errors.phoneNumber}
+                    </div>
                   )}
                 </div>
-                <div className="container-item-input">
-                  <label htmlFor="password">Password</label>
+                <div className={styles.containerItemInput}>
+                  <label htmlFor="password">
+                    Password <span className={styles.textRequired}>*</span>
+                  </label>
                   <input
                     type="password"
                     name="password"
@@ -182,11 +206,14 @@ const SignUp = () => {
                     onBlur={handleBlur}
                   />
                   {errors.password && touched.password && (
-                    <div className="error-message">{errors.password}</div>
+                    <div className={styles.errorMessage}>{errors.password}</div>
                   )}
                 </div>
-                <div className="container-item-input">
-                  <label htmlFor="confirmPassword">Confirm Password</label>
+                <div className={styles.containerItemInput}>
+                  <label htmlFor="confirmPassword">
+                    Confirm Password{" "}
+                    <span className={styles.textRequired}>*</span>
+                  </label>
                   <input
                     type="password"
                     name="confirmPassword"
@@ -197,13 +224,17 @@ const SignUp = () => {
                     onBlur={handleBlur}
                   />
                   {errors.confirmPassword && touched.confirmPassword && (
-                    <div className="error-message">
+                    <div className={styles.errorMessage}>
                       {errors.confirmPassword}
                     </div>
                   )}
                 </div>
 
-                <button type="submit" disabled={isSubmitting}>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={styles.buttonSignUp}
+                >
                   Sign Up
                 </button>
               </form>

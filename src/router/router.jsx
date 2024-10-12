@@ -18,14 +18,6 @@ const router = createBrowserRouter(
           index: true,
           element: <Home />,
         },
-        {
-          path: "login",
-          element: <Login />,
-        },
-          {
-              path: "signup",
-              element: <SignUp />
-          }
       ],
     },
     {
@@ -42,6 +34,14 @@ const router = createBrowserRouter(
           element: <CreateCategory />,
         },
       ],
+    },
+    {
+      path: "login",
+      element: <Login />,
+    },
+    {
+      path: "signup",
+      element: <SignUp />,
     },
   ],
   {
