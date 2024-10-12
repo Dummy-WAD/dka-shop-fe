@@ -1,0 +1,29 @@
+.sidebar {
+  min-width: 250px;
+  background-color: var(--admin-color);
+  color: white;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  margin-bottom: 40px;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin-bottom: 30px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.sidebarLink {
+  color: #ffffff;
+  text-decoration: none;
+  &:hover {
+    color: #878787;
+  }
+}

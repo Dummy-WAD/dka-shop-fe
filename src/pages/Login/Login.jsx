@@ -51,7 +51,6 @@ function Login() {
         <label htmlFor="email">Email</label>
         <input
           id="email"
-          className="form-control"
           name="email"
           type="email"
           onChange={formik.handleChange}
@@ -67,7 +66,6 @@ function Login() {
         <label htmlFor="email">Password</label>
         <input
           id="password"
-          className="form-control"
           name="password"
           type="password"
           onChange={formik.handleChange}

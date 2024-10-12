@@ -1,66 +1,47 @@
-import { createBrowserRouter, useNavigate } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import CreateCategory from "../pages/CreateCategory/CreateCategory";
 import Home from "../pages/Home/Home";
 import LayoutAdmin from "../layout/LayoutAdmin/LayoutAdmin";
 import LayoutUser from "../layout/LayoutUser/LayoutUser";
 import Login from "../pages/Login/Login";
-import { useSelector } from "react-redux";
-
-const PrivateRoute = ({ children }) => {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const navigate = useNavigate();
-  if (!isAuthenticated) return navigate("/login");
-  return children;
-};
-
-const publicRoutes = [
-  { path: "/", page: Home, layout: LayoutUser },
-  { path: "/login", page: Login, layout: LayoutUser },
-];
-
-const privateRoutes = [
-  { path: "/admin/create-category", page: CreateCategory, layout: LayoutAdmin },
-];
+import Error from "../pages/Error/Error";
 
 const router = createBrowserRouter(
-  publicRoutes
-    .map((route) => {
-      const { path, page, layout } = route;
-      const Page = page;
-      const Layout = layout;
-      return {
-        path,
-        element: Layout ? (
-          <Layout>
-            <Page />
-          </Layout>
-        ) : (
-          <>
-            <Page />
-          </>
-        ),
-      };
-    })
-    .concat(
-      privateRoutes.map((route) => {
-        const { path, page, layout } = route;
-        const Page = page;
-        const Layout = layout;
-        return {
-          path,
-          element: Layout ? (
-            <PrivateRoute>
-              <Layout>
-                <Page />
-              </Layout>
-            </PrivateRoute>
-          ) : (
-            <PrivateRoute>
-              <Page />
-            </PrivateRoute>
-          ),
-        };
-      })
-    )
+  [
+    {
+      path: "/",
+      element: <LayoutUser />,
+      errorElement: <Error />,
+      children: [
+        {
+          index: true,
+          element: <Home />,
+        },
+        {
+          path: "login",
+          element: <Login />,
+        },
+      ],
+    },
+    {
+      path: "/admin",
+      element: <LayoutAdmin />,
+      errorElement: <Error />,
+      children: [
+        {
+          index: true,
+          element: <CreateCategory />,
+        },
+        {
+          path: "category/create",
+          element: <CreateCategory />,
+        },
+      ],
+    },
+  ],
+  {
+    basename: import.meta.env.VITE_BASE_URL,
+  }
 );
+
 export default router;
