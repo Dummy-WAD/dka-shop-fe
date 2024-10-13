@@ -5,11 +5,12 @@ import { Button } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { useEffect } from "react";
 import ModalCustom from "../../components/Modal/BasicModal";
-import { handleGetAllCategories, handleCreateCategory} from "../../api/category";
+import { handleGetAllCategories, handleCreateCategory, handleEditCategory} from "../../api/category";
 import categorySlice from "../../redux/slice/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import ViewCategory from "../../components/Category/ViewCategory";
 import CreateCategory from "../../components/Category/CreateCategory";
+import EditCategory from "../../components/Category/EditCategory";
 import { toast } from "react-toastify";
 
 const ShowCategory = () => {
@@ -38,6 +39,14 @@ const ShowCategory = () => {
     }))
   }
 
+  const handleViewEdit = (item) => {
+    dispatch(categorySlice.actions.setCategoryInfo({
+      category: item,
+      typeModal: "edit",
+      isOpenModal: true,
+    }))
+  }
+
   const handleSetOderBy = (name) => {
     const order = name == orderBy ? (orderDirection === "desc" ? "asc" : "desc") : "asc"
     dispatch(categorySlice.actions.setCategoryInfo({
@@ -51,6 +60,25 @@ const ShowCategory = () => {
     if (name.trim()!=="" && desc.trim() !== ""){
       try{
         await handleCreateCategory(name, desc);
+        toast.success("Create new category successfully",{
+          autoClose: 3000,
+        });
+        fetchCategories(page, limit, orderBy, orderDirection, search);
+      }
+      catch (err){
+        toast.error(err.response.data.message,{
+          autoClose: 3000,
+        });
+        handleClose();
+      }
+    }
+  }
+
+  const handleEdit = async (name, desc) => {
+    if (name.trim()!=="" && desc.trim() !== ""){
+      try{
+        // await handleEditCategory(name, desc);
+        console.log("handleEdit",{name, desc})
         toast.success("Create new category successfully",{
           autoClose: 3000,
         });
@@ -105,9 +133,10 @@ const ShowCategory = () => {
             <TableCategory 
               categories={data} 
               rowsPerPage={limit} 
-              handleViewDetail={handleViewDetail}
               onSetPage={handleSetPage}
               onSetOrder={handleSetOderBy}
+              handleViewDetail={handleViewDetail}
+              handleViewEdit={handleViewEdit}
             />
         </div>
         {(isOpen && type=="view") &&
@@ -119,6 +148,11 @@ const ShowCategory = () => {
         {(isOpen && type=="create") &&
           <ModalCustom isOpen={isOpen} handleClose={handleClose}>
             <CreateCategory onSubmit={handleCreate} />
+          </ModalCustom>
+        }
+        {(isOpen && type=="edit") &&
+          <ModalCustom isOpen={isOpen} handleClose={handleClose}>
+            <EditCategory onSubmit={handleEdit}/>
           </ModalCustom>
         }
     </>

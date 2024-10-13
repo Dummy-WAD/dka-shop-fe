@@ -10,6 +10,7 @@ const TableCategory = ({
     onSetPage, 
     onSetOrder,
     handleViewDetail,
+    handleViewEdit
 }) => {
     const {listData: categories, totalResults, page, orderBy, orderDirection} = useSelector((state) => state.category)
 
@@ -61,7 +62,7 @@ const TableCategory = ({
                                     <IconButton onClick={()=> handleViewDetail(item)}>
                                         <Visibility sx={{color: 'blue'}}/>
                                     </IconButton>
-                                    <IconButton>
+                                    <IconButton onClick={()=> handleViewEdit(item)}>
                                         <Edit sx={{color: 'green'}}/>
                                     </IconButton>
                                     <IconButton>

@@ -2,7 +2,6 @@ import axiosInstance from "../../utils/axios";
 
 const token = localStorage.getItem('token')
 const handleGetAllCategories = (page, limit, sortBy, order, name) => {
-  console.log({page, limit, sortBy, order, name})
   return axiosInstance.get(`/admin/categories?page=${page}&limit=${limit}${sortBy ? `&sortBy=${sortBy}&order=${order}` : ""}&name=${name}`);
 };
 
