@@ -1,11 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
-import CreateCategory from "../pages/CreateCategory/CreateCategory";
 import Home from "../pages/Home/Home";
 import LayoutAdmin from "../layout/LayoutAdmin/LayoutAdmin";
 import LayoutUser from "../layout/LayoutUser/LayoutUser";
 import Login from "../pages/Login/Login";
 import Error from "../pages/Error/Error";
 import SignUp from "../pages/SignUp/SignUp";
+import ShowCategory from "../pages/Category/ShowCategory";
 
 const router = createBrowserRouter(
   [
@@ -27,11 +27,11 @@ const router = createBrowserRouter(
       children: [
         {
           index: true,
-          element: <CreateCategory />,
+          element: <ShowCategory />,
         },
         {
-          path: "category/create",
-          element: <CreateCategory />,
+          path: "category",
+          element: <ShowCategory />,
         },
       ],
     },
