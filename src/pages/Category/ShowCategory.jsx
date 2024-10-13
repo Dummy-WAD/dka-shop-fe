@@ -69,13 +69,12 @@ const ShowCategory = () => {
         toast.error(err.response.data.message,{
           autoClose: 3000,
         });
-        handleClose();
       }
     }
   }
 
   const handleEdit = async (name, desc) => {
-    if (name.trim()!=="" && desc.trim() !== ""){
+    if (name.trim()!=="" && desc.trim() !== "" && (name != category.name || desc != category.description)){
       try{
         // await handleEditCategory(name, desc);
         console.log("handleEdit",{name, desc})
@@ -88,7 +87,6 @@ const ShowCategory = () => {
         toast.error(err.response.data.message,{
           autoClose: 3000,
         });
-        handleClose();
       }
     }
   }
