@@ -5,10 +5,12 @@ import { Button } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { useEffect } from "react";
 import ModalCustom from "../../components/Modal/BasicModal";
-import { handleGetAllCategories} from "../../api/category";
+import { handleGetAllCategories, handleCreateCategory} from "../../api/category";
 import categorySlice from "../../redux/slice/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import ViewCategory from "../../components/Category/ViewCategory";
+import CreateCategory from "../../components/Category/CreateCategory";
+import { toast } from "react-toastify";
 
 const ShowCategory = () => {
   const dispatch = useDispatch();
@@ -29,6 +31,13 @@ const ShowCategory = () => {
     }))
   }
 
+  const handleViewCreate = () => {
+    dispatch(categorySlice.actions.setCategoryInfo({
+      typeModal: "create",
+      isOpenModal: true,
+    }))
+  }
+
   const handleSetOderBy = (name) => {
     const order = name == orderBy ? (orderDirection === "desc" ? "asc" : "desc") : "asc"
     dispatch(categorySlice.actions.setCategoryInfo({
@@ -36,6 +45,24 @@ const ShowCategory = () => {
         orderDirection: order,
         page: 0,
     }))
+  }
+
+  const handleCreate = async (name, desc) => {
+    if (name.trim()!=="" && desc.trim() !== ""){
+      try{
+        await handleCreateCategory(name, desc);
+        toast.success("Create new category successfully",{
+          autoClose: 3000,
+        });
+        fetchCategories(page, limit, orderBy, orderDirection, search);
+      }
+      catch (err){
+        toast.error(err.response.data.message,{
+          autoClose: 3000,
+        });
+        handleClose();
+      }
+    }
   }
 
   const fetchCategories = async (page, limit, orderBy, orderDirection, name) => {
@@ -69,6 +96,7 @@ const ShowCategory = () => {
               variant="contained" 
               sx={{backgroundColor: "#000", color: "#FFF"}} 
               startIcon={<Add />}
+              onClick={handleViewCreate}
             >
               Create
             </Button>
@@ -85,6 +113,12 @@ const ShowCategory = () => {
         {(isOpen && type=="view") &&
           <ModalCustom isOpen={isOpen} handleClose={handleClose}>
             <ViewCategory />
+          </ModalCustom>
+        }
+
+        {(isOpen && type=="create") &&
+          <ModalCustom isOpen={isOpen} handleClose={handleClose}>
+            <CreateCategory onSubmit={handleCreate} />
           </ModalCustom>
         }
     </>
