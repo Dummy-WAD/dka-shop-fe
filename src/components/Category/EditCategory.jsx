@@ -17,6 +17,7 @@ const EditCategory = ({onSubmit}) => {
         <Box sx={{width: "100%"}}>
             <Typography variant="h5" sx={{fontWeight: "500", textAlign: "center"}}>Edit Category</Typography>
             <Box sx={{mt: "2rem"}}>
+                <MyTextField id="id" label="ID" variant="outlined" value={category.id} color="#000" fullWidth style={{mb: "1.5rem"}} disabled/>
                 <MyTextField id="name" label="Name" variant="outlined" defaultValue={category.name} color="#000" fullWidth style={{mb: "1.5rem"}} ref={nameRef}/>
                 <MyTextField id="desc" label="Description" multiline rows={4} color="#000" defaultValue={category.description} fullWidth ref={descRef}/>
             </Box>
