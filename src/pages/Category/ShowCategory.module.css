@@ -1,0 +1,19 @@
+.main_title{
+    display: flex;
+    justify-content: space-between;
+}
+
+.title_page{
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.title_page p{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.icon_style{
+    width: 20px;
+}
