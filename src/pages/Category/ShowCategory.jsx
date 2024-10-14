@@ -5,12 +5,13 @@ import { Button } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import ModalCustom from "../../components/Modal/BasicModal";
-import { handleGetAllCategories, handleCreateCategory, handleEditCategory} from "../../api/category";
+import { handleGetAllCategories, handleCreateCategory, handleEditCategory, handleDeleteCategory} from "../../api/category";
 import categorySlice from "../../redux/slice/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import ViewCategory from "../../components/Category/ViewCategory";
 import CreateCategory from "../../components/Category/CreateCategory";
 import EditCategory from "../../components/Category/EditCategory";
+import DeleteModal from "../../components/Modal/DeleteModal";
 import { toast } from "react-toastify";
 
 const ShowCategory = () => {
@@ -46,6 +47,14 @@ const ShowCategory = () => {
     }))
     setIsOpen(true);
     setTypeModal("edit")
+  }
+
+  const handleViewDelete = (item) => {
+    dispatch(categorySlice.actions.setCategoryInfo({
+      category: item,
+    }))
+    setIsOpen(true);
+    setTypeModal("delete")
   }
 
   const handleSetOderBy = (name) => {
@@ -96,6 +105,20 @@ const ShowCategory = () => {
     }
   }
 
+  const handleDelete = async () => {
+    try{
+      await handleDeleteCategory(category.id);
+      toast.success("Delete category successfully",{
+        autoClose: 3000,
+      });
+      fetchCategories(page, limit, orderBy, orderDirection, search);
+    } catch (err){
+      toast.error(err.response.data.message,{
+        autoClose: 3000,
+      });
+    }
+  }
+
   const fetchCategories = async (page, limit, orderBy, orderDirection, name) => {
     try {
       const res = await handleGetAllCategories(page+1,limit,orderBy,orderDirection,name);
@@ -140,6 +163,7 @@ const ShowCategory = () => {
               onSetOrder={handleSetOderBy}
               handleViewDetail={handleViewDetail}
               handleViewEdit={handleViewEdit}
+              handleViewDelete={handleViewDelete}
             />
         </div>
         {(isOpen && typeModal=="view") &&
@@ -157,6 +181,15 @@ const ShowCategory = () => {
           <ModalCustom isOpen={isOpen} handleClose={handleClose}>
             <EditCategory onSubmit={handleEdit}/>
           </ModalCustom>
+        }
+        {(isOpen && typeModal=="delete") &&
+          <DeleteModal 
+            isOpen={isOpen} 
+            handleClose={handleClose} 
+            onSubmit={handleDelete} 
+            title="Delete category"
+            description="Are you sure delete this category ?"
+          />
         }
     </>
   )

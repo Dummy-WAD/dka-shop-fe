@@ -11,7 +11,8 @@ const TableCategory = ({
     onSetPage, 
     onSetOrder,
     handleViewDetail,
-    handleViewEdit
+    handleViewEdit,
+    handleViewDelete,
 }) => {
     const {totalResults, page, orderBy, orderDirection} = useSelector((state) => state.category)
 
@@ -66,7 +67,7 @@ const TableCategory = ({
                                     <IconButton onClick={()=> handleViewEdit(item)}>
                                         <Edit sx={{color: 'green'}}/>
                                     </IconButton>
-                                    <IconButton>
+                                    <IconButton onClick={()=> handleViewDelete(item)}>
                                         <Delete sx={{color: 'red'}}/>
                                     </IconButton>
                                 </TableCell>
