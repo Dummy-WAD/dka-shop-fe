@@ -6,12 +6,14 @@ import { useSelector } from 'react-redux';
 import TableSortLabelCustom from '../../components/TableSortLabelCustom/TableSortLabelCustom';
 
 const TableCategory = ({
+    categories,
     rowsPerPage, 
     onSetPage, 
     onSetOrder,
     handleViewDetail,
+    handleViewEdit
 }) => {
-    const {listData: categories, totalResults, page, orderBy, orderDirection} = useSelector((state) => state.category)
+    const {totalResults, page, orderBy, orderDirection} = useSelector((state) => state.category)
 
     const handleChangePage = (e, newPage) => {
         onSetPage(newPage)
@@ -61,7 +63,7 @@ const TableCategory = ({
                                     <IconButton onClick={()=> handleViewDetail(item)}>
                                         <Visibility sx={{color: 'blue'}}/>
                                     </IconButton>
-                                    <IconButton>
+                                    <IconButton onClick={()=> handleViewEdit(item)}>
                                         <Edit sx={{color: 'green'}}/>
                                     </IconButton>
                                     <IconButton>

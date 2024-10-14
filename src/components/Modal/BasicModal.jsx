@@ -6,6 +6,11 @@ const ModalCustom = ({children, isOpen, handleClose}) => {
         <Dialog
             open={isOpen}
             onClose={handleClose}
+            sx={{ 
+                '& .MuiDialog-paper': {
+                    borderRadius: '8px',
+                } 
+            }}
         >
             <DialogContent>
                 <Box>

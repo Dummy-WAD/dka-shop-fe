@@ -21,9 +21,6 @@ const MyTextField = forwardRef(({color, fullWidth, style, ...props}, ref) => {
                 "& fieldset": {
                     borderColor: color,
                 },
-                "&:hover fieldset": {
-                    borderColor: color, 
-                },
                 "&.Mui-focused fieldset": {
                     borderColor: color, 
                 },

@@ -2,13 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     category: {},
-    isOpenModal: false,
-    typeModal: "",
-    listData: [],
     page: 0,
     totalPages: 0,
     totalResults: 0,
-    id: null,
     orderBy: "",
     orderDirection: "",
     search: "",
