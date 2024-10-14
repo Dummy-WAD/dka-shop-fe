@@ -28,26 +28,30 @@ axiosInstance.interceptors.response.use(
   (response) => response.data,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (
+      error.response.status === 401 &&
+      error.config.url === "/auth/refresh-token"
+    ) {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      dispatch(
+        authSlice.actions.setAuthInfo({
+          isAuthenticated: false,
+          userInfo: {},
+        })
+      );
+      window.location.href = "/login";
+    } else if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      try {
-        const refreshToken = localStorage.getItem("refreshToken");
-        const response = await handleCreateAccessToken(refreshToken);
-        const { accessToken, refreshToken: newRefreshToken } = response;
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", newRefreshToken);
-        axiosInstance.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${accessToken}`;
-        return axiosInstance(originalRequest);
-      } catch (refreshError) {
-        console.error("Token refresh failed:", refreshError);
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        dispatch(authSlice.actions.setAuthInfo({ isAuthenticated: false }));
-        // window.location.href = "/login";
-        return Promise.reject(refreshError);
-      }
+      const response = await handleCreateAccessToken(refreshToken);
+      const { access, refresh } = response;
+      localStorage.setItem("accessToken", access.token);
+      localStorage.setItem("refreshToken", refresh.token);
+      axiosInstance.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${access.token}`;
+      return axiosInstance(originalRequest);
     }
     return Promise.reject(error);
   }

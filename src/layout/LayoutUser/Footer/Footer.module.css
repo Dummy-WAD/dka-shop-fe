@@ -1,0 +1,39 @@
+.container {
+  background-color: #ffffff;
+  padding: 30px 50px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-items: flex-start;
+}
+
+.section {
+  flex: 1;
+}
+
+.sectionTitle {
+  font-weight: 500;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.sectionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-weight: 300;
+  font-size: 14px;
+}
+
+.sectionDetail {
+  display: flex;
+  gap: 10px;
+}

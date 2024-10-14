@@ -1,86 +1,134 @@
 import { handleLogin } from "../../api/user";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { useFormik } from "formik";
+import { useDispatch } from "react-redux";
+import logo from "../../assets/logo.png";
+import { Link, useNavigate } from "react-router-dom";
+import { Formik } from "formik";
 import * as Yup from "yup";
 import authSlice from "../../redux/slice/authSlice";
+import styles from "./Login.module.css";
+import { password } from "../../validator";
+import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
+import { BackIcon } from "../../icon/Icon";
+import { toast } from "react-toastify";
+import { ADMIN } from "../../config/roles";
+
+const LoginSchema = Yup.object().shape({
+  email: Yup.string().email("Email is invalid.").required("Email is required."),
+  password: Yup.string()
+    .required("Password is required.")
+    .test(
+      "password test",
+      "Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, one number, and one special character.",
+      password
+    ),
+});
 
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isAuthenticated } = useSelector((state) => state.auth);
-  if (isAuthenticated) return navigate("/");
-
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    validationSchema: Yup.object({
-      email: Yup.string().email("Invalid email address").required("Required"),
-      password: Yup.string()
-        .min(6, "Password must be at least 6 characters")
-        .required("Required"),
-    }),
-    onSubmit: (values) => {
-      const { email, password } = values;
-      const login = async (email, password) => {
-        try {
-          const res = await handleLogin(email, password);
-          const { tokens, user } = res;
-          dispatch(
-            authSlice.actions.setAuthInfo({
-              isAuthenticated: true,
-              userInfo: user,
-            })
-          );
-          localStorage.setItem("accessToken", tokens?.access?.token);
-          localStorage.setItem("refreshToken", tokens?.refresh?.token);
-          return navigate("/");
-        } catch (err) {
-          console.error(err);
-        }
-      };
-      login(email, password);
-    },
-  });
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <div className="mb-4 d-flex flex-column row-gap-2">
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          onChange={formik.handleChange}
-          value={formik.values.email}
-          placeholder="Enter email..."
-        />
-        {formik.errors.email ? (
-          <div className="text-danger">{formik.errors.email}</div>
-        ) : null}
+    <>
+      <div className={styles.headerLogin}>
+        <div>
+          <BackIcon />
+          <span>Back</span>
+        </div>
+        <div>
+          <Link to="/signup">Create a new account</Link>
+        </div>
       </div>
+      <hr />
+      <div className={styles.mainContainerLogin}>
+        <div className={styles.logo}>
+          <img src={logo} alt="" />
+        </div>
+        <div className={styles.title}>Sign In</div>
+        <div className={styles.containerFormLogin}>
+          <Formik
+            initialValues={{
+              email: "",
+              password: "",
+            }}
+            validationSchema={LoginSchema}
+            onSubmit={async (values) => {
+              try {
+                const { email, password } = values;
+                const res = await handleLogin(email, password);
+                const { tokens, user } = res;
+                dispatch(
+                  authSlice.actions.setAuthInfo({
+                    isAuthenticated: true,
+                    userInfo: user,
+                  })
+                );
+                localStorage.setItem("accessToken", tokens?.access?.token);
+                localStorage.setItem("refreshToken", tokens?.refresh?.token);
+                return user.role === ADMIN ? navigate("/admin") : navigate("/");
+              } catch (err) {
+                console.error(err);
+                toast.error("Incorrect email or password!");
+              }
+            }}
+          >
+            {({
+              values,
+              errors,
+              touched,
+              handleSubmit,
+              isSubmitting,
+              handleChange,
+              handleBlur,
+            }) => (
+              <form className={styles.form} onSubmit={handleSubmit}>
+                <div className={styles.containerItemInput}>
+                  <label htmlFor="email">
+                    Email <span className={styles.textRequired}>*</span>
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email address..."
+                    id="email"
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.email && touched.email && (
+                    <ErrorMessage content={errors.email} />
+                  )}
+                </div>
+                <div className={styles.containerItemInput}>
+                  <label htmlFor="password">
+                    Password <span className={styles.textRequired}>*</span>
+                  </label>
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter password..."
+                    id="password"
+                    value={values.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.password && touched.password && (
+                    <ErrorMessage content={errors.password} />
+                  )}
+                </div>
 
-      <div className="mb-4 d-flex flex-column row-gap-2">
-        <label htmlFor="email">Password</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          onChange={formik.handleChange}
-          value={formik.values.password}
-          placeholder="Enter password..."
-        />
-        {formik.errors.password ? (
-          <div className="text-danger">{formik.errors.password}</div>
-        ) : null}
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={styles.buttonLogin}
+                >
+                  Sign In
+                </button>
+              </form>
+            )}
+          </Formik>
+        </div>
       </div>
-
-      <button type="submit" className="btn btn-dark">
-        Submit
-      </button>
-    </form>
+    </>
   );
 }
 
