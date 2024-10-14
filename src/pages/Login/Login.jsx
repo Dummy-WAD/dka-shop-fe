@@ -6,14 +6,16 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import authSlice from "../../redux/slice/authSlice";
 import styles from "./Login.module.css";
-import { password } from "../../validator";
+import { email, password } from "../../validator";
 import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 import { BackIcon } from "../../icon/Icon";
 import { toast } from "react-toastify";
 import { ADMIN } from "../../config/roles";
 
 const LoginSchema = Yup.object().shape({
-  email: Yup.string().email("Email is invalid.").required("Email is required."),
+  email: Yup.string()
+    .required("Email is required.")
+    .test("Email test", "Email is invalid.", email),
   password: Yup.string()
     .required("Password is required.")
     .test(
@@ -54,7 +56,7 @@ function Login() {
             onSubmit={async (values) => {
               try {
                 const { email, password } = values;
-                const res = await handleLogin(email, password);
+                const res = await handleLogin(email.trim(), password.trim());
                 const { tokens, user } = res;
                 dispatch(
                   authSlice.actions.setAuthInfo({
