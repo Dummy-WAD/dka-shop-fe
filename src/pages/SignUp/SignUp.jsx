@@ -1,7 +1,7 @@
 import { BackIcon } from "../../icon/Icon";
 import { Formik } from "formik";
 import logo from "../../assets/logo.png";
-import { handeSignUp } from "../../api/user";
+import { handleSignUp } from "../../api/user";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { email, password, phoneNumber } from "../../validator/index";
@@ -11,7 +11,7 @@ const SignUp = () => {
 
   const handleSubmit = async (values) => {
     try {
-      const response = await handeSignUp(values);
+      const response = await handleSignUp(values);
       if (response) {
         toast.success("Sign up successfully!");
         navigate("/login");

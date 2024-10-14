@@ -29,7 +29,9 @@ const NavbarAdmin = () => {
       </div>
       <div className={classNames(css.userMenu)}>
         <NotificationIcon className={css.notifIcon} />
-        <LogoutIcon />
+        <div style={{ cursor: "pointer" }}>
+          <LogoutIcon />
+        </div>
       </div>
     </nav>
   );

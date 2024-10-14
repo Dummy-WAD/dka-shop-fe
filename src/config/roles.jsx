@@ -1,2 +1,5 @@
-export const ADMIN = "Admin";
-export const CUSTOMER = "Customer";
+export const ADMIN = "ADMIN";
+export const CUSTOMER = "CUSTOMER";
+
+export const ACTIVE = "ACTIVE";
+export const INACTIVE = "INACTIVE";

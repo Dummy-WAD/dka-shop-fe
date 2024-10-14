@@ -4,6 +4,7 @@ import SidebarAdmin from "./SidebarAdmin/SidebarAdmin";
 import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import NotPermitted from "../../pages/Error/NotPermitted";
+import { ADMIN, CUSTOMER } from "../../config/roles";
 
 const LayoutAdmin = () => {
   const isAdminRoute = window.location.pathname.startsWith(
@@ -12,8 +13,8 @@ const LayoutAdmin = () => {
   const role = useSelector((state) => state?.auth?.userInfo?.role);
   return (
     <>
-      {isAdminRoute && role === "ADMIN" && (
-        <div style={{ display: "flex", minHeight: "100vh" }}>
+      {isAdminRoute && role === ADMIN && (
+        <div style={{ display: "flex", height: "100vh" }}>
           <SidebarAdmin />
 
           <div
@@ -27,7 +28,7 @@ const LayoutAdmin = () => {
           </div>
         </div>
       )}
-      {isAdminRoute && role === "CUSTOMER" && <NotPermitted />}
+      {isAdminRoute && role === CUSTOMER && <NotPermitted />}
     </>
   );
 };
