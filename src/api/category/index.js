@@ -12,8 +12,8 @@ const handleCreateCategory = (name, description) => {
   });
 };
 
-const handleEditCategory = (name, description) => {
-  return axiosInstance.put("/admin/categories", {
+const handleEditCategory = (categoryId, name, description) => {
+  return axiosInstance.patch(`/admin/categories/${categoryId}`, {
     name,
     description,
   });

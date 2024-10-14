@@ -77,8 +77,7 @@ const ShowCategory = () => {
   const handleEdit = async (name, desc) => {
     if (name.trim()!=="" && desc.trim() !== "" && (name != category.name || desc != category.description)){
       try{
-        // await handleEditCategory(name, desc);
-        console.log("handleEdit",{name, desc})
+        await handleEditCategory(category.id,name, desc);
         toast.success("Create new category successfully",{
           autoClose: 3000,
         });
@@ -89,6 +88,11 @@ const ShowCategory = () => {
           autoClose: 3000,
         });
       }
+    }
+    else{
+      toast.error("Change information to update",{
+        autoClose: 3000,
+      });
     }
   }
 
