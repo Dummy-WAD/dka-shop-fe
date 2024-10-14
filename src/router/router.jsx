@@ -1,5 +1,4 @@
 import { createBrowserRouter, useNavigate } from "react-router-dom";
-import CreateCategory from "../pages/CreateCategory/CreateCategory";
 import Home from "../pages/Home/Home";
 import LayoutAdmin from "../layout/LayoutAdmin/LayoutAdmin";
 import LayoutUser from "../layout/LayoutUser/LayoutUser";
