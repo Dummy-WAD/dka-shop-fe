@@ -17,3 +17,7 @@
 .icon_style{
     width: 20px;
 }
+.search_create{
+    display: flex;
+    gap: 1rem;
+}

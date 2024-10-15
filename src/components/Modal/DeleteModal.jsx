@@ -25,14 +25,14 @@ const DeleteModal = ({ isOpen, handleClose, onSubmit, title, description }) => {
                     <Box sx={{display: "flex", gap: "1.5rem", justifyContent: "center"}}>
                         <Button 
                             variant="outlined" 
-                            sx={{ color: "#000", border: "1px solid #000"}} 
+                            sx={{ color: "var(--admin-color)", border: "1px solid var(--admin-color)"}} 
                             onClick={handleClose}
                         >
                             No
                         </Button>
                         <Button 
                             variant="contained" 
-                            sx={{backgroundColor: "#000", color: "#FFF"}} 
+                            sx={{backgroundColor: "var(--admin-color)", color: "#FFF"}} 
                             onClick={onSubmit}
                         >
                             Yes
