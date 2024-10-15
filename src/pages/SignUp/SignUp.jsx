@@ -34,9 +34,9 @@ const SignUp = () => {
   return (
     <>
       <div className={styles.headerSignup}>
-        <div>
+        <div onClick={() => navigate("/")}>
           <BackIcon />
-          <span>Back</span>
+          <span>Home</span>
         </div>
         <div>
           Already have an account? <Link to="/login">Login</Link>
@@ -47,9 +47,7 @@ const SignUp = () => {
         <div className={styles.logo}>
           <img src={logo} alt="" />
         </div>
-        <div className={styles.title}>
-          Unlock your style – Sign up now for exclusive fashion deals!
-        </div>
+        <div className={styles.title}>Sign Up</div>
         <div className={styles.containerFormSignup}>
           <Formik
             initialValues={{

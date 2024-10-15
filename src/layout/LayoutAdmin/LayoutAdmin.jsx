@@ -28,7 +28,7 @@ const LayoutAdmin = () => {
           </div>
         </div>
       )}
-      {isAdminRoute && role === CUSTOMER && <NotPermitted />}
+      {isAdminRoute && (role === CUSTOMER || !role) && <NotPermitted />}
     </>
   );
 };
