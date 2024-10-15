@@ -76,8 +76,13 @@ const TableCategory = ({
                     </TableBody>
                 </Table>
             </TableContainer>
+            {categories.length == 0 && (
+                <Grid2 sx={{textAlign: "center", padding: "1rem 0"}}>
+                    No result found
+                </Grid2>
+            )}
             <Grid2 sx={{display: 'flex', alignItems: "center", justifyContent: "space-between"}}>
-                <Typography>Rows of per page: {rowsPerPage}</Typography>
+                <Typography>Rows per page: {rowsPerPage}</Typography>
                 <TablePagination 
                     rowsPerPageOptions={[]}
                     component="div"

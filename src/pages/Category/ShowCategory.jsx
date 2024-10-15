@@ -8,6 +8,7 @@ import ModalCustom from "../../components/Modal/BasicModal";
 import { handleGetAllCategories, handleCreateCategory, handleEditCategory, handleDeleteCategory} from "../../api/category";
 import categorySlice from "../../redux/slice/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
+import SearchInput from "../../components/SearchInput/SearchInput";
 import ViewCategory from "../../components/Category/ViewCategory";
 import CreateCategory from "../../components/Category/CreateCategory";
 import EditCategory from "../../components/Category/EditCategory";
@@ -58,11 +59,22 @@ const ShowCategory = () => {
   }
 
   const handleSetOderBy = (name) => {
-    const order = name == orderBy ? (orderDirection === "desc" ? "asc" : "desc") : "asc"
+    const order = name == orderBy ? (orderDirection === "asc" ? "desc" : orderDirection === "desc" ? "" : "asc") : "asc";
+    const nameOrder = order == "" ? "" : name;
     dispatch(categorySlice.actions.setCategoryInfo({
-        orderBy: name,
+        orderBy: nameOrder,
         orderDirection: order,
         page: 0,
+    }))
+  }
+
+  const handleSearch = () => {
+    fetchCategories(page, limit, orderBy, orderDirection, search);
+  }
+
+  const handleChangeSearch = (value) => {
+    dispatch(categorySlice.actions.setCategoryInfo({
+      search: value
     }))
   }
 
@@ -81,13 +93,18 @@ const ShowCategory = () => {
         });
       }
     }
+    else{
+      toast.error("Please fill in all the information",{
+        autoClose: 3000,
+      });
+    }
   }
 
   const handleEdit = async (name, desc) => {
     if (name.trim()!=="" && desc.trim() !== "" && (name != category.name || desc != category.description)){
       try{
         await handleEditCategory(category.id,name, desc);
-        toast.success("Create new category successfully",{
+        toast.success("Edit category successfully",{
           autoClose: 3000,
         });
         fetchCategories(page, limit, orderBy, orderDirection, search);
@@ -98,8 +115,9 @@ const ShowCategory = () => {
         });
       }
     }
-    else{
-      toast.error("Change information to update",{
+    else if (name == category.name && desc == category.description) handleClose()
+    else {
+      toast.error("Please fill in all the information",{
         autoClose: 3000,
       });
     }
@@ -137,7 +155,7 @@ const ShowCategory = () => {
 
   useEffect(()=>{
       fetchCategories(page, limit, orderBy, orderDirection, search);
-  },[page, orderBy, orderDirection])
+  },[page, orderBy, orderDirection,search])
 
   return (
     <>
@@ -146,14 +164,22 @@ const ShowCategory = () => {
               <CategoryIcon className={classes.icon_style} />
               <p>CATEGORY</p>
             </div>
-            <Button 
-              variant="contained" 
-              sx={{backgroundColor: "#000", color: "#FFF"}} 
-              startIcon={<Add />}
-              onClick={handleViewCreate}
-            >
-              Create
-            </Button>
+            <div className={classes.search_create}>
+              <SearchInput 
+                placeholder="Search"
+                value={search}
+                onSearch={handleSearch}
+                onChange={handleChangeSearch}
+              />
+              <Button 
+                variant="contained" 
+                sx={{backgroundColor: "var(--admin-color)", color: "#FFF"}} 
+                startIcon={<Add />}
+                onClick={handleViewCreate}
+              >
+                Create
+              </Button>
+            </div>
         </div>
         <div>
             <TableCategory 
