@@ -21,9 +21,16 @@ const handleGetUserInfo = () => {
   return axiosInstance.get("/customer");
 };
 
+const handleLogout = (refresh_token) => {
+  return axiosInstance.post("/auth/logout", {
+    refresh_token,
+  });
+};
+
 export {
   handleLogin,
   handleCreateAccessToken,
   handleSignUp,
   handleGetUserInfo,
+  handleLogout,
 };

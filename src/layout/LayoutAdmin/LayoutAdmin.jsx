@@ -14,7 +14,7 @@ const LayoutAdmin = () => {
   return (
     <>
       {isAdminRoute && role === ADMIN && (
-        <div style={{ display: "flex", height: "100vh" }}>
+        <div style={{ display: "flex", minHeight: "100vh" }}>
           <SidebarAdmin />
 
           <div
