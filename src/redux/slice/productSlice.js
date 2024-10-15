@@ -2,10 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   dataProducts: [],
-  page: 1,
+  page: 0,
   totalPages: null,
   totalResults: null,
-  limit: 20,
+  limit: 10,
   order: "",
   sortBy: "",
   search: "",
@@ -20,6 +20,12 @@ export const productSlice = createSlice({
         ...action.payload,
       };
     },
+    setCurrentPage: (state, action) => {
+      return {
+        ...state,
+        page: action.payload,
+      };
+    },
   },
   extraReducers: () => {},
 });
@@ -27,4 +33,4 @@ export const productSlice = createSlice({
 // Export the reducer
 export default productSlice;
 
-export const { setListProductInfo } = productSlice.actions;
+export const { setListProductInfo, setCurrentPage } = productSlice.actions;

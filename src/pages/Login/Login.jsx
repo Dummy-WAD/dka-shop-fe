@@ -30,9 +30,9 @@ function Login() {
   return (
     <>
       <div className={styles.headerLogin}>
-        <div>
+        <div onClick={() => navigate("/")}>
           <BackIcon />
-          <span>Back</span>
+          <span>Home</span>
         </div>
         <div>
           <Link to="/signup">Create a new account</Link>

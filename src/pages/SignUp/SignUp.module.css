@@ -45,8 +45,9 @@ hr {
   object-fit: cover;
 }
 .mainContainerSignup .title {
-  font-size: 22px;
-  font-weight: 500;
+  font-size: 40px;
+  color: var(--user-color);
+  font-weight: 700;
   text-align: center;
 }
 .mainContainerSignup .form {
@@ -115,7 +116,7 @@ hr {
   width: 100%;
   height: 50px;
   border-radius: 15px;
-  background-color: #c3c3c3;
+  background-color: var(--user-color);
   color: white;
   font-size: 18px;
   font-weight: 500;
@@ -123,9 +124,6 @@ hr {
   border: none;
   outline: none;
   cursor: pointer;
-  &:hover {
-    background-color: rgba(234, 88, 12, 1);
-  }
 }
 .errorMessage {
   color: red;

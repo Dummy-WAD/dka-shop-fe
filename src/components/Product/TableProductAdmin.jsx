@@ -15,9 +15,22 @@ import classes from "./TableProductAdmin.module.css";
 import TableSortLabelCustom from "../../components/TableSortLabelCustom/TableSortLabelCustom";
 import IconButton from "../IconButton/IconButton";
 import { Delete, Edit, Visibility } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentPage } from "../../redux/slice/productSlice";
 
-const TableProductAdmin = ({ data, rowsPerPage, page, totalResults }) => {
-  console.log(rowsPerPage, page, totalResults);
+const TableProductAdmin = ({
+  data,
+  rowsPerPage,
+  page,
+  totalResults,
+  handleSetOrderBy,
+}) => {
+  const dispatch = useDispatch();
+
+  const handleChangePage = (e, newPage) => {
+    dispatch(setCurrentPage(newPage));
+  };
+  const { order, sortBy } = useSelector((state) => state.product);
   return (
     <>
       <TableContainer
@@ -29,16 +42,28 @@ const TableProductAdmin = ({ data, rowsPerPage, page, totalResults }) => {
             <TableRow>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
                 <TableSortLabelCustom name="name" color="#FFF">
+                  ID
+                </TableSortLabelCustom>
+              </TableCell>
+              <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
+                <TableSortLabelCustom
+                  name="name"
+                  color="#FFF"
+                  onClick={() => handleSetOrderBy("name")}
+                  orderDirection={order}
+                  orderBy={sortBy}
+                >
                   Name
                 </TableSortLabelCustom>
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
-                <TableSortLabelCustom name="image" color="#FFF">
-                  Image
-                </TableSortLabelCustom>
-              </TableCell>
-              <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
-                <TableSortLabelCustom name="price" color="#FFF">
+                <TableSortLabelCustom
+                  name="price"
+                  color="#FFF"
+                  onClick={() => handleSetOrderBy("price")}
+                  orderDirection={order}
+                  orderBy={sortBy}
+                >
                   Price
                 </TableSortLabelCustom>
               </TableCell>
@@ -48,12 +73,24 @@ const TableProductAdmin = ({ data, rowsPerPage, page, totalResults }) => {
                 </TableSortLabelCustom>
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
-                <TableSortLabelCustom name="createdAt" color="#FFF">
+                <TableSortLabelCustom
+                  name="createdAt"
+                  color="#FFF"
+                  onClick={() => handleSetOrderBy("createdAt")}
+                  orderDirection={order}
+                  orderBy={sortBy}
+                >
                   Created At
                 </TableSortLabelCustom>
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
-                <TableSortLabelCustom name="updatedAt" color="#FFF">
+                <TableSortLabelCustom
+                  name="updatedAt"
+                  color="#FFF"
+                  onClick={() => handleSetOrderBy("updatedAt")}
+                  orderDirection={order}
+                  orderBy={sortBy}
+                >
                   Last Updated At
                 </TableSortLabelCustom>
               </TableCell>
@@ -64,25 +101,11 @@ const TableProductAdmin = ({ data, rowsPerPage, page, totalResults }) => {
             {data &&
               data.map((item) => (
                 <TableRow key={item.id} className={classes.table_row}>
+                  {/* ID */}
+                  <TableCell>{item.id}</TableCell>
+
                   {/* Name */}
                   <TableCell>{item.name}</TableCell>
-
-                  {/* Image */}
-                  <TableCell>
-                    {item.productImages.length > 0 ? (
-                      <img
-                        src={item.productImages[0].image}
-                        alt={item.name}
-                        style={{
-                          width: "50px",
-                          height: "50px",
-                          objectFit: "cover",
-                        }}
-                      />
-                    ) : (
-                      "No image"
-                    )}
-                  </TableCell>
 
                   {/* Price */}
                   <TableCell>{item.price} VND</TableCell>
@@ -140,6 +163,7 @@ const TableProductAdmin = ({ data, rowsPerPage, page, totalResults }) => {
           count={totalResults}
           rowsPerPage={rowsPerPage}
           page={page}
+          onPageChange={handleChangePage}
         />
       </Grid2>
     </>

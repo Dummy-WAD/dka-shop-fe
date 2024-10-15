@@ -9,7 +9,7 @@ import ShowCategory from "../pages/Category/ShowCategory";
 import { useSelector } from "react-redux";
 import { ADMIN, CUSTOMER } from "../config/roles";
 import { useEffect, useState } from "react";
-
+import ProductAdmin from "../pages/ProductAdmin/ProductAdmin";
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
   const navigate = useNavigate();
@@ -36,7 +36,6 @@ const ProtectedRouteAuth = ({ children }) => {
 
   return <>{children}</>;
 };
-import ProductAdmin from "../pages/ProductAdmin/ProductAdmin";
 
 const router = createBrowserRouter(
   [
