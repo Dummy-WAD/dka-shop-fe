@@ -93,13 +93,18 @@ const ShowCategory = () => {
         });
       }
     }
+    else{
+      toast.error("Please fill in all the information",{
+        autoClose: 3000,
+      });
+    }
   }
 
   const handleEdit = async (name, desc) => {
     if (name.trim()!=="" && desc.trim() !== "" && (name != category.name || desc != category.description)){
       try{
         await handleEditCategory(category.id,name, desc);
-        toast.success("Create new category successfully",{
+        toast.success("Edit category successfully",{
           autoClose: 3000,
         });
         fetchCategories(page, limit, orderBy, orderDirection, search);
@@ -110,8 +115,9 @@ const ShowCategory = () => {
         });
       }
     }
-    else{
-      toast.error("Change information to update",{
+    else if (name == category.name && desc == category.description) handleClose()
+    else {
+      toast.error("Please fill in all the information",{
         autoClose: 3000,
       });
     }
