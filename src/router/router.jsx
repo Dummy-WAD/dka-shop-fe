@@ -36,6 +36,7 @@ const ProtectedRouteAuth = ({ children }) => {
 
   return <>{children}</>;
 };
+import ProductAdmin from "../pages/ProductAdmin/ProductAdmin";
 
 const router = createBrowserRouter(
   [
@@ -62,6 +63,10 @@ const router = createBrowserRouter(
         {
           path: "category",
           element: <ShowCategory />,
+        },
+        {
+          path: "product",
+          element: <ProductAdmin />,
         },
       ],
     },
