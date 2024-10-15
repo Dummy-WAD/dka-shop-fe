@@ -8,7 +8,11 @@ const handleGetCustomersForAdmin = (config) => {
 };
 
 const handleGetCustomerDetail = (customerId) => {
-    return axiosInstance.get(`/admin/customers/${customerId}`)
+  return axiosInstance.get(`/admin/customers/${customerId}`)
 }
 
-export { handleGetCustomersForAdmin, handleGetCustomerDetail }
+const handleGetOrderByCustomer = (customerId, page, limit, order) => {
+  return axiosInstance.get(`admin/orders/customers/${customerId}${page ? `?page=${page}` : ""}${limit ? `&limit=${limit}` : ""}${order ? `&sortBy=updatedAt&order=${order}` : ""}`)
+}
+
+export { handleGetCustomersForAdmin, handleGetCustomerDetail, handleGetOrderByCustomer }
