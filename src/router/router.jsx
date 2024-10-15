@@ -13,6 +13,8 @@ import ProductAdmin from "../pages/ProductAdmin/ProductAdmin";
 import ProductDetail from "../components/Product/ProductDetail";
 import CustomerListAdmin from "../pages/CustomerListAdmin/CustomerListAdmin";
 import NotPermitted from "../pages/Error/NotPermitted";
+import CustomerDetail from "../pages/Customer/CustomerDetail";
+
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
   const navigate = useNavigate();
@@ -77,6 +79,10 @@ const router = createBrowserRouter(
         {
           path: "customer",
           element: <CustomerListAdmin />,
+        },
+        {
+          path: "customer/:customerId", // Dynamic route for category details
+          element: <CustomerDetail />, // Component to display specific category details
         },
       ],
     },

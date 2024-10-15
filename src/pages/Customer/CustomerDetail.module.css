@@ -1,0 +1,26 @@
+.container {
+    margin-bottom: 2rem;
+}
+
+.column_layout {
+    display: flex;
+    gap: 5rem;
+}
+
+.info {
+    flex: 2
+}
+
+.address {
+    flex: 3
+}
+
+.label {
+    margin-bottom: 1rem;
+}
+
+.value {
+    border: 1px solid grey;
+    border-radius: 10px;
+    padding: 1rem;
+}

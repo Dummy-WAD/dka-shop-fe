@@ -7,4 +7,8 @@ const handleGetCustomersForAdmin = (config) => {
   return axiosInstance.get("/admin/customers", { params: config });
 };
 
-export { handleGetCustomersForAdmin };
+const handleGetCustomerDetail = (customerId) => {
+    return axiosInstance.get(`/admin/customers/${customerId}`)
+}
+
+export { handleGetCustomersForAdmin, handleGetCustomerDetail }
