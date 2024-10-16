@@ -18,7 +18,7 @@ const handleSignUp = (data) => {
 };
 
 const handleGetUserInfo = () => {
-  return axiosInstance.get("/customer");
+  return axiosInstance.get("/auth/current-user");
 };
 
 const handleLogout = (refresh_token) => {
