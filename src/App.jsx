@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import "./App.css";
+import { RouterProvider } from "react-router-dom";
+import router from "./router/router";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useEffect, useState } from "react";
+import { handleGetUserInfo } from "./api/user";
+import { useDispatch } from "react-redux";
+import authSlice from "./redux/slice/authSlice";
 function App() {
-  const [count, setCount] = useState(0)
+  const dispatch = useDispatch();
+  const accessToken = localStorage.getItem("accessToken");
+  const [isLoading, setLoading] = useState(true);
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const res = await handleGetUserInfo();
+        console.log(res);
+        dispatch(
+          authSlice.actions.setAuthInfo({
+            isAuthenticated: true,
+            userInfo: res,
+          })
+        );
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (accessToken) {
+      getUserInfo();
+    } else setLoading(false);
+  }, [accessToken, dispatch]);
+
+  if (isLoading) return null;
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <RouterProvider router={router} />
+      <ToastContainer />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
