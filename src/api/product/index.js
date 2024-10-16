@@ -7,4 +7,8 @@ const getAllProductForAdmin = (config) => {
     }${name ? `&name=${name}` : ""}`
   );
 };
-export { getAllProductForAdmin };
+
+const getDetailProductForAdminById = (productId) => {
+  return axiosInstance.get(`/admin/products/${productId}`);
+};
+export { getAllProductForAdmin, getDetailProductForAdminById };

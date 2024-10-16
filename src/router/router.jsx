@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { ADMIN, CUSTOMER } from "../config/roles";
 import { useEffect, useState } from "react";
 import ProductAdmin from "../pages/ProductAdmin/ProductAdmin";
+import ProductDetail from "../components/Product/ProductDetail";
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
   const navigate = useNavigate();
@@ -66,6 +67,10 @@ const router = createBrowserRouter(
         {
           path: "product",
           element: <ProductAdmin />,
+        },
+        {
+          path: "product/:id",
+          element: <ProductDetail />,
         },
       ],
     },
