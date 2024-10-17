@@ -1,6 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialProduct = {
+  id: "",
+  primaryImage: "",
+  otherImages: [],
+  name: "",
+  price: "",
+  description: "",
+  category: {
+      id: "",
+      name: "",
+  },
+  productVariants: [],
+}
+
 const initialState = {
+  product: initialProduct,
   dataProducts: [],
   page: 0,
   totalPages: null,
@@ -9,6 +24,7 @@ const initialState = {
   order: "",
   sortBy: "",
   search: "",
+  idSelected: "",
 };
 export const productSlice = createSlice({
   name: "product",
@@ -18,6 +34,12 @@ export const productSlice = createSlice({
       return {
         ...state,
         ...action.payload,
+      };
+    },
+    setIdSelected: (state, action) => {
+      return {
+        ...state,
+        idSelected: action.payload,
       };
     },
     setCurrentPage: (state, action) => {
@@ -33,4 +55,4 @@ export const productSlice = createSlice({
 // Export the reducer
 export default productSlice;
 
-export const { setListProductInfo, setCurrentPage } = productSlice.actions;
+export const { setListProductInfo, setCurrentPage, setIdSelected } = productSlice.actions;

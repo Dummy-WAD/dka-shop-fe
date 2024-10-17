@@ -17,6 +17,7 @@ import IconButton from "../IconButton/IconButton";
 import { Delete, Edit, Visibility } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentPage } from "../../redux/slice/productSlice";
+import { Link } from "react-router-dom";
 
 const TableProductAdmin = ({
   data,
@@ -24,6 +25,7 @@ const TableProductAdmin = ({
   page,
   totalResults,
   handleSetOrderBy,
+  handleViewDelete,
 }) => {
   const dispatch = useDispatch();
 
@@ -134,13 +136,15 @@ const TableProductAdmin = ({
                       justifyContent: "flex-end",
                     }}
                   >
-                    <IconButton>
-                      <Visibility sx={{ color: "blue" }} />
-                    </IconButton>
+                    <Link to={`${item.id}`}>
+                      <IconButton>
+                        <Visibility sx={{ color: "blue" }} />
+                      </IconButton>
+                    </Link>
                     <IconButton>
                       <Edit sx={{ color: "green" }} />
                     </IconButton>
-                    <IconButton>
+                    <IconButton onClick={()=>handleViewDelete(item.id)}>
                       <Delete sx={{ color: "red" }} />
                     </IconButton>
                   </TableCell>
