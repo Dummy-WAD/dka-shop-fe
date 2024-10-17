@@ -1,0 +1,30 @@
+.container {
+    margin: 2rem 0;
+}
+
+.column_layout {
+    display: flex;
+    gap: 5rem;
+}
+
+.info {
+    flex: 2
+}
+
+.address {
+    flex: 3
+}
+
+.label {
+    margin-bottom: 1rem;
+}
+
+.value {
+    border: 1px solid grey;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.no_address {
+    padding: 1rem 0 1rem 0;
+}
