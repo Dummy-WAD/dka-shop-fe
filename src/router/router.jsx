@@ -11,6 +11,8 @@ import { ADMIN, CUSTOMER } from "../config/roles";
 import { useEffect, useState } from "react";
 import ProductAdmin from "../pages/ProductAdmin/ProductAdmin";
 import ProductDetail from "../components/Product/ProductDetail";
+import CustomerListAdmin from "../pages/CustomerListAdmin/CustomerListAdmin";
+import NotPermitted from "../pages/Error/NotPermitted";
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
   const navigate = useNavigate();
@@ -72,6 +74,10 @@ const router = createBrowserRouter(
           path: "product/:id",
           element: <ProductDetail />,
         },
+        {
+          path: "customer",
+          element: <CustomerListAdmin />,
+        },
       ],
     },
     {
@@ -89,6 +95,14 @@ const router = createBrowserRouter(
           <SignUp />
         </ProtectedRouteAuth>
       ),
+    },
+    {
+      path: "unauthorized",
+      element: <NotPermitted />,
+    },
+    {
+      path: "error",
+      element: <Error />,
     },
   ],
   {

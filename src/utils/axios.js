@@ -2,6 +2,7 @@ import axios from "axios";
 import { handleCreateAccessToken } from "../api/user";
 import authSlice from "../redux/slice/authSlice";
 import store from "../redux/store/store";
+import { redirect } from "react-router-dom";
 
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_URL}`,
@@ -52,6 +53,8 @@ axiosInstance.interceptors.response.use(
         "Authorization"
       ] = `Bearer ${access.token}`;
       return axiosInstance(originalRequest);
+    } else if (error.response.status === 403) {
+      return redirect("/unauthorized");
     }
     return Promise.reject(error);
   }
