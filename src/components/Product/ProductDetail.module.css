@@ -1,0 +1,17 @@
+.container{
+    margin-top: 2rem;
+    display: flex;
+    gap: 2rem
+}
+.row{
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+}
+.container_left{
+    width: 35%;
+}
+
+.container_right{
+    width: 65%;
+}

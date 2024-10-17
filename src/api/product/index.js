@@ -12,4 +12,7 @@ const deleteProductById = (productId) => {
   return axiosInstance.delete(`/admin/products/${productId}`);
 };
 
-export { getAllProductForAdmin, deleteProductById };
+const getDetailProductForAdminById = (productId) => {
+  return axiosInstance.get(`/admin/products/${productId}`);
+};
+export { getAllProductForAdmin, getDetailProductForAdminById, deleteProductById };
