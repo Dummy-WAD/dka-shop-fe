@@ -7,20 +7,24 @@ import { resetCategoryState } from "../../../redux/slice/categorySlice";
 const SidebarAdmin = () => {
   const dispatch = useDispatch();
   const handleResetCategoryState = () => {
-    dispatch(resetCategoryState())
-  }
+    dispatch(resetCategoryState());
+  };
   return (
     <div className={classNames(css.sidebar)}>
       <h2>Admin Panel</h2>
       <ul>
         <li>
-          <Link to="/admin/product" className={css.sidebarLink}>
-            Product
+          <Link
+            to="/admin/category"
+            className={css.sidebarLink}
+            onClick={handleResetCategoryState}
+          >
+            Category
           </Link>
         </li>
         <li>
-          <Link to="/admin/category" className={css.sidebarLink} onClick={handleResetCategoryState}>
-            Category
+          <Link to="/admin/product" className={css.sidebarLink}>
+            Product
           </Link>
         </li>
         <li>
