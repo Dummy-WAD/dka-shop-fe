@@ -9,6 +9,7 @@ import { getAllProductForAdmin, deleteProductById } from "../../api/product/inde
 import { setListProductInfo, setIdSelected } from "../../redux/slice/productSlice";
 import DeleteModal from "../../components/Modal/DeleteModal";
 import { toast } from "react-toastify";
+import SearchInput from "../../components/SearchInput/SearchInput";
 
 const ProductAdmin = () => {
   const dispatch = useDispatch();
@@ -87,6 +88,7 @@ const ProductAdmin = () => {
   const handleSearchProduct = () => {
     dispatch(
       setListProductInfo({
+        page: 0,
         search: refInput.current.value.trim(),
       })
     );
@@ -125,36 +127,32 @@ const ProductAdmin = () => {
       <div className={classes.main_title}>
         <div className={classes.title_page}>
           <CategoryIcon className={classes.icon_style} />
-          <p>Product</p>
+          <p>PRODUCT</p>
         </div>
-        <div className={classes.searchBar}>
-          <input type="text" placeholder="Search..." ref={refInput} />
-          <SearchIcon
-            className={classes.searchIcon}
-            onClick={handleSearchProduct}
+        <div className={classes.search_create}>
+          <SearchInput 
+            placeholder="Search"
+            inputRef={refInput}
+            onSearch={handleSearchProduct}
           />
+          <Button
+            variant="contained"
+            sx={{ backgroundColor: "#000", color: "#FFF" }}
+            startIcon={<Add />}
+          >
+            Create
+          </Button>
         </div>
-        <Button
-          variant="contained"
-          sx={{ backgroundColor: "#000", color: "#FFF" }}
-          startIcon={<Add />}
-        >
-          Create
-        </Button>
       </div>
       <div>
-        {dataProducts.length > 0 ? (
-          <TableProductAdmin
-            data={dataProducts}
-            page={page}
-            rowsPerPage={limit}
-            totalResults={totalResults}
-            handleSetOrderBy={handleSetOrderBy}
-            handleViewDelete={handleViewDelete}
-          />
-        ) : (
-          <p>No products available.</p>
-        )}
+        <TableProductAdmin
+          data={dataProducts}
+          page={page}
+          rowsPerPage={limit}
+          totalResults={totalResults}
+          handleSetOrderBy={handleSetOrderBy}
+          handleViewDelete={handleViewDelete}
+        />
       </div>
       {isOpenDelete &&
         <DeleteModal 

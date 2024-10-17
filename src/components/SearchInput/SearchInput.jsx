@@ -2,14 +2,13 @@ import css from "./SearchInput.module.css";
 import { SearchIcon } from "../../icon/Icon";
 import classNames from "classnames";
 
-const SearchInput = ({onChange, value, onSearch, placeholder}) => { 
+const SearchInput = ({onSearch, placeholder, inputRef}) => { 
     return (
         <div className={classNames(css.searchBar)}>
             <input
                 type="text"
                 placeholder={placeholder}
-                value={value}
-                onChange={(e) => onChange(e.target.value)}
+                ref={inputRef}
             />
             <SearchIcon
                 onClick={onSearch}
