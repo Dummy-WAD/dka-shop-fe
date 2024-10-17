@@ -1,7 +1,5 @@
 .main_title {
-  display: grid;
-  grid-template-columns: 100px 600px 100px;
-  align-items: center;
+  display: flex;
   justify-content: space-between;
 }
 
@@ -19,22 +17,8 @@
 .icon_style {
   width: 20px;
 }
-.searchBar {
-  width: 100%;
-  position: relative;
-  input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px #ccc solid;
-    outline: none;
-  }
-}
 
-.searchIcon {
-  position: absolute;
-  color: #ccc;
-  right: 5px;
-  top: 50%;
-  transform: translateY(-50%);
+.search_create{
+  display: flex;
+  gap: 1rem;
 }

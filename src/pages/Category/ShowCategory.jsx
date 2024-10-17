@@ -3,7 +3,7 @@ import { CategoryIcon } from "../../icon/Icon";
 import TableCategory from "./TableCategory";
 import { Button } from "@mui/material";
 import { Add } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ModalCustom from "../../components/Modal/BasicModal";
 import { handleGetAllCategories, handleCreateCategory, handleEditCategory, handleDeleteCategory} from "../../api/category";
 import categorySlice from "../../redux/slice/categorySlice";
@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 
 const ShowCategory = () => {
   const dispatch = useDispatch();
+  const refInput = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [typeModal, setTypeModal] = useState("");
   const [listData, setListData] = useState([]);
@@ -69,12 +70,9 @@ const ShowCategory = () => {
   }
 
   const handleSearch = () => {
-    fetchCategories(page, limit, orderBy, orderDirection, search);
-  }
-
-  const handleChangeSearch = (value) => {
     dispatch(categorySlice.actions.setCategoryInfo({
-      search: value
+      page: 0,
+      search: refInput.current.value.trim()
     }))
   }
 
@@ -137,6 +135,22 @@ const ShowCategory = () => {
     }
   }
 
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  useEffect(() => {
+    refInput?.current?.addEventListener("keypress", handleKeyPress);
+    return () => {
+      refInput?.current?.removeEventListener("keypress", handleKeyPress);
+      dispatch(
+        categorySlice.actions.resetCategoryState()
+      );
+    };
+  }, []);
+
   const fetchCategories = async (page, limit, orderBy, orderDirection, name) => {
     try {
       const res = await handleGetAllCategories(page+1,limit,orderBy,orderDirection,name);
@@ -167,9 +181,8 @@ const ShowCategory = () => {
             <div className={classes.search_create}>
               <SearchInput 
                 placeholder="Search"
-                value={search}
+                inputRef={refInput}
                 onSearch={handleSearch}
-                onChange={handleChangeSearch}
               />
               <Button 
                 variant="contained" 
