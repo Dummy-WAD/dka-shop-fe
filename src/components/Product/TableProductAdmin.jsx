@@ -24,6 +24,7 @@ const TableProductAdmin = ({
   page,
   totalResults,
   handleSetOrderBy,
+  handleViewDelete,
 }) => {
   const dispatch = useDispatch();
 
@@ -140,7 +141,7 @@ const TableProductAdmin = ({
                     <IconButton>
                       <Edit sx={{ color: "green" }} />
                     </IconButton>
-                    <IconButton>
+                    <IconButton onClick={()=>handleViewDelete(item.id)}>
                       <Delete sx={{ color: "red" }} />
                     </IconButton>
                   </TableCell>
