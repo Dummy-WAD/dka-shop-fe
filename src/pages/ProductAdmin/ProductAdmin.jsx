@@ -1,12 +1,14 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import classes from "./ProductAdmin.module.css";
 import { CategoryIcon, SearchIcon } from "../../icon/Icon";
 import TableProductAdmin from "../../components/Product/TableProductAdmin";
-import { getAllProductForAdmin } from "../../api/product/index";
-import { setListProductInfo } from "../../redux/slice/productSlice";
+import { getAllProductForAdmin, deleteProductById } from "../../api/product/index";
+import { setListProductInfo, setIdSelected } from "../../redux/slice/productSlice";
+import DeleteModal from "../../components/Modal/DeleteModal";
+import { toast } from "react-toastify";
 
 const ProductAdmin = () => {
   const dispatch = useDispatch();
@@ -19,8 +21,32 @@ const ProductAdmin = () => {
     sortBy,
     search,
     limit,
+    idSelected,
   } = useSelector((state) => state.product);
   const refInput = useRef(null);
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
+
+  const handleViewDelete = (productId) => {
+    setIsOpenDelete(true);
+    dispatch(setIdSelected(productId));
+  }
+
+  const handleClose = () => setIsOpenDelete(false);
+
+  const handleDeleteProduct = async () => {
+    try{
+      await deleteProductById(idSelected);
+      toast.success("Delete product successfully",{
+        autoClose: 3000,
+      });
+      fetchDataProduct();
+    } catch (err){
+      toast.error(err.response.data.message,{
+        autoClose: 3000,
+      });
+    }
+    handleClose();
+  }
 
   const fetchDataProduct = async () => {
     try {
@@ -124,11 +150,21 @@ const ProductAdmin = () => {
             rowsPerPage={limit}
             totalResults={totalResults}
             handleSetOrderBy={handleSetOrderBy}
+            handleViewDelete={handleViewDelete}
           />
         ) : (
           <p>No products available.</p>
         )}
       </div>
+      {isOpenDelete &&
+        <DeleteModal 
+          isOpen={isOpenDelete} 
+          handleClose={handleClose} 
+          onSubmit={handleDeleteProduct} 
+          title="Delete product"
+          description="Are you sure delete this product ?"
+        />
+      }
     </>
   );
 };

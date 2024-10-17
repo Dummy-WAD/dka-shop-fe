@@ -7,4 +7,9 @@ const getAllProductForAdmin = (config) => {
     }${name ? `&name=${name}` : ""}`
   );
 };
-export { getAllProductForAdmin };
+
+const deleteProductById = (productId) => {
+  return axiosInstance.delete(`/admin/products/${productId}`);
+};
+
+export { getAllProductForAdmin, deleteProductById };
