@@ -14,6 +14,7 @@ import ProductDetail from "../components/Product/ProductDetail";
 import CustomerListAdmin from "../pages/CustomerListAdmin/CustomerListAdmin";
 import NotPermitted from "../pages/Error/NotPermitted";
 import CustomerDetail from "../components/Customer/CustomerDetail";
+import ProductDetailCustomer from "../pages/ProductCustomer/ProductDetailCustomer";
 
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
@@ -52,6 +53,10 @@ const router = createBrowserRouter(
         {
           index: true,
           element: <Home />,
+        },
+        {
+          path: "product/:productId",
+          element: <ProductDetailCustomer />,
         },
       ],
     },

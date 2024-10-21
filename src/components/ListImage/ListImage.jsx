@@ -1,11 +1,15 @@
 import classes from "./ListImage.module.css"
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { ImageList, ImageListItem, IconButton } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ListImage = ({primaryImage, otherImages}) => {
-    const [nowImage, setNowImage] = useState(primaryImage);
+    const [nowImage, setNowImage] = useState("");
     const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(()=>{
+        setNowImage(primaryImage);
+    },[primaryImage])
 
     const totalImages = otherImages.length + 1;
     const numberImagesShow = totalImages < 5 ? totalImages : 5;

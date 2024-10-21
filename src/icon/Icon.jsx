@@ -294,6 +294,45 @@ export const TwitterIcon = ({
   </svg>
 );
 
+export const PlusIcon = ({
+  width = "1.2rem",
+  height = "1.2rem",
+  className = "",
+  onClick = () => {},
+}) => (
+  <svg
+    className={className}
+    width={width}
+    height={height}
+    onClick={onClick}
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 448 512"
+  >
+    <path d="M432 256c0 13.3-10.7 24-24 24h-152v152c0 13.3-10.7 24-24 24s-24-10.7-24-24V280H56c-13.3 0-24-10.7-24-24s10.7-24 24-24h152V80c0-13.3 10.7-24 24-24s24 10.7 24 24v152h152c13.3 0 24 10.7 24 24z" />
+  </svg>
+);
+
+export const MinusIcon = ({
+  width = "1.2rem",
+  height = "1.2rem",
+  className = "",
+  onClick = () => {},
+}) => (
+  <svg
+    className={className}
+    width={width}
+    height={height}
+    onClick={onClick}
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 448 512"
+  >
+    <path d="M432 256c0 13.3-10.7 24-24 24H40c-13.3 0-24-10.7-24-24s10.7-24 24-24h368c13.3 0 24 10.7 24 24z" />
+  </svg>
+);
+
+
 const iconPropTypes = {
   children: node,
   className: string,
@@ -317,3 +356,5 @@ InstagramIcon.propTypes = iconPropTypes;
 TwitterIcon.propTypes = iconPropTypes;
 PhoneIcon.propTypes = iconPropTypes;
 EmailIcon.propTypes = iconPropTypes;
+PlusIcon.propTypes = iconPropTypes;
+MinusIcon.propTypes = iconPropTypes;
