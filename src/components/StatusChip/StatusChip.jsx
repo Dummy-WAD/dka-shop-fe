@@ -2,27 +2,27 @@ import { Chip } from "@mui/material";
 import React from "react";
 
 const statusStyles = {
-  pending: {
+  PENDING: {
     backgroundColor: 'grey',
     color: 'white',
   },
-  packaged: {
+  PACKAGED: {
     backgroundColor: '#faa564',
     color: 'black',
   },
-  delivering: {
+  DELIVERING: {
     backgroundColor: '#64befa',
     color: 'black',
   },
-  completed: {
+  COMPLETED: {
     backgroundColor: 'green',
     color: 'white',
   },
-  active: {
+  ACTIVE: {
     backgroundColor: 'green',
     color: 'white',
   },
-  default: {
+  Default: {
     backgroundColor: 'black',
     color: 'white',
   },
@@ -39,7 +39,7 @@ function StatusChip({ label, status, style, ...props }) {
   return (
     <Chip
       // {...props}
-      label={status ? capitalizeFirstLetter(status) : label}
+      label={status ? status : label}
       sx={{
         ...style,
         ".MuiChip-label": {
@@ -47,7 +47,7 @@ function StatusChip({ label, status, style, ...props }) {
         },
         backgroundColor: backgroundColor,
         color: color,
-        minWidth: '100px'
+        minWidth: '110px'
       }}
     />
   );
