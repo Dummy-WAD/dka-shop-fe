@@ -6,8 +6,8 @@ const LayoutUser = () => {
   return (
     <div>
       <NavbarUser />
-      <div style={{ padding: "30px 50px" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+      <div>
+        <div style={{ minWidth: "1200px", margin: "0 auto" }}>
           <Outlet />
         </div>
       </div>
