@@ -1,4 +1,13 @@
-import { Box, Button, Chip, List, ListItem, ListItemText, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  List,
+  ListItem,
+  ListItemText,
+  TextField,
+  Typography,
+} from "@mui/material";
 import classes from "./CustomerDetail.module.css";
 import React, { useEffect, useState } from "react";
 import TableCategory from "../../pages/Category/TableCategory";
@@ -6,64 +15,77 @@ import StatusChip from "../StatusChip/StatusChip";
 import { green } from "@mui/material/colors";
 import TableOrderHistory from "./TableOrderHistory";
 import { Link, useParams } from "react-router-dom";
-import { handleGetCustomerDetail, handleGetOrderByCustomer } from "../../api/customer";
+import {
+  handleGetCustomerDetail,
+  handleGetOrderByCustomer,
+} from "../../api/customer";
 import { ArrowBack } from "@mui/icons-material";
 
 function CustomerDetail() {
-  const {customerId} = useParams()
-  const [customerInfo, setCustomerInfo] = useState([])
-  const [addresses, setAddresses] = useState([])
-  const [orderByCustomer, setOrderByCustomer] = useState([])
-  const [sortOrder, setSortOrder] = useState("desc")
-  const [loading, setLoading] = useState(false)
-  const [totalResults, setTotalResults] = useState(0)
-  const [currentPage, setCurrentPage] = useState(0)
-  const rowsPerPage = 5
+  const { customerId } = useParams();
+  const [customerInfo, setCustomerInfo] = useState([]);
+  const [addresses, setAddresses] = useState([]);
+  const [orderByCustomer, setOrderByCustomer] = useState([]);
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [loading, setLoading] = useState(false);
+  const [totalResults, setTotalResults] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const rowsPerPage = 5;
 
   const handleSetPage = (newPage) => {
-    setCurrentPage(newPage)
-  }
+    setCurrentPage(newPage);
+  };
 
   const handleSortOrder = () => {
-    const newSortOrder = sortOrder == "asc" ? "desc" : "asc"
-    setSortOrder(newSortOrder)
-  }
+    const newSortOrder = sortOrder == "asc" ? "desc" : "asc";
+    setSortOrder(newSortOrder);
+  };
 
   const fetchCustomerDetail = async (customerId) => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const res = await handleGetCustomerDetail(customerId)
-      setCustomerInfo(res.userInfo)
-      setAddresses(res.addresses)
+      const res = await handleGetCustomerDetail(customerId);
+      setCustomerInfo(res.userInfo);
+      setAddresses(res.addresses);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const fetchOrderByCustomer = async(customerId, currentPage, rowsPerPage, sortOrder) => {
-    setLoading(true)
-    console.log(currentPage, rowsPerPage)
+  const fetchOrderByCustomer = async (
+    customerId,
+    currentPage,
+    rowsPerPage,
+    sortOrder
+  ) => {
+    setLoading(true);
+    console.log(currentPage, rowsPerPage);
     try {
-      const res = await handleGetOrderByCustomer(customerId, currentPage+1, rowsPerPage, sortOrder)
-      setOrderByCustomer(res.results)
-      setTotalResults(res.totalResults)
+      const res = await handleGetOrderByCustomer(
+        customerId,
+        currentPage + 1,
+        rowsPerPage,
+        sortOrder
+      );
+      setOrderByCustomer(res.results);
+      setTotalResults(res.totalResults);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchCustomerDetail(customerId)
-  },[])
+    fetchCustomerDetail(customerId);
+  }, []);
 
   useEffect(() => {
-    fetchOrderByCustomer(customerId, currentPage, rowsPerPage, sortOrder)
-  }, [currentPage, sortOrder])
-  
+    fetchOrderByCustomer(customerId, currentPage, rowsPerPage, sortOrder);
+  }, [currentPage, sortOrder]);
+
   return (
     <>
       <div>
@@ -97,15 +119,11 @@ function CustomerDetail() {
               <Typography variant="h6" sx={{ my: "1rem" }}>
                 First Name
               </Typography>
-              <Box className={classes.value}>
-                {customerInfo.firstName}
-              </Box>
+              <Box className={classes.value}>{customerInfo.firstName}</Box>
               <Typography variant="h6" sx={{ my: "1rem" }}>
                 Last Name
               </Typography>
-              <Box className={classes.value}>
-                {customerInfo.lastName}
-              </Box>
+              <Box className={classes.value}>{customerInfo.lastName}</Box>
               <Typography variant="h6" sx={{ my: "1rem" }}>
                 Email Address
               </Typography>
@@ -126,15 +144,15 @@ function CustomerDetail() {
                 Status
               </Typography>
               <div className={classes.column_layout}>
-                {customerInfo.status == "Active" && (
+                {customerInfo.status == "ACTIVE" && (
                   <StatusChip
-                    status="active"
+                    status="ACTIVE"
                     style={{ padding: 2, fontSize: "16px", m: 1 }}
                   />
                 )}
-                {customerInfo.status == "Inactive" && (
+                {customerInfo.status == "INACTIVE" && (
                   <StatusChip
-                    status="inactive"
+                    status="INACTIVE"
                     style={{ padding: 2, fontSize: "16px", m: 1 }}
                   />
                 )}
@@ -147,19 +165,39 @@ function CustomerDetail() {
                   This customer has no address
                 </Box>
               ) : (
-                <List className={classes.value}>
-                  {addresses.map((address) => (
-                    <ListItem key={address.full_address}>
-                      <ListItemText primary={address.full_address} />
-                      {address.is_default && (
-                        <StatusChip
-                          status="default"
-                          style={{ fontSize: "16px", m: 1 }}
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                  className={classes.value}
+                >
+                  <List disablePadding>
+                    {addresses.map((address) => (
+                      <ListItem
+                        key={address.full_address}
+                        sx={{ "&.MuiListItem-root": { paddingY: 0.5 } }}
+                      >
+                        <ListItemText
+                          sx={{ flex: 1 }}
+                          primary={address.full_address}
                         />
-                      )}
-                    </ListItem>
-                  ))}
-                </List>
+                      </ListItem>
+                    ))}
+                  </List>
+                  <List disablePadding>
+                    {addresses.map((address) => (
+                      <ListItem
+                        key={address.full_address}
+                        sx={{ "&.MuiListItem-root": { paddingY: 0.5 } }}
+                      >
+                        {address.is_default && (
+                          <StatusChip
+                            status="Default"
+                            style={{ fontSize: "16px" }}
+                          />
+                        )}
+                      </ListItem>
+                    ))}
+                  </List>
+                </div>
               )}
             </div>
           </div>
