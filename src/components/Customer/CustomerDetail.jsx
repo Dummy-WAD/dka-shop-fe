@@ -144,18 +144,10 @@ function CustomerDetail() {
                 Status
               </Typography>
               <div className={classes.column_layout}>
-                {customerInfo.status == "ACTIVE" && (
-                  <StatusChip
-                    status="ACTIVE"
-                    style={{ padding: 2, fontSize: "16px", m: 1 }}
-                  />
-                )}
-                {customerInfo.status == "INACTIVE" && (
-                  <StatusChip
-                    status="INACTIVE"
-                    style={{ padding: 2, fontSize: "16px", m: 1 }}
-                  />
-                )}
+                <StatusChip
+                  status={customerInfo.status}
+                  style={{ padding: 2, fontSize: "16px", m: 1 }}
+                />
               </div>
               <Typography variant="h6" sx={{ my: "1rem" }}>
                 Address
@@ -190,8 +182,12 @@ function CustomerDetail() {
                       >
                         {address.is_default && (
                           <StatusChip
-                            status="Default"
-                            style={{ fontSize: "16px" }}
+                            label="Default"
+                            style={{
+                              fontSize: "16px",
+                              backgroundColor: "black",
+                              color: "white",
+                            }}
                           />
                         )}
                       </ListItem>
