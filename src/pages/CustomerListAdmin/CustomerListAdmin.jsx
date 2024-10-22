@@ -7,7 +7,7 @@ import { UserIcon } from "../../icon/Icon";
 import TableCustomer from "./TableCustomer";
 import customerAdminSlice from "../../redux/slice/customerAdminSlice";
 import { handleGetCustomersForAdmin } from "../../api/customer";
-import { ACTIVE, INACTIVE } from "../../config/roles";
+import { ACTIVE, INACTIVE } from "../../config/status";
 
 const limit = 20;
 
