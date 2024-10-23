@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -7,16 +7,18 @@ import {
   SearchIcon,
   UserIcon,
 } from "../../../icon/Icon";
-import searchSlice from "../../../redux/slice/searchSlice";
+import SearchInput from "../../../components/SearchInput/SearchInput";
 import css from "./NavbarUser.module.css";
 import classNames from "classnames";
 import { handleLogout } from "../../../api/user";
 import authSlice from "../../../redux/slice/authSlice";
 import { toast } from "react-toastify";
+import { setInfoPageSearch, resetInfoPageSearch } from "../../../redux/slice/searchSlice";
 
 const NavbarUser = () => {
+  const refInput = useRef(null);
+
   const { isAuthenticated } = useSelector((state) => state.auth);
-  const [searchText, setSearchText] = useState();
   const [isShowUserMenu, setShowUserMenu] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -45,26 +47,38 @@ const NavbarUser = () => {
     logout();
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  useEffect(() => {
+    refInput?.current?.addEventListener("keypress", handleKeyPress);
+    return () => {
+      refInput?.current?.removeEventListener("keypress", handleKeyPress);
+      dispatch(resetInfoPageSearch());
+    };
+  }, []);
+
+  const handleSearch = () => {
+    dispatch(setInfoPageSearch({
+      page: 1,
+      searchText: refInput.current.value.trim()
+    }))
+  }
+
   return (
     <div className={css.container}>
       <header className={css.navbar}>
         <Link to="/">
           <img alt="logo" src="/logo.png" className={css.logo} />
         </Link>
-        <div className={css.searchBar}>
-          <input
-            className={css.searchInput}
-            value={searchText}
-            placeholder="Explore our products..."
-            onChange={(e) => setSearchText(e.target.value)}
-          />
-          <SearchIcon
-            className={css.searchIcon}
-            onClick={() =>
-              dispatch(searchSlice.actions.setSearchText(searchText))
-            }
-          />
-        </div>
+        <SearchInput 
+          placeholder="Explore our products..."
+          inputRef={refInput}
+          onSearch={handleSearch}
+        />
         <div className={css.actionBox}>
           {isAuthenticated ? (
             <>

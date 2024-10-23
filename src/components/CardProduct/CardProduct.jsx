@@ -13,20 +13,20 @@ const CardProduct = ({product}) => {
                         height: 'auto',
                         aspectRatio: '1/1' // Giữ tỉ lệ 1:1 giữa width và height
                     }}
-                    image={product.primaryImage}
+                    image={product.primaryImageUrl}
                 />
             </CardActionArea>
             <CardContent sx={{pt: "0.5rem", pb: "1rem !important"}}>
                 <Typography sx={{fontWeight: "500"}}>{product.name}</Typography>
                 <Divider sx={{borderBottomWidth: "2px", my: "0.5rem"}}/>
-                <Grid2 sx={{display: "flex", gap: "1.5rem", alignItems : "center"}}>
+                <Grid2 sx={{display: "flex", gap: "1rem", alignItems : "center"}}>
                     <Typography
                         sx={{
                             textDecoration: "line-through",
                             color: "#ccc"
                         }}
                     >
-                        ${product.originPrice}
+                        ${product.price}
                     </Typography>
                     <Typography
                         sx={{
@@ -35,7 +35,7 @@ const CardProduct = ({product}) => {
                             color: "#faa564",
                         }}
                     >
-                        ${product.sellPrice}
+                        ${product.priceDiscounted}
                     </Typography>
                 </Grid2>
                 <Grid2 sx={{display: "flex", justifyContent:"space-between", mt: "0.5rem", flexWrap: "wrap"}}>

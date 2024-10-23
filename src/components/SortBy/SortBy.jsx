@@ -1,10 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SwapVert } from "@mui/icons-material"
 import { Button, Divider, FormControlLabel, Grid2, Menu, Paper, Radio, RadioGroup, Typography } from "@mui/material";
 import classes from "./SortBy.module.css"
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setSortBy } from "../../redux/slice/searchSlice";
 
 const SortBy = ({}) => {
+    const dispatch = useDispatch();
+    const { sortBy, orderDirection } = useSelector(state => state.search);
+    const [name, setName] = useState("");
+    const [priceRadio, setPriceRadio] = useState("");
+    const [updatedAtRadio, setUpdatedAtRadio] = useState("");
+
+    useEffect(()=>{
+        setName(sortBy);
+        if (sortBy === "price") setPriceRadio(orderDirection);
+        else if (sortBy === "updatedAt") setUpdatedAtRadio(orderDirection); 
+    },[sortBy, orderDirection])
+
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -13,6 +26,40 @@ const SortBy = ({}) => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const handleOnChangeValue = (e, type) => {
+        const value = e.target.value;
+        setName(type);
+        if (type == "price") {
+            setPriceRadio(value);
+            setUpdatedAtRadio("");
+        } else {
+            setUpdatedAtRadio(value);
+            setPriceRadio("");
+        }
+    }
+
+    const handleApply = () => {
+        const order = name === "price" ? priceRadio : updatedAtRadio;
+        dispatch(setSortBy({
+            sortBy: name,
+            order,
+        }))
+        setAnchorEl(null);
+    }
+
+    const handleReset = () => {
+        dispatch(setSortBy({
+            sortBy: "",
+            order: "",
+        }))
+        setName("");
+        setPriceRadio("");
+        setUpdatedAtRadio("");
+    }
+
+    useEffect(()=>{
+        handleReset();
+    },[])
     return (
         <div className={classes.container}>
             <Button 
@@ -47,7 +94,11 @@ const SortBy = ({}) => {
             >
                 <Grid2 sx={{width: "400px", p: "1rem"}}>
                     <Typography sx={{fontWeight: "500", mb:  "0.5rem"}}>Price</Typography>
-                    <RadioGroup row >
+                    <RadioGroup 
+                        row 
+                        value={priceRadio}
+                        onChange={(e)=>handleOnChangeValue(e,"price")}
+                    >
                         <FormControlLabel value="asc" control={<Radio sx={{
                             "&.Mui-checked" : { color : "var(--admin-color)"}
                         }} />} label="Low to high" sx={{flex: 1}} />
@@ -57,11 +108,15 @@ const SortBy = ({}) => {
                     </RadioGroup>
                     <Divider sx={{m: "0.5rem 0"}}/>
                     <Typography sx={{fontWeight: "500", mb:  "0.5rem"}}>Last updated</Typography>
-                    <RadioGroup row >
-                        <FormControlLabel value="new" control={<Radio sx={{
+                    <RadioGroup 
+                        row 
+                        value={updatedAtRadio}
+                        onChange={(e)=>handleOnChangeValue(e,"updatedAt")}
+                    >
+                        <FormControlLabel value="desc" control={<Radio sx={{
                             "&.Mui-checked" : { color : "var(--admin-color)"}
                         }} />} label="Newest" sx={{flex: 1}} />
-                        <FormControlLabel value="old" control={<Radio sx={{
+                        <FormControlLabel value="asc" control={<Radio sx={{
                             "&.Mui-checked" : { color : "var(--admin-color)"}
                         }} />} label="Oldest" sx={{flex: 1}} />
                     </RadioGroup>
@@ -72,6 +127,7 @@ const SortBy = ({}) => {
                             sx={{
                                 backgroundColor: "var(--admin-color)",
                             }}
+                            onClick={handleApply}
                         >
                             Apply
                         </Button>
@@ -81,6 +137,7 @@ const SortBy = ({}) => {
                                 color: "var(--admin-color)",
                                 border: "1px solid var(--admin-color)"
                             }}
+                            onClick={handleReset}
                         >
                             Reset
                         </Button>
