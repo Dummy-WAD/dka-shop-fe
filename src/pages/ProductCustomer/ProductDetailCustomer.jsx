@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 
 function ProductDetailCustomer() {
   const { productId } = useParams();
-  const [product, setProduct] = useState({});
+  const [product, setProduct] = useState({ primaryImage: "", otherImages: [] });
   const [colors, setColors] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [availableSizes, setAvailableSizes] = useState([]);
@@ -90,15 +90,8 @@ function ProductDetailCustomer() {
       <div className={classes.container}>
         <div className={classes.container_left}>
           <ListImage
-            primaryImage="https://5.imimg.com/data5/VH/BL/PA/SELLER-96763193/fond-of-mens-cotton-shirts.jpg"
-            otherImages={[
-              "https://5.imimg.com/data5/VH/BL/PA/SELLER-96763193/fond-of-mens-cotton-shirts.jpg",
-              "https://5.imimg.com/data5/VH/BL/PA/SELLER-96763193/fond-of-mens-cotton-shirts.jpg",
-              "https://5.imimg.com/data5/VH/BL/PA/SELLER-96763193/fond-of-mens-cotton-shirts.jpg",
-              "https://5.imimg.com/data5/VH/BL/PA/SELLER-96763193/fond-of-mens-cotton-shirts.jpg",
-              "https://5.imimg.com/data5/VH/BL/PA/SELLER-96763193/fond-of-mens-cotton-shirts.jpg",
-              "https://5.imimg.com/data5/VH/BL/PA/SELLER-96763193/fond-of-mens-cotton-shirts.jpg",
-            ]}
+            primaryImage={product.primaryImage}
+            otherImages={product.otherImages}
           />
         </div>
         <div className={classes.container_right}>
