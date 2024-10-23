@@ -66,6 +66,7 @@ const NavbarUser = () => {
       page: 1,
       searchText: refInput.current.value.trim()
     }))
+    navigate("/search");
   }
 
   return (
