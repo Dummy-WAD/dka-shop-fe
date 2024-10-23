@@ -28,7 +28,7 @@ function Home() {
             <div>Exciting products at irresistible prices</div>
           </div>
           <div>
-            <CategoryButton >
+            <CategoryButton className={classes.outlined} >
               {" All products"}
               <AllArrowIcon />
             </CategoryButton>
@@ -36,8 +36,10 @@ function Home() {
         </div>
         <div className={classes.bestSellerBody}>All best seller product</div>
         {/* More product button */}
-        <div className={classes.moreProductBtn}>
-          <Button>More product</Button>
+        <div style={{ display: "flex", justifyContent: "center"}}>
+          <CategoryButton className={classes.moreProductBtn} >
+            {"All products"}
+          </CategoryButton>
         </div>
       </div>
     </div>
