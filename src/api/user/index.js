@@ -27,10 +27,22 @@ const handleLogout = (refresh_token) => {
   });
 };
 
+const confirmAccount = (token) => {
+  return axiosInstance.get(`/auth/confirm-sign-up?token=${token}`);
+};
+
+const resendEmail = (email) => {
+  return axiosInstance.post("/auth/resend-confirmation-email", {
+    email,
+  });
+};
+
 export {
   handleLogin,
   handleCreateAccessToken,
   handleSignUp,
   handleGetUserInfo,
   handleLogout,
+  confirmAccount,
+  resendEmail,
 };

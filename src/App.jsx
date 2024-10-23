@@ -15,7 +15,6 @@ function App() {
     const getUserInfo = async () => {
       try {
         const res = await handleGetUserInfo();
-        console.log(res);
         dispatch(
           authSlice.actions.setAuthInfo({
             isAuthenticated: true,

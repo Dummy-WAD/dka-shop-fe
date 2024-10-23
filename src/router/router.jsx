@@ -14,6 +14,8 @@ import ProductDetail from "../components/Product/ProductDetail";
 import CustomerListAdmin from "../pages/CustomerListAdmin/CustomerListAdmin";
 import NotPermitted from "../pages/Error/NotPermitted";
 import CustomerDetail from "../components/Customer/CustomerDetail";
+import Confirm from "../pages/ConfirmEmail/Confirm";
+import ResendEmail from "../pages/ResendEmail/ResendEmail";
 import ProductDetailCustomer from "../pages/ProductCustomer/ProductDetailCustomer";
 
 const ProtectedRouteAuth = ({ children }) => {
@@ -108,8 +110,18 @@ const router = createBrowserRouter(
       ),
     },
     {
+      path: "confirm-signup",
+      element: <Confirm />,
+      errorElement: <Error />,
+    },
+    {
       path: "unauthorized",
       element: <NotPermitted />,
+    },
+    {
+      path: "resend-email",
+      element: <ResendEmail />,
+      errorElement: <Error />,
     },
     {
       path: "error",
