@@ -17,6 +17,7 @@ import CustomerDetail from "../components/Customer/CustomerDetail";
 import Confirm from "../pages/ConfirmEmail/Confirm";
 import ResendEmail from "../pages/ResendEmail/ResendEmail";
 import ProductDetailCustomer from "../pages/ProductCustomer/ProductDetailCustomer";
+import Search from "../pages/Search/Search";
 
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
@@ -59,6 +60,10 @@ const router = createBrowserRouter(
         {
           path: "product/:productId",
           element: <ProductDetailCustomer />,
+        },
+        {
+          path: "search",
+          element: <Search />,
         },
       ],
     },

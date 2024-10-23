@@ -1,0 +1,41 @@
+.container{
+    min-height: 100vh;
+    padding: 1rem 1.5rem;
+}
+
+.list_filter{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-left: 1.5rem;
+    gap: 0.5rem;
+}
+.showButton{
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.price{
+    margin-top: 1rem;
+}
+.input{
+    background-color: #fff;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem;
+    width: 40%;
+}
+
+.input input{
+    padding: 0.5rem;
+    width: 100%;
+}
+.input_container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+}
