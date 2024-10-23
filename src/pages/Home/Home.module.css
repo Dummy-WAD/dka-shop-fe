@@ -1,0 +1,19 @@
+.container {
+    padding: 35px 0;
+}
+
+.categories {
+    background: #f3f4f6;
+    width: 100%;
+    margin-top: -30px;
+}
+
+.categoriesBody {
+    width: 100%;
+    display: flex;
+    justify-content: space-between; /* Center the buttons horizontally */
+    gap: 12px; /* Space between each button */
+    padding: 20px 0; /* Padding for top and bottom spacing */
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+}
+  
