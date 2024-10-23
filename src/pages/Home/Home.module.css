@@ -1,19 +1,36 @@
 .container {
-    padding: 35px 0;
+  padding: 35px 0;
 }
 
 .categories {
-    background: #f3f4f6;
-    width: 100%;
-    margin-top: -30px;
+  background: #f3f4f6;
+  width: 100%;
+  margin-top: -30px;
+  border-bottom: 1px solid rgb(187, 182, 182);
 }
 
 .categoriesBody {
-    width: 100%;
-    display: flex;
-    justify-content: space-between; /* Center the buttons horizontally */
-    gap: 12px; /* Space between each button */
-    padding: 20px 0; /* Padding for top and bottom spacing */
-    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+  width: 100%;
+  display: flex;
+  justify-content: space-between; /* Center the buttons horizontally */
+  gap: 12px; /* Space between each button */
+  padding: 20px 0; /* Padding for top and bottom spacing */
+  flex-wrap: wrap; /* Allows wrapping on smaller screens */
 }
-  
+
+.bestSellerProduct {
+  padding: 20px 0;
+}
+
+.bestSellerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Vertically centers content */
+  flex-wrap: wrap; /* Allows wrapping on smaller screens */
+}
+
+.text {
+  display: flex;
+  flex-direction: column; /* Ensures the header and description stack vertically */
+}
+
