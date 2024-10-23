@@ -8,7 +8,7 @@ import { getListProducts } from "../../api/search/search"
 import { useDispatch, useSelector } from "react-redux"
 import { setNewPage, setInfoPageSearch } from "../../redux/slice/searchSlice"
 
-const limit = 1;
+const limit = 10;
 
 const Search = ({}) => {
     const dispatch = useDispatch();

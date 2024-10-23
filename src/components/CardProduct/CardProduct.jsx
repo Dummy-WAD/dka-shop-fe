@@ -1,11 +1,16 @@
 import { Card, CardActionArea, CardContent, CardMedia, Divider, Grid2, Rating, Typography } from "@mui/material"
 import { FavoriteBorder, ShoppingCart } from "@mui/icons-material"
 import IconButton from "../IconButton/IconButton"
+import { useNavigate } from "react-router-dom"
 
 const CardProduct = ({product}) => {
+    const navigate = useNavigate();
+    const handleProductClick = () => {
+        navigate(`/product/${product.id}`);
+    }
     return (
         <Card sx={{width: "18%"}}>
-            <CardActionArea>
+            <CardActionArea onClick={handleProductClick}>
                 <CardMedia 
                     component="img"
                     style={{
