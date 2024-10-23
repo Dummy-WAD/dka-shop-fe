@@ -1,13 +1,16 @@
 import axiosInstance from "../../utils/axios";
 
 const getPresignedURLs = (filenames) => {
-  return axiosInstance.post(`/images/generate-presigned-urls`, {
+  return axiosInstance.post(`/admin/images/generate-presigned-urls`, {
     keys: filenames,
   });
 }
 
 const uploadImageToS3 = (presignedURL, file) => {
-  return axiosInstance.put(presignedURL, file);
+  return fetch(presignedURL, {
+    method: "PUT",
+    body: file
+  })
 }
 
 const uploadImagesToS3 = (presignedURLs, files) => {
