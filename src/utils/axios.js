@@ -44,6 +44,12 @@ axiosInstance.interceptors.response.use(
       );
       window.location.href = "/login";
     } else if (error.response.status === 401 && !originalRequest._retry) {
+      const resultError = error.response.data;
+      const { message, user } = resultError;
+      if (message === "Account is not active") {
+        sessionStorage.setItem("email", user.email);
+        window.location.href = "/resend-email";
+      }
       originalRequest._retry = true;
       const response = await handleCreateAccessToken(refreshToken);
       const { access, refresh } = response;

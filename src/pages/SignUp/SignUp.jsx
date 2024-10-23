@@ -13,7 +13,9 @@ const SignUp = () => {
     try {
       const response = await handleSignUp(values);
       if (response) {
-        toast.success("Sign up successfully!");
+        toast.success(
+          "Registration successful. Please check your email to verify your account!"
+        );
         navigate("/login");
       }
     } catch (error) {
