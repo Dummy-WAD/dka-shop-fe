@@ -10,13 +10,16 @@ import { setFilterCategory, setFilterPrice } from "../../redux/slice/searchSlice
 const initialPrice = [0,1000]
 const limit = 5;
 
+const transferValueToPercent = (value) => {
+    return Math.round(value / initialPrice[1] * 100);
+}
+
 const Filter = ({}) => {
     const dispatch = useDispatch();
     const { priceStart, priceEnd, filterCategory } = useSelector(state => state.search);
     const [listCategories, setListCategories] = useState([]);
     const [numberCategoryShow, setNumberCategoryShow] = useState(limit);
-    const transferPriceStart = Math.round(priceStart / initialPrice[1] * 100);
-    const transferPriceEnd = Math.round(priceEnd / initialPrice[1] * 100);
+    const [value, setValue] = useState(initialPrice);
     const priceStartRef = useRef(null);
     const priceEndRef = useRef(null);
 
@@ -27,21 +30,30 @@ const Filter = ({}) => {
         setNumberCategoryShow(numberCategoryShow - limit);
     }
     const handleChangeValue = (e, newValue) => {
+        setValue(newValue);
         const [start, end] = newValue;
+        const transferStart = Math.round(start * initialPrice[1] / 100);
+        const transferEnd = Math.round(end * initialPrice[1] / 100);
+        priceStartRef.current.value = transferStart;
+        priceEndRef.current.value = transferEnd;
+    }
+
+    const handleChangePrice = () =>  {
+        const [start, end] = value;
         const transferStart = Math.round(start * initialPrice[1] / 100);
         const transferEnd = Math.round(end * initialPrice[1] / 100);
         dispatch(setFilterPrice({
             start: transferStart,
             end: transferEnd,
-        }))
-        priceStartRef.current.value = transferStart;
-        priceEndRef.current.value = transferEnd;
+        }));
     }
 
     const handleInputPriceStart = (e) => {
         if (e.key === 'Enter') {
             const value = parseInt(priceStartRef.current.value);
             if (value <= initialPrice[1] && value >= initialPrice[0]){
+                const transferPriceStart = transferValueToPercent(value);
+                const transferPriceEnd = transferValueToPercent(priceEnd);
                 if (value > priceEnd){
                     dispatch(setFilterPrice({
                         start: priceEnd,
@@ -49,11 +61,13 @@ const Filter = ({}) => {
                     }))
                     priceStartRef.current.value = priceEnd;
                     priceEndRef.current.value = value;
+                    setValue([transferPriceEnd, transferPriceStart]);
                 } else {
                     dispatch(setFilterPrice({
                         start: value,
                         end: priceEnd,
                     }))
+                    setValue([transferPriceStart, transferPriceEnd]);
                 }
             }
             else priceStartRef.current.value = priceStart;
@@ -64,6 +78,8 @@ const Filter = ({}) => {
         if (e.key === 'Enter') {
             const value = parseInt(priceEndRef.current.value);
             if (value <= initialPrice[1] && value >= initialPrice[0]){
+                const transferPriceStart = transferValueToPercent(priceStart)
+                const transferPriceEnd = transferValueToPercent(value);
                 if (value < priceStart){
                     dispatch(setFilterPrice({
                         start: value,
@@ -71,11 +87,13 @@ const Filter = ({}) => {
                     }))
                     priceStartRef.current.value = value;
                     priceEndRef.current.value = priceStart;
+                    setValue([transferPriceEnd, transferPriceStart]);
                 } else {
                     dispatch(setFilterPrice({
                         start: priceStart,
                         end: value,
-                    }))
+                    }));
+                    setValue([transferPriceStart, transferPriceEnd]);
                 }
             } else priceEndRef.current.value = priceEnd;
         }
@@ -103,6 +121,7 @@ const Filter = ({}) => {
             start: initialPrice[0],
             end: initialPrice[1],
         })
+        setValue([transferValueToPercent(priceStart), transferValueToPercent(priceEnd)]);
     },[])
 
     return (
@@ -159,8 +178,9 @@ const Filter = ({}) => {
             <div className={classes.price}>
                 <Typography variant="h6" sx={{fontWeight: "500", mb:  "0.5rem"}}>Price</Typography>
                 <Slider
-                    value={[transferPriceStart, transferPriceEnd]}
+                    value={value}
                     onChange={handleChangeValue}
+                    onChangeCommitted={handleChangePrice}
                     valueLabelDisplay="auto"
                     valueLabelFormat={formatValueLabel}
                     color="var(--admin-color)"
@@ -188,4 +208,4 @@ const Filter = ({}) => {
     )
 }
 
-export default Filter
+export default Filter;
