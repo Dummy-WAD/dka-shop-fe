@@ -15,10 +15,10 @@ function Home() {
 
   const fetchProductsAndCategories = async () => {
     try {
-      const products = await getBestSellerProductsForCustomer({});
+      const products = await getBestSellerProductsForCustomer({ limit: 20 });
       setListProducts(products);
 
-      const categories = await getBestSellerCategoriesForCustomer({});
+      const categories = await getBestSellerCategoriesForCustomer({ limit: 10 });
       setListCategories(categories);
     } catch (err) {
       console.error(err);
@@ -49,7 +49,7 @@ function Home() {
     <>
       <div className="banner" style={{ minWidth: "1200px", overflow: "hidden", margin: "0 auto" }}>
         <img
-          src="../../../public/banner.png"
+          src="/banner.png"
           alt="Banner"
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
