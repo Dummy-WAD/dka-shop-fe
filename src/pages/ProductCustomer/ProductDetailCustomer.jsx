@@ -126,7 +126,7 @@ function ProductDetailCustomer() {
           <div className={classes.row}>
             <p>Category</p>
             <p style={{ color: "#000", fontSize: "20px" }}>
-              {product.categoryName}
+              {product?.categoryName ?? "no category"}
             </p>
           </div>
 

@@ -14,11 +14,13 @@ import { handleLogout } from "../../../api/user";
 import authSlice from "../../../redux/slice/authSlice";
 import { toast } from "react-toastify";
 import { setInfoPageSearch, setSearchText } from "../../../redux/slice/searchSlice";
+import { ADMIN, CUSTOMER } from "../../../config/roles";
 
 const NavbarUser = () => {
   const refInput = useRef(null);
 
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const { role } = useSelector((state) => state.auth.userInfo);
   const [isShowUserMenu, setShowUserMenu] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -81,15 +83,8 @@ const NavbarUser = () => {
           onSearch={handleSearch}
         />
         <div className={css.actionBox}>
-          {isAuthenticated ? (
+          {isAuthenticated && role === CUSTOMER ? (
             <>
-              <div className={css.actionItem}>
-                <div className={css.actionIcon}>
-                  <NotificationIcon className={css.actionIconDetail} />
-                  <span className={css.count}></span>
-                </div>
-                <div>Notification</div>
-              </div>
               <div
                 onClick={() => setShowUserMenu(!isShowUserMenu)}
                 className={classNames(css.actionItem, css.actionUser)}
@@ -115,13 +110,20 @@ const NavbarUser = () => {
               </div>
               <div className={css.actionItem}>
                 <div className={css.actionIcon}>
+                  <NotificationIcon className={css.actionIconDetail} />
+                  <span className={css.count}></span>
+                </div>
+                <div>Notification</div>
+              </div>
+              <div className={css.actionItem}>
+                <div className={css.actionIcon}>
                   <CartIcon className={css.actionIconDetail} />
                   <span className={css.count}></span>
                 </div>
                 <div>Cart</div>
               </div>
             </>
-          ) : (
+          ) : isAuthenticated && role === ADMIN ? <Link to='/admin'style={{color: 'var(--admin-color)', textDecoration: 'underline'}}>Back to admin page</Link> : (
             <>
               <Link className={classNames(css.button, css.primary)} to="/login">
                 Login

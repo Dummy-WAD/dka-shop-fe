@@ -1,7 +1,7 @@
 import { node } from "prop-types";
 import NavbarAdmin from "./NavbarAdmin/NavbarAdmin";
 import SidebarAdmin from "./SidebarAdmin/SidebarAdmin";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import NotPermitted from "../../pages/Error/NotPermitted";
 import { ADMIN, CUSTOMER } from "../../config/roles";
@@ -11,6 +11,8 @@ const LayoutAdmin = () => {
     `${import.meta.env.VITE_BASE_URL}/admin`
   );
   const role = useSelector((state) => state?.auth?.userInfo?.role);
+  if (isAdminRoute && role !== ADMIN) return <Navigate to="/unauthorized" />
+
   return (
     <>
       {isAdminRoute && role === ADMIN && (
@@ -28,7 +30,6 @@ const LayoutAdmin = () => {
           </div>
         </div>
       )}
-      {isAdminRoute && (role === CUSTOMER || !role) && <NotPermitted />}
     </>
   );
 };

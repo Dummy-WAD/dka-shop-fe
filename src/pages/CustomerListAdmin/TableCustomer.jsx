@@ -39,7 +39,7 @@ const TableCustomer = ({
           <TableHead className={classes.table_head}>
             <TableRow>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
-                ID
+                  ID
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
                 <TableSortLabelCustom
@@ -64,28 +64,10 @@ const TableCustomer = ({
                 </TableSortLabelCustom>
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
-                <TableSortLabelCustom
-                  isHideSort={true}
-                  orderBy={sortBy}
-                  orderDirection={order}
-                  name="email"
-                  color="#FFF"
-                  onClick={() => onSetOrder("email")}
-                >
                   Email
-                </TableSortLabelCustom>
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
-                <TableSortLabelCustom
-                  isHideSort={true}
-                  orderBy={sortBy}
-                  orderDirection={order}
-                  name="phoneNumber"
-                  color="#FFF"
-                  onClick={() => onSetOrder("phoneNumber")}
-                >
                   Phone number
-                </TableSortLabelCustom>
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
                 <TableSortLabelCustom
@@ -95,7 +77,7 @@ const TableCustomer = ({
                   color="#FFF"
                   onClick={() => onSetOrder("createdAt")}
                 >
-                  Created date
+                  Registered date
                 </TableSortLabelCustom>
               </TableCell>
               <TableCell></TableCell>
@@ -111,7 +93,7 @@ const TableCustomer = ({
                   <TableCell>{email}</TableCell>
                   <TableCell>{phoneNumber}</TableCell>
                   <TableCell>
-                    {moment(createdAt).toDate().toDateString()}
+                    {moment(createdAt).format("DD/MM/YYYY")}
                   </TableCell>
                   <TableCell
                     sx={{

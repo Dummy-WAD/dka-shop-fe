@@ -18,6 +18,7 @@ import { Delete, Edit, Visibility } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentPage } from "../../redux/slice/productSlice";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 const TableProductAdmin = ({
   data,
@@ -70,9 +71,7 @@ const TableProductAdmin = ({
                 </TableSortLabelCustom>
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
-                <TableSortLabelCustom name="status" color="#FFF">
-                  Status
-                </TableSortLabelCustom>
+                  Category
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
                 <TableSortLabelCustom
@@ -110,21 +109,21 @@ const TableProductAdmin = ({
                   <TableCell>{item.name}</TableCell>
 
                   {/* Price */}
-                  <TableCell>{item.price} VND</TableCell>
+                  <TableCell>{item.price} $</TableCell>
 
-                  {/* Status */}
+                  {/* Category */}
                   <TableCell>
-                    {item.isDeleted ? "Inactive" : "Active"}
+                    {item?.category?.name}
                   </TableCell>
 
                   {/* Created At */}
                   <TableCell>
-                    {new Date(item.createdAt).toLocaleDateString()}
+                    {moment(item.createdAt).format("DD/MM/YYYY")}
                   </TableCell>
 
                   {/* Updated At */}
                   <TableCell>
-                    {new Date(item.updatedAt).toLocaleDateString()}
+                    {moment(item.updateAt).format("DD/MM/YYYY")}
                   </TableCell>
 
                   {/* Actions */}

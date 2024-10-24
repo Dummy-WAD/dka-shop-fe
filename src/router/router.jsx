@@ -20,6 +20,7 @@ import Confirm from "../pages/ConfirmEmail/Confirm";
 import ResendEmail from "../pages/ResendEmail/ResendEmail";
 import ProductDetailCustomer from "../pages/ProductCustomer/ProductDetailCustomer";
 import Search from "../pages/Search/Search";
+import CreateProduct from "../pages/CreateProduct/CreateProduct";
 
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
@@ -99,6 +100,10 @@ const router = createBrowserRouter(
         {
           path: "product",
           element: <ProductAdmin />,
+        },
+        {
+          path: "product/create",
+          element: <CreateProduct />,
         },
         {
           path: "product/:id",

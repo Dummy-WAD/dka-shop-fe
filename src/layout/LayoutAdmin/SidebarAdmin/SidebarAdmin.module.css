@@ -28,3 +28,16 @@
     color: #878787;
   }
 }
+
+.nav_link{
+  color: #ffffff;
+  &:hover {
+    color: #878787;
+  }
+}
+
+.active{
+  color: #ffffff;
+  text-decoration: underline;
+}
+

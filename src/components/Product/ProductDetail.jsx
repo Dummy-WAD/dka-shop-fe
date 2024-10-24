@@ -54,7 +54,7 @@ const ProductDetail = ({}) => {
                     </div>
                     <div className={classes.row}>
                         <MyTextField id="price" label="Price" variant="outlined" color="var(--admin-color)" disabled style={{mb: "1.5rem", width: "50%"}} value={product.price}/>
-                        <MyTextField id="category" label="Category" variant="outlined" color="var(--admin-color)" disabled style={{mb: "1.5rem", width: "50%"}} value={product.category.name}/>
+                        <MyTextField id="category" label="Category" variant="outlined" color="var(--admin-color)" disabled style={{mb: "1.5rem", width: "50%"}} value={product?.category?.name ?? "no category"}/>
                     </div>
                     <div className={classes.row}>
                         <MyTextField id="description" label="Description" variant="outlined" multiline rows={4} color="var(--admin-color)" disabled style={{width: "100%"}} value={product.description}/>

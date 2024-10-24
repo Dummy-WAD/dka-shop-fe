@@ -40,6 +40,7 @@ const NavbarAdmin = () => {
         <img alt="logo" src="/logo.png" />
       </div>
       <div className={classNames(css.userMenu)}>
+        <Link to="/" style={{textDecoration: 'underline', color: 'var(--admin-color)'}}>User page</Link>
         <NotificationIcon />
         <div onClick={handleClickToLogout} style={{ cursor: "pointer" }}>
           <LogoutIcon />

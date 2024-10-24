@@ -24,12 +24,18 @@ const CustomerListAdmin = () => {
   };
 
   const handleSetOderBy = (name) => {
-    const orderTmp =
-      name == sortBy ? (order === "desc" ? "asc" : "desc") : "asc";
+    const newOrder =
+      name == sortBy
+        ? order === "asc"
+          ? "desc"
+          : order === "desc"
+          ? ""
+          : "asc"
+        : "asc";
     dispatch(
       customerAdminSlice.actions.setCustomerInfo({
-        sortBy: name,
-        order: orderTmp,
+        sortBy: newOrder == "" ? "" : name,
+        order: newOrder,
         page: 0,
       })
     );

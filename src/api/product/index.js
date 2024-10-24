@@ -34,10 +34,15 @@ const getBestSellerProductsForCustomer = (config) => {
   return axiosInstance.get(url);
 };
 
+const handleCreateProduct = (params) => {
+  return axiosInstance.post('/admin/products', params)
+}
+
 export {
   getAllProductForAdmin,
   getDetailProductForAdminById,
   deleteProductById,
   getDetailProductForCustomerById,
   getBestSellerProductsForCustomer,
+  handleCreateProduct,
 };

@@ -5,11 +5,18 @@ import { Add } from "@mui/icons-material";
 import classes from "./ProductAdmin.module.css";
 import { CategoryIcon, SearchIcon } from "../../icon/Icon";
 import TableProductAdmin from "../../components/Product/TableProductAdmin";
-import { getAllProductForAdmin, deleteProductById } from "../../api/product/index";
-import { setListProductInfo, setIdSelected } from "../../redux/slice/productSlice";
+import {
+  getAllProductForAdmin,
+  deleteProductById,
+} from "../../api/product/index";
+import {
+  setListProductInfo,
+  setIdSelected,
+} from "../../redux/slice/productSlice";
 import DeleteModal from "../../components/Modal/DeleteModal";
 import { toast } from "react-toastify";
 import SearchInput from "../../components/SearchInput/SearchInput";
+import { Link } from "react-router-dom";
 
 const ProductAdmin = () => {
   const dispatch = useDispatch();
@@ -30,24 +37,24 @@ const ProductAdmin = () => {
   const handleViewDelete = (productId) => {
     setIsOpenDelete(true);
     dispatch(setIdSelected(productId));
-  }
+  };
 
   const handleClose = () => setIsOpenDelete(false);
 
   const handleDeleteProduct = async () => {
-    try{
+    try {
       await deleteProductById(idSelected);
-      toast.success("Delete product successfully",{
+      toast.success("Delete product successfully", {
         autoClose: 3000,
       });
       fetchDataProduct();
-    } catch (err){
-      toast.error(err.response.data.message,{
+    } catch (err) {
+      toast.error(err.response.data.message, {
         autoClose: 3000,
       });
     }
     handleClose();
-  }
+  };
 
   const fetchDataProduct = async () => {
     try {
@@ -130,18 +137,20 @@ const ProductAdmin = () => {
           <p>PRODUCT</p>
         </div>
         <div className={classes.search_create}>
-          <SearchInput 
+          <SearchInput
             placeholder="Search"
             inputRef={refInput}
             onSearch={handleSearchProduct}
           />
-          <Button
-            variant="contained"
-            sx={{ backgroundColor: "var(--admin-color)", color: "#FFF" }}
-            startIcon={<Add />}
-          >
-            Create
-          </Button>
+          <Link to="/admin/product/create">
+            <Button
+              variant="contained"
+              sx={{ backgroundColor: "#000", color: "#FFF" }}
+              startIcon={<Add />}
+            >
+              Create
+            </Button>
+          </Link>
         </div>
       </div>
       <div>
@@ -154,15 +163,15 @@ const ProductAdmin = () => {
           handleViewDelete={handleViewDelete}
         />
       </div>
-      {isOpenDelete &&
-        <DeleteModal 
-          isOpen={isOpenDelete} 
-          handleClose={handleClose} 
-          onSubmit={handleDeleteProduct} 
+      {isOpenDelete && (
+        <DeleteModal
+          isOpen={isOpenDelete}
+          handleClose={handleClose}
+          onSubmit={handleDeleteProduct}
           title="Delete product"
           description="Are you sure delete this product ?"
         />
-      }
+      )}
     </>
   );
 };
