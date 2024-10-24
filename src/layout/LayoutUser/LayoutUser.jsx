@@ -7,7 +7,7 @@ const LayoutUser = () => {
   return (
     <div>
       <NavbarUser />
-      <div style={{ background: location.pathname === '/' ? '#f3f4f6' : "none" }}>
+      <div>
         <div style={{ padding: "30px 50px" }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <Outlet />

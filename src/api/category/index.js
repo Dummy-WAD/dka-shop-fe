@@ -1,6 +1,5 @@
 import axiosInstance from "../../utils/axios";
 
-const token = localStorage.getItem("token");
 const handleGetAllCategories = (page, limit, sortBy, order, name) => {
   return axiosInstance.get(
     `/admin/categories?page=${page}&limit=${limit}${
@@ -39,3 +38,5 @@ const getBestSellerCategoriesForCustomer = (config) => {
   const { limit } = config;
   return axiosInstance.get(`/customer/categories/best-seller${limit ? `?limit=${limit}` : ''}`);
 };
+
+export { handleGetAllCategories, handleCreateCategory, handleEditCategory, handleDeleteCategory, getDetailProductForCustomerById, getAllCategoriesInCustomer, getBestSellerCategoriesForCustomer };

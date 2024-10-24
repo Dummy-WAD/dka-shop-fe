@@ -54,7 +54,7 @@ function Home() {
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
       </div>
-      <div className="wrapper" style={{ minHeight: "60vh", margin: "30px 80px", marginBottom: 0 }}>
+      <div className="wrapper" style={{ minHeight: "60vh", margin: "30px 80px", padding: "0 50px", marginBottom: 0 }}>
         <div className={classes.categories}>
           <div className={classes.categoriesHeader}>
             <h2 style={{ padding: "20px 0 " }}>Categories</h2>
