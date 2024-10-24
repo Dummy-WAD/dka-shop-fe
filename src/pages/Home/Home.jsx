@@ -18,7 +18,7 @@ function Home() {
       const products = await getBestSellerProductsForCustomer({ limit: 20 });
       setListProducts(products);
 
-      const categories = await getBestSellerCategoriesForCustomer({ limit: 10 });
+      const categories = await getBestSellerCategoriesForCustomer({ limit: 6 });
       setListCategories(categories);
     } catch (err) {
       console.error(err);
