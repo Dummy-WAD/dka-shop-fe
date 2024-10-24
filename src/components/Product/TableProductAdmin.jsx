@@ -71,9 +71,7 @@ const TableProductAdmin = ({
                 </TableSortLabelCustom>
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
-                <TableSortLabelCustom name="status" color="#FFF">
-                  Status
-                </TableSortLabelCustom>
+                  Category
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
                 <TableSortLabelCustom
@@ -111,11 +109,11 @@ const TableProductAdmin = ({
                   <TableCell>{item.name}</TableCell>
 
                   {/* Price */}
-                  <TableCell>{item.price} VND</TableCell>
+                  <TableCell>{item.price} $</TableCell>
 
-                  {/* Status */}
+                  {/* Category */}
                   <TableCell>
-                    {item.isDeleted ? "Inactive" : "Active"}
+                    {item?.category?.name}
                   </TableCell>
 
                   {/* Created At */}
