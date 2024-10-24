@@ -32,7 +32,7 @@ const CardProduct = ({product}) => {
                             color: "#ccc"
                         }}
                     >
-                        ${product.price}
+                        ${product.price.toFixed(2)}
                     </Typography>
                     <Typography
                         sx={{
@@ -41,7 +41,7 @@ const CardProduct = ({product}) => {
                             color: "#faa564",
                         }}
                     >
-                        ${product.priceDiscounted}
+                        ${product.priceDiscounted.toFixed(2)}
                     </Typography>
                 </Grid2>
                 <Grid2 sx={{display: "flex", justifyContent:"space-between", mt: "0.5rem", flexWrap: "wrap"}}>
