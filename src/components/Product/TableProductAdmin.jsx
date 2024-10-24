@@ -18,6 +18,7 @@ import { Delete, Edit, Visibility } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentPage } from "../../redux/slice/productSlice";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 const TableProductAdmin = ({
   data,
@@ -119,12 +120,12 @@ const TableProductAdmin = ({
 
                   {/* Created At */}
                   <TableCell>
-                    {new Date(item.createdAt).toLocaleDateString()}
+                    {moment(item.createdAt).format("DD/MM/YYYY")}
                   </TableCell>
 
                   {/* Updated At */}
                   <TableCell>
-                    {new Date(item.updatedAt).toLocaleDateString()}
+                    {moment(item.updateAt).format("DD/MM/YYYY")}
                   </TableCell>
 
                   {/* Actions */}

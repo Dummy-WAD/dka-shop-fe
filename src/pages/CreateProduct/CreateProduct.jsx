@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import {  handleCreateProduct } from "../../api/product";
+import { handleCreateProduct } from "../../api/product";
 import { useEffect, useRef, useState } from "react";
 import {
   Button,
@@ -63,8 +63,8 @@ const CreateProduct = () => {
       });
       return;
     }
-    if (isNaN(price) || isNaN(parseFloat(price))) {
-      toast.error("Price must be a number", {
+    if (Number(price) <= 0) {
+      toast.error("Price must be a positive number", {
         autoClose: 3000,
       });
       return;
@@ -103,8 +103,8 @@ const CreateProduct = () => {
             quantity: parseInt(quantity),
           })),
         };
-        await handleCreateProduct(params)
-        navigate("/admin/product")
+        await handleCreateProduct(params);
+        navigate("/admin/product");
       } catch (err) {
         toast.error(err.response.data.message, { autoClose: 3000 });
       }
@@ -353,12 +353,10 @@ const CreateProduct = () => {
               key={image.id}
               style={{ position: "relative", width: 250, height: 250 }}
               onMouseEnter={(e) => {
-                e.currentTarget.querySelector(".hover").style.display =
-                  "flex";
+                e.currentTarget.querySelector(".hover").style.display = "flex";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.querySelector(".hover").style.display =
-                  "none";
+                e.currentTarget.querySelector(".hover").style.display = "none";
               }}
             >
               <img
@@ -392,13 +390,8 @@ const CreateProduct = () => {
             </div>
           ))}
 
-          <label
-            htmlFor="file-upload"
-            className={classes.uploadContainer}
-          >
-            <div
-              className={classes.uploadContent}
-            >
+          <label htmlFor="file-upload" className={classes.uploadContainer}>
+            <div className={classes.uploadContent}>
               <span style={{ fontSize: "24px", color: "#ccc" }}>+</span>
               <span style={{ color: "#ccc" }}>Add photo</span>
             </div>

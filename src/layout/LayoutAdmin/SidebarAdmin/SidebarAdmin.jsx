@@ -1,7 +1,7 @@
 import css from "./SidebarAdmin.module.css";
 import classNames from "classnames";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { resetCategoryState } from "../../../redux/slice/categorySlice";
 
 const SidebarAdmin = () => {
@@ -14,28 +14,37 @@ const SidebarAdmin = () => {
       <h2>Admin Panel</h2>
       <ul>
         <li>
-          <Link
+          <NavLink
             to="/admin/category"
-            className={css.sidebarLink}
+            className={({ isActive }) => (isActive ? css.active : css.nav_link)}
             onClick={handleResetCategoryState}
           >
             Category
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/admin/product" className={css.sidebarLink}>
+          <NavLink
+            to="/admin/product"
+            className={({ isActive }) => (isActive ? css.active : css.nav_link)}
+          >
             Product
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/admin/order" className={css.sidebarLink}>
+          <NavLink
+            to="/admin/order"
+            className={({ isActive }) => (isActive ? css.active : css.nav_link)}
+          >
             Order
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/admin/customer" className={css.sidebarLink}>
+          <NavLink
+            className={({ isActive }) => (isActive ? css.active : css.nav_link)}
+            to="/admin/customer"
+          >
             Customer
-          </Link>
+          </NavLink>
         </li>
       </ul>
     </div>

@@ -18,11 +18,6 @@ const LoginSchema = Yup.object().shape({
     .test("Email test", "Email is invalid.", email),
   password: Yup.string()
     .required("Password is required.")
-    .test(
-      "password test",
-      "Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, one number, and one special character.",
-      password
-    ),
 });
 
 function Login() {

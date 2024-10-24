@@ -18,13 +18,17 @@ const EditVariantModal = ({ variant, variantList, onEditVariant }) => {
       });
       return;
     }
-    if (isNaN(quantity) || isNaN(parseInt(quantity))) {
-      toast.error("Quantity must be an integer value", {
+    const quantityNumber = Number(quantity)
+    if (!Number.isInteger(quantityNumber) || quantityNumber <= 0) {
+      toast.error("Quantity must be a positive integer", {
         autoClose: 3000,
       });
       return;
     }
-    const check = variantList.find((item => item.color === color && item.size === size))
+    const check = variantList.find(
+      (item) =>
+        item.id !== variant?.id && item.color.toLowerCase() === color.toLowerCase() && item.size.toLowerCase() === size.toLowerCase()
+    );
     if (check) {
         toast.error("There is already this variant", {
           autoClose: 3000,

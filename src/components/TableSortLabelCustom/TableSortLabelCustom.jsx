@@ -8,14 +8,13 @@ const TableSortLabelCustom = ({
   orderBy,
   orderDirection,
   onClick,
-  isHideSort,
 }) => {
   return (
     <TableSortLabel
       active={orderBy === name}
       direction={orderBy === name ? orderDirection : "asc"}
       onClick={onClick}
-      IconComponent={isHideSort ? null : ArrowDropDown}
+      IconComponent={ArrowDropDown}
       sx={{
         svg: {
           fontSize: "1.5rem",

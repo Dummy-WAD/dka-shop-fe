@@ -18,8 +18,9 @@ const CreateVariantModal = ({ onCreateVariant, variantList }) => {
       });
       return;
     }
-    if (isNaN(quantity) || isNaN(parseInt(quantity))) {
-      toast.error("Quantity must be an integer value", {
+    const quantityNumber = Number(quantity)
+    if (!Number.isInteger(quantityNumber) || quantityNumber <= 0) {
+      toast.error("Quantity must be a positive integer", {
         autoClose: 3000,
       });
       return;
