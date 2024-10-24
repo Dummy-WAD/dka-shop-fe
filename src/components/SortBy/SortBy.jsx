@@ -57,9 +57,6 @@ const SortBy = ({}) => {
         setUpdatedAtRadio("");
     }
 
-    useEffect(()=>{
-        handleReset();
-    },[])
     return (
         <div className={classes.container}>
             <Button 

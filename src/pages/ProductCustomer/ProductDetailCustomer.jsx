@@ -111,7 +111,7 @@ function ProductDetailCustomer() {
   };
 
   return (
-    <div className="wrapper" style={{ minHeight: "60vh", marginTop: "30px" }}>
+    <div className="wrapper" style={{ minHeight: "60vh", marginTop : "2rem" }}>
       <div className={classes.container}>
         <div className={classes.container_left}>
           <ListImage
@@ -183,7 +183,7 @@ function ProductDetailCustomer() {
                       : classes.disabled
                   } ${size == selectedSize ? classes.selected : ""}`}
                   key={size}
-                  onClick={() => handleSelectSize(size)}
+                  onClick={() => {if(availableSizes.some((sizeItem) => sizeItem.size === size)) handleSelectSize(size)}}
                 >
                   {size}
                 </div>

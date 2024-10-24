@@ -22,7 +22,7 @@ const CardProduct = ({product}) => {
                 />
             </CardActionArea>
             <CardContent sx={{pt: "0.5rem", pb: "1rem !important"}}>
-                <Typography sx={{fontWeight: "500"}}>{product.name}</Typography>
+                <Typography sx={{fontWeight: "500", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}}>{product.name}</Typography>
                 <Divider sx={{borderBottomWidth: "2px", my: "0.5rem"}}/>
                 <Grid2 sx={{display: "flex", gap: "1rem", alignItems : "center"}}>
                     <Typography

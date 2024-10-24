@@ -137,7 +137,7 @@ const ProductAdmin = () => {
           />
           <Button
             variant="contained"
-            sx={{ backgroundColor: "#000", color: "#FFF" }}
+            sx={{ backgroundColor: "var(--admin-color)", color: "#FFF" }}
             startIcon={<Add />}
           >
             Create

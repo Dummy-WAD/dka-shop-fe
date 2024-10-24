@@ -2,6 +2,7 @@ import { createBrowserRouter, useNavigate } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import LayoutAdmin from "../layout/LayoutAdmin/LayoutAdmin";
 import LayoutUser from "../layout/LayoutUser/LayoutUser";
+import LayoutSearch from "../layout/LayoutSearch/LayoutSearch";
 import Login from "../pages/Login/Login";
 import Error from "../pages/Error/Error";
 import SignUp from "../pages/SignUp/SignUp";
@@ -61,11 +62,18 @@ const router = createBrowserRouter(
           path: "product/:productId",
           element: <ProductDetailCustomer />,
         },
-        {
-          path: "search",
-          element: <Search />,
-        },
       ],
+    },
+    {
+      path: "/search",
+      element: <LayoutSearch />,
+      errorElement: <Error />,
+      children: [
+        {
+          index: true,
+          element: <Search />,
+        }
+      ]
     },
     {
       path: "/admin",
