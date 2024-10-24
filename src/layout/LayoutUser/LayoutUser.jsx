@@ -8,8 +8,8 @@ const LayoutUser = () => {
     <div>
       <NavbarUser />
       <div style={{ background: location.pathname === '/' ? '#f3f4f6' : "none" }}>
-        <div style={{ paddingBottom: "30px" }}>
-          <div style={{ minWidth: '1200px', margin: "0 auto" }}>
+        <div style={{ padding: "30px 50px" }}>
+          <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <Outlet />
           </div>
         </div>
