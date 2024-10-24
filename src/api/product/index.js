@@ -22,7 +22,22 @@ const getDetailProductForCustomerById = (productId) => {
 
 const getBestSellerProductsForCustomer = (config) => {
   const { categoryId, limit } = config;
-  return axiosInstance.get(`/customer/products/best-seller${categoryId ? `?categoryId=${categoryId}` : ''}${limit ? `&limit=${limit}` : ''}`);
+
+  const params = new URLSearchParams();
+  if (categoryId) params.append("categoryId", categoryId);
+  if (limit) params.append("limit", limit);
+
+  const url = `/customer/products/best-seller${
+    params.toString() ? `?${params.toString()}` : ""
+  }`;
+
+  return axiosInstance.get(url);
 };
 
-export { getAllProductForAdmin, getDetailProductForAdminById, deleteProductById, getDetailProductForCustomerById, getBestSellerProductsForCustomer };
+export {
+  getAllProductForAdmin,
+  getDetailProductForAdminById,
+  deleteProductById,
+  getDetailProductForCustomerById,
+  getBestSellerProductsForCustomer,
+};

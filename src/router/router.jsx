@@ -3,6 +3,7 @@ import Home from "../pages/Home/Home";
 import LayoutAdmin from "../layout/LayoutAdmin/LayoutAdmin";
 import LayoutUser from "../layout/LayoutUser/LayoutUser";
 import LayoutSearch from "../layout/LayoutSearch/LayoutSearch";
+import LayoutHomePage from "../layout/LayoutHomePage/LayoutHomePage";
 import Login from "../pages/Login/Login";
 import Error from "../pages/Error/Error";
 import SignUp from "../pages/SignUp/SignUp";
@@ -55,14 +56,21 @@ const router = createBrowserRouter(
       errorElement: <Error />,
       children: [
         {
-          index: true,
-          element: <Home />,
-        },
-        {
           path: "product/:productId",
           element: <ProductDetailCustomer />,
         },
       ],
+    },
+    {
+      path: "/",
+      element: <LayoutHomePage />,
+      errorElement: <Error />,
+      children: [
+        {
+          index: true,
+          element: <Home />,
+        }
+      ]
     },
     {
       path: "/search",

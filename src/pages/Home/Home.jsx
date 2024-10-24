@@ -15,10 +15,10 @@ function Home() {
 
   const fetchProductsAndCategories = async () => {
     try {
-      const products = await getBestSellerProductsForCustomer({});
+      const products = await getBestSellerProductsForCustomer({ limit: 20 });
       setListProducts(products);
 
-      const categories = await getBestSellerCategoriesForCustomer({});
+      const categories = await getBestSellerCategoriesForCustomer({ limit: 6 });
       setListCategories(categories);
     } catch (err) {
       console.error(err);
@@ -49,50 +49,52 @@ function Home() {
     <>
       <div className="banner" style={{ minWidth: "1200px", overflow: "hidden", margin: "0 auto" }}>
         <img
-          src="../../../public/banner.png"
+          src="/banner.png"
           alt="Banner"
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
       </div>
-      <div className="wrapper" style={{ minHeight: "60vh", margin: "30px 80px", marginBottom: 0 }}>
-        <div className={classes.categories}>
-          <div className={classes.categoriesHeader}>
-            <h2 style={{ padding: "20px 0 " }}>Categories</h2>
-          </div>
-          <div className={classes.categoriesBody}>
-            {
-              listCategories.length > 0 ? listCategories.map((category, index) =>
-                <div key={index}>
-                  <CategoryButton className={`${currentCategoryId === category.id ? classes.borderActiveBtn : ''}`} onClick={() => handleFilterProductsByCategory(category.id)}>{category?.name || ""}</CategoryButton>
-                </div>
-              ) : <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>No result found</div>
-            }
-          </div>
-        </div>
-        <div className={classes.bestSellerProduct}>
-          <div className={classes.bestSellerHeader}>
-            <div>
-              <h2>Best seller</h2>
-              <div style={{ color: "#9CA3AF", fontSize: "16px" }}>Exciting products at irresistible prices!</div>
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <div className="wrapper" style={{  minHeight: "60vh", margin: "30px 80px", marginBottom: 0 }}>
+          <div className={classes.categories}>
+            <div className={classes.categoriesHeader}>
+              <h2 style={{ padding: "20px 0 " }}>Categories</h2>
             </div>
-            <div>
-              <CategoryButton className={classes.allProductBtn} onClick={handleClickShowAllProducts}>
-                {" All products"}
-                <AllArrowIcon />
+            <div className={classes.categoriesBody}>
+              {
+                listCategories.length > 0 ? listCategories.map((category, index) =>
+                  <div key={index}>
+                    <CategoryButton className={`${currentCategoryId === category.id ? classes.borderActiveBtn : ''}`} onClick={() => handleFilterProductsByCategory(category.id)}>{category?.name || ""}</CategoryButton>
+                  </div>
+                ) : <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>No result found</div>
+              }
+            </div>
+          </div>
+          <div className={classes.bestSellerProduct}>
+            <div className={classes.bestSellerHeader}>
+              <div>
+                <h2>Best seller</h2>
+                <div style={{ color: "#9CA3AF", fontSize: "16px" }}>Exciting products at irresistible prices!</div>
+              </div>
+              <div>
+                <CategoryButton className={classes.allProductBtn} onClick={handleClickShowAllProducts}>
+                  {" All products"}
+                  <AllArrowIcon />
+                </CategoryButton>
+              </div>
+            </div>
+            <div className={classes.bestSellerBody}>
+              <div className={classes.listProduct}>
+                {listProducts?.length > 0 ? listProducts.map((item, index) => (
+                  <CardProduct key={index} product={{ ...item, primaryImageUrl: item.imageUrl }} />
+                )) : <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>No result found</div>}
+              </div>
+            </div>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <CategoryButton className={classes.moreProductBtn} onClick={handleClickShowAllProducts}>
+                { "All products" }
               </CategoryButton>
             </div>
-          </div>
-          <div className={classes.bestSellerBody}>
-            <div className={classes.listProduct}>
-              {listProducts?.length > 0 ? listProducts.map((item, index) => (
-                <CardProduct key={index} product={{ ...item, primaryImageUrl: item.imageUrl }} />
-              )) : <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>No result found</div>}
-            </div>
-          </div>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <CategoryButton className={classes.moreProductBtn} onClick={handleClickShowAllProducts}>
-              { "All products" }
-            </CategoryButton>
           </div>
         </div>
       </div>
