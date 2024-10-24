@@ -20,4 +20,9 @@ const getDetailProductForCustomerById = (productId) => {
   return axiosInstance.get(`/customer/products/${productId}`);
 };
 
-export { getAllProductForAdmin, getDetailProductForAdminById, deleteProductById, getDetailProductForCustomerById };
+const getBestSellerProductsForCustomer = (config) => {
+  const { categoryId, limit } = config;
+  return axiosInstance.get(`/customer/products/best-seller${categoryId ? `?categoryId=${categoryId}` : ''}${limit ? `&limit=${limit}` : ''}`);
+};
+
+export { getAllProductForAdmin, getDetailProductForAdminById, deleteProductById, getDetailProductForCustomerById, getBestSellerProductsForCustomer };

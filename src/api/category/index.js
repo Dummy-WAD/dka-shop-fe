@@ -27,4 +27,9 @@ const getAllCategoriesInCustomer = () => {
   return axiosInstance.get("/customer/categories");
 }
 
-export { handleGetAllCategories, handleCreateCategory, handleEditCategory, handleDeleteCategory, getAllCategoriesInCustomer};
+const getBestSellerCategoriesForCustomer = (config) => {
+  const { limit } = config;
+  return axiosInstance.get(`/customer/categories/best-seller${limit ? `?limit=${limit}` : ''}`);
+};
+
+export { handleGetAllCategories, handleCreateCategory, handleEditCategory, handleDeleteCategory, getAllCategoriesInCustomer, getBestSellerCategoriesForCustomer };
