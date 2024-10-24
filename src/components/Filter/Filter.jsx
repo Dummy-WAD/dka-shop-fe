@@ -26,8 +26,8 @@ const Filter = ({}) => {
     const handleShowMore = () => {
         setNumberCategoryShow(numberCategoryShow + limit);
     }
-    const handleShowLess = () => {
-        setNumberCategoryShow(numberCategoryShow - limit);
+    const handleCollapseAll = () => {
+        setNumberCategoryShow(limit);
     }
     const handleChangeValue = (e, newValue) => {
         setValue(newValue);
@@ -163,11 +163,11 @@ const Filter = ({}) => {
                     }
                     {numberCategoryShow > listCategories.length && numberCategoryShow != limit  && 
                         <ButtonLink 
-                            onClick={handleShowLess} 
+                            onClick={handleCollapseAll} 
                             style = {{textAlign: "left"}}
                         >
                             <div className={classes.showButton}>
-                                <Typography>Show less</Typography>
+                                <Typography>Collapse all</Typography>
                                 <KeyboardArrowUp />
                             </div>
                         </ButtonLink>
