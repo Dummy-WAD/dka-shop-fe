@@ -111,7 +111,7 @@ function ProductDetailCustomer() {
   };
 
   return (
-    <div className="wrapper" style={{ minHeight: "60vh", maxWidth: "1200px", margin : "2rem auto" }}>
+    <div className="wrapper" style={{ minHeight: "60vh", marginTop : "2rem" }}>
       <div className={classes.container}>
         <div className={classes.container_left}>
           <ListImage

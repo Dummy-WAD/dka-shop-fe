@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = { 
   searchText: "",
-  filterCategory: "",
+  filterCategory: "all",
   priceStart: 0,
   priceEnd: 1000,
   sortBy: "",
