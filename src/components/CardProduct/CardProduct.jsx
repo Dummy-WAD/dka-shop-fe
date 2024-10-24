@@ -7,6 +7,7 @@ const CardProduct = ({product}) => {
     const navigate = useNavigate();
     const handleProductClick = () => {
         navigate(`/product/${product.id}`);
+        window.scrollTo(0, 0);
     }
     return (
         <Card sx={{width: "18%"}}>

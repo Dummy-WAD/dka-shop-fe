@@ -73,7 +73,6 @@ const ListImage = ({primaryImage, otherImages}) => {
                     >
                         <img
                             src={primaryImage}
-                            srcSet={primaryImage}
                             loading="lazy"
                             className={classes.sub_image}
                         />
@@ -92,7 +91,6 @@ const ListImage = ({primaryImage, otherImages}) => {
                         >
                         <img
                             src={item}
-                            srcSet={item}
                             loading="lazy"
                             className={classes.sub_image}
                         />
