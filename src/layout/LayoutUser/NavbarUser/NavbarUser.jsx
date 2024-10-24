@@ -13,7 +13,7 @@ import classNames from "classnames";
 import { handleLogout } from "../../../api/user";
 import authSlice from "../../../redux/slice/authSlice";
 import { toast } from "react-toastify";
-import { setInfoPageSearch, resetInfoPageSearch } from "../../../redux/slice/searchSlice";
+import { setInfoPageSearch, setSearchText } from "../../../redux/slice/searchSlice";
 
 const NavbarUser = () => {
   const refInput = useRef(null);
@@ -57,7 +57,7 @@ const NavbarUser = () => {
     refInput?.current?.addEventListener("keypress", handleKeyPress);
     return () => {
       refInput?.current?.removeEventListener("keypress", handleKeyPress);
-      dispatch(resetInfoPageSearch());
+      dispatch(setSearchText(""));
     };
   }, []);
 
