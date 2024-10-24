@@ -136,7 +136,7 @@ function ProductDetailCustomer() {
                 variant="h5"
                 sx={{ fontWeight: 600, color: "var(--user-color)" }}
               >
-                ${product.price}
+                ${product.price?.toFixed(2)}
               </Typography>
             </div>
           ) : (
@@ -145,13 +145,13 @@ function ProductDetailCustomer() {
                 variant="h5"
                 sx={{ fontWeight: 600, color: "var(--user-color)" }}
               >
-                ${product.priceDiscounted}
+                ${product.priceDiscounted?.toFixed(2)}
               </Typography>
               <Typography
                 variant="h6"
                 sx={{ color: "#757575", textDecoration: "line-through" }}
               >
-                ${product.price}
+                ${product.price?.toFixed(2)}
               </Typography>
             </div>
           )}
