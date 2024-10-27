@@ -21,6 +21,7 @@ import ResendEmail from "../pages/ResendEmail/ResendEmail";
 import ProductDetailCustomer from "../pages/ProductCustomer/ProductDetailCustomer";
 import Search from "../pages/Search/Search";
 import CreateProduct from "../pages/CreateProduct/CreateProduct";
+import Profile from "../pages/Profile/Profile";
 
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
@@ -59,6 +60,10 @@ const router = createBrowserRouter(
         {
           path: "product/:productId",
           element: <ProductDetailCustomer />,
+        },
+        {
+          path: "profile",
+          element: <Profile />,
         },
       ],
     },
