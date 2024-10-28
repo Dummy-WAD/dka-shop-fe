@@ -1,6 +1,6 @@
 import { Box, Typography, Button } from "@mui/material";
 import { useRef } from "react";
-import MyTextField from "../../components/MyTextField/MyTextField";
+import MyTextField from "../MyTextField/MyTextField";
 import { Edit } from "@mui/icons-material";
 import { toast } from "react-toastify";
 
@@ -19,8 +19,8 @@ const EditVariantModal = ({ variant, variantList, onEditVariant }) => {
       return;
     }
     const quantityNumber = Number(quantity)
-    if (!Number.isInteger(quantityNumber) || quantityNumber <= 0) {
-      toast.error("Quantity must be a positive integer", {
+    if (!Number.isInteger(quantityNumber) || quantityNumber < 0) {
+      toast.error("Quantity must be an integer greater than or equal to 0", {
         autoClose: 3000,
       });
       return;

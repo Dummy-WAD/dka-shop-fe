@@ -1,5 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
-import { handleCreateProduct } from "../../api/product";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  getDetailProductForAdminById,
+  handleEditProduct,
+} from "../../api/product";
 import { useEffect, useRef, useState } from "react";
 import {
   Box,
@@ -22,7 +25,7 @@ import {
   EditOutlined,
   RemoveCircleOutline,
 } from "@mui/icons-material";
-import classes from "./CreateProduct.module.css";
+import classes from "./EditProduct.module.css";
 import { toast } from "react-toastify";
 import SelectCustom from "../../components/SelectCustom/SelectCustom";
 import MyTextField from "../../components/MyTextField/MyTextField";
@@ -30,17 +33,19 @@ import { v4 as uuidv4 } from "uuid";
 import { useBoolean } from "../../hook/useBoolean";
 import ModalCustom from "../../components/Modal/BasicModal";
 import { getAllCategoriesInCustomer } from "../../api/category";
-import CreateVariantModal from "../../components/Modal/CreateVariantModal";
-import EditVariantModal from "../../components/Modal/EditVariantModal";
 import { getPresignedURLs, uploadImagesToS3 } from "../../api/image";
 import classNames from "classnames";
 import { getUniqueFileName } from "../../helper";
+import CreateVariantModal from "../../components/Modal/CreateVariantModal";
+import EditVariantModal from "../../components/Modal/EditVariantModal";
 
-const CreateProduct = () => {
+const EditProduct = () => {
   const navigate = useNavigate();
+  const [product, setProduct] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const { id } = useParams();
   const createVariantModal = useBoolean();
   const editVariantModal = useBoolean();
-  const [isLoading, setIsLoading] = useState(true);
   const [categoriesList, setCategoriesList] = useState([]);
   const [currentVariant, setCurrentVariant] = useState(null);
   const [variantList, setVariantList] = useState([]);
@@ -84,13 +89,16 @@ const CreateProduct = () => {
       return;
     }
 
-    const createProduct = async () => {
+    const editProduct = async () => {
       try {
         setIsLoading(true);
-        const fileNames = images.map((item) => item.id);
-        const files = images.map((item) => item.file);
-        const { urls } = await getPresignedURLs(fileNames);
-        await uploadImagesToS3(urls, files);
+        const newImages = images.filter((item) => !item.isFetched);
+        if (newImages.length > 0) {
+          const fileNames = newImages.map((item) => item.id);
+          const files = newImages.map((item) => item.file);
+          const { urls } = await getPresignedURLs(fileNames);
+          await uploadImagesToS3(urls, files);
+        }
         const params = {
           name,
           price,
@@ -106,50 +114,46 @@ const CreateProduct = () => {
             quantity: parseInt(quantity),
           })),
         };
-        await handleCreateProduct(params);
+        await handleEditProduct(params, id);
         setIsLoading(false);
         navigate("/admin/product");
-        toast.success("Create product successfully", { autoClose: 3000 });
+        toast.success("Edit product successfully", { autoClose: 3000 });
       } catch (err) {
         setIsLoading(false);
         toast.error(err.response.data.message, { autoClose: 3000 });
       }
     };
-    createProduct();
+    editProduct();
   };
 
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
-    const newImages = files
-      .map((file) => {
-        if (!file.type.startsWith("image/")) {
-          toast.error(
-            `${file.name} is not an image file. Please upload an image.`,
-            {
-              autoClose: 3000,
-            }
-          );
-          return null;
-        }
-        const newFileName = getUniqueFileName(file, uuidv4());
-        const newFile = new File([file], newFileName, {
-          type: file.type,
-          lastModified: file.lastModified,
-        });
-        return {
-          id: newFileName,
-          file: newFile,
-          src: URL.createObjectURL(newFile),
-          isPrimary: false,
-        };
-      })
-      .filter(Boolean);
+    const newImages = files.map((file) => {
+      if (!file.type.startsWith("image/")) {
+        toast.error(
+          `${file.name} is not an image file. Please upload an image.`,
+          {
+            autoClose: 3000,
+          }
+        );
+        return null;
+      }
+      const newFileName = getUniqueFileName(file, uuidv4());
+      const newFile = new File([file], newFileName, {
+        type: file.type,
+        lastModified: file.lastModified,
+      });
+      return {
+        id: newFileName,
+        file: newFile,
+        src: URL.createObjectURL(newFile),
+        isPrimary: false,
+        isFetched: false,
+      };
+    }).filter(Boolean);
     setImages((prevImages) => {
       const updatedImages = [...prevImages, ...newImages];
-      if (
-        !updatedImages.some((img) => img.isPrimary) &&
-        updatedImages.length > 0
-      ) {
+      if (!updatedImages.some((img) => img.isPrimary) && updatedImages.length > 0) {
         updatedImages[0].isPrimary = true;
       }
       return updatedImages;
@@ -206,24 +210,55 @@ const CreateProduct = () => {
   };
 
   useEffect(() => {
-    const getCategories = async () => {
+    const initialProductInfo = async () => {
       try {
-        const res = await getAllCategoriesInCustomer();
+        const productResponse = await getDetailProductForAdminById(id);
+        setProduct(productResponse);
+        const { name, price, description, category } = productResponse;
+        const categoriesResponse = await getAllCategoriesInCustomer();
         setCategoriesList(
-          res.map(({ id, name }) => ({ key: id, value: name }))
+          categoriesResponse.map(({ id, name }) => ({ key: id, value: name }))
         );
+        setFormData((prev) => ({
+          ...prev,
+          name,
+          price,
+          description,
+          category: category.id,
+        }));
+        setVariantList(
+          productResponse.productVariants.map(({ size, color, quantity }) => ({
+            id: uuidv4(),
+            size,
+            color,
+            quantity,
+          }))
+        );
+        const { primaryImage, otherImages = [] } = productResponse;
+        setImages([
+          {
+            id: primaryImage.filename,
+            src: primaryImage.url,
+            isPrimary: true,
+            isFetched: true,
+          },
+          ...otherImages.map(({ filename, url }) => ({
+            id: filename,
+            src: url,
+            isPrimary: false,
+            isFetched: true,
+          })),
+        ]);
       } catch (err) {
-        toast.error(err.response.data.message, {
-          autoClose: 3000,
-        });
+        toast.error(err.response.data.message, { autoClose: 3000 });
       } finally {
         setIsLoading(false);
       }
     };
-    getCategories();
+    initialProductInfo();
   }, []);
 
-  if (isLoading) {
+  if (isLoading || !product) {
     return (
       <Box
         sx={{
@@ -254,7 +289,7 @@ const CreateProduct = () => {
           variant="h5"
           sx={{ textAlign: "center", mt: "-2rem", fontWeight: 600 }}
         >
-          Create Product
+          Edit Product
         </Typography>
       </div>
       <div className={classes.container}>
@@ -274,10 +309,10 @@ const CreateProduct = () => {
           <div className={classes.row}>
             <Grid2 sx={{ width: "30%" }}>
               <SelectCustom
+                label="Category"
                 name="category"
                 value={formData.category}
                 onChange={(e) => handleInputChange(e)}
-                label="Category"
                 menuList={categoriesList}
                 style={{
                   width: "100%",
@@ -298,8 +333,8 @@ const CreateProduct = () => {
             <Grid2 sx={{ width: "70%" }}>
               <MyTextField
                 id="description"
-                label="Description"
                 name="description"
+                label="Description"
                 value={formData.description}
                 onChange={(e) => handleInputChange(e)}
                 variant="outlined"
@@ -484,4 +519,4 @@ const CreateProduct = () => {
   );
 };
 
-export default CreateProduct;
+export default EditProduct;

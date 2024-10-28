@@ -140,9 +140,11 @@ const TableProductAdmin = ({
                         <Visibility sx={{ color: "blue" }} />
                       </IconButton>
                     </Link>
-                    <IconButton>
-                      <Edit sx={{ color: "green" }} />
-                    </IconButton>
+                    <Link to={`/admin/product/edit/${item.id}`}>
+                      <IconButton>
+                        <Edit sx={{ color: "green" }} />
+                      </IconButton>
+                    </Link>
                     <IconButton onClick={()=>handleViewDelete(item.id)}>
                       <Delete sx={{ color: "red" }} />
                     </IconButton>

@@ -38,6 +38,10 @@ const handleCreateProduct = (params) => {
   return axiosInstance.post('/admin/products', params)
 }
 
+const handleEditProduct = (params, id) => {
+  return axiosInstance.put(`/admin/products/${id}`, params)
+}
+
 export {
   getAllProductForAdmin,
   getDetailProductForAdminById,
@@ -45,4 +49,5 @@ export {
   getDetailProductForCustomerById,
   getBestSellerProductsForCustomer,
   handleCreateProduct,
+  handleEditProduct
 };
