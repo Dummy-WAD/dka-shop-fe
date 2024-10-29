@@ -14,6 +14,7 @@ import { handleGetUserInfo } from "../../api/user";
 import moment from "moment/moment";
 import { handleUpdateProfileCustomer } from "../../api/personal";
 import { setAuthInfo } from "../../redux/slice/authSlice";
+import { MALE, FEMALE } from "../../config/gender";
 
 const genderList = [
     {
@@ -21,23 +22,14 @@ const genderList = [
         value: "Select gender"
     },
     {
-        key: "MALE",
+        key: MALE,
         value: "Male",
     },
     {
-        key: "FEMALE",
+        key: FEMALE,
         value: "Female",
     }
 ]
-
-// const initialProfile = {
-//     firstName: "Ha",
-//     lastName: "Phuong",
-//     email: "phuongha@gmail.com",
-//     phone: "0905478854",
-//     joinDate: "24/07/2024",
-//     gender: "male",
-// }
 
 const Profile = () => {
     const dispatch = useDispatch();
@@ -48,7 +40,6 @@ const Profile = () => {
     const [lastName, setLastName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [gender, setGender] = useState("");
-    // const [profile, setProfile] = useState({});
 
     const handleSetAttribute = (profile) => {
         setFirstName(profile?.firstName);
@@ -60,7 +51,9 @@ const Profile = () => {
     const fetchData = async () => {
         // call API
         const res = await handleGetUserInfo();
-        dispatch(setAuthInfo(res));
+        dispatch(setAuthInfo({
+            userInfo: res,
+        }));
         handleSetAttribute(res);
     }
 
@@ -72,7 +65,7 @@ const Profile = () => {
         let isValided = true;
         let error = "";
 
-        isValided = (firstName.trim() != "") && (lastName.trim() != "") && (phoneNumber.trim() != "") && (gender != "male" || gender != "female");
+        isValided = (firstName.trim() != "") && (lastName.trim() != "") && (phoneNumber.trim() != "") && (gender != "none");
         error = isValided ? "" : "Fill full information";
 
         isValided = isValided ?? ValidPhoneNumber(phoneNumber);
@@ -91,6 +84,7 @@ const Profile = () => {
                 toast.error("Update profile failed", {
                     autoClose: 3000,
                 });
+                handleSetAttribute(profile);
             }
             setIsEdited(false);
         } else {
@@ -165,7 +159,7 @@ const Profile = () => {
                                         disabled={!isEdited} 
                                         fullWidth 
                                         value={phoneNumber}
-                                        onChange={(e)=>setPhone(e.target.value)}
+                                        onChange={(e)=>setPhoneNumber(e.target.value)}
                                     />
                                 </div>
                                 <div className={classes.row}>

@@ -14,7 +14,7 @@ const SidebarProfile = ({firstName, lastName}) => {
                     src={avatar}
                     sx={{width: "80px", height: "80px"}}
                 />
-                <Typography variant="h6" sx={{fontWeight: "500"}}>{lastName} {firstName}</Typography>
+                <Typography variant="h6" sx={{fontWeight: "500", textAlign: "center"}}>{lastName} {firstName}</Typography>
             </div>
             <div className={classes.profile}>
                 <NavLink to="/profile">
