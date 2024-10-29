@@ -24,7 +24,7 @@ const LayoutAdmin = () => {
           >
             <NavbarAdmin />
 
-            <div style={{ padding: "30px" }}>
+            <div style={{ padding: "30px", flex: 1 }}>
               <Outlet />
             </div>
           </div>

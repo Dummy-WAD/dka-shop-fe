@@ -2,7 +2,7 @@ import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { forwardRef } from "react";
 
 
-const SelectCustom = forwardRef(({label, handleChange, value, menuList, style}, ref) => {
+const SelectCustom = forwardRef(({label, handleChange, value, menuList, style, ...rest}, ref) => {
     return (
         <FormControl sx={{...style}} >
             <InputLabel id="demo-simple-select-label">{label}</InputLabel>
@@ -13,6 +13,7 @@ const SelectCustom = forwardRef(({label, handleChange, value, menuList, style}, 
                 label={label}
                 onChange={handleChange}
                 inputRef={ref}
+                {...rest}
             >
                 {menuList?.map((item) => (
                     <MenuItem value={item.key}>{item.value}</MenuItem>
