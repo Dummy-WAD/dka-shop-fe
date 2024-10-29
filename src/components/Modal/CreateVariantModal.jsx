@@ -18,8 +18,13 @@ const CreateVariantModal = ({ onCreateVariant, variantList }) => {
       });
       return;
     }
-    const quantityNumber = Number(quantity)
-    if (!Number.isInteger(quantityNumber) || quantityNumber < 0) {
+    const quantityInput = quantity.trim();
+    const quantityNumber = parseInt(quantityInput, 10);
+    if (
+      isNaN(quantityNumber) ||
+      quantityNumber < 0 ||
+      quantityNumber.toString() !== quantityInput
+    ) {
       toast.error("Quantity must be an integer greater than or equal to 0", {
         autoClose: 3000,
       });

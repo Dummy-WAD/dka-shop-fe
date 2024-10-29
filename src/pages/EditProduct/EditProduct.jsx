@@ -70,7 +70,13 @@ const EditProduct = () => {
       });
       return;
     }
-    if (Number(price) < 0) {
+    const priceInput = price.toString().trim();
+    const priceNumber = parseFloat(priceInput);
+    if (
+      isNaN(priceNumber) ||
+      priceNumber <= 0 ||
+      priceNumber.toString() !== priceInput
+    ) {
       toast.error("Price must be a positive number", {
         autoClose: 3000,
       });

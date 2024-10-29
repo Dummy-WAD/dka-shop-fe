@@ -18,8 +18,13 @@ const EditVariantModal = ({ variant, variantList, onEditVariant }) => {
       });
       return;
     }
-    const quantityNumber = Number(quantity)
-    if (!Number.isInteger(quantityNumber) || quantityNumber < 0) {
+    const quantityInput = quantity.trim();
+    const quantityNumber = parseInt(quantityInput, 10);
+    if (
+      isNaN(quantityNumber) ||
+      quantityNumber < 0 ||
+      quantityNumber.toString() !== quantityInput
+    ) {
       toast.error("Quantity must be an integer greater than or equal to 0", {
         autoClose: 3000,
       });
@@ -27,14 +32,16 @@ const EditVariantModal = ({ variant, variantList, onEditVariant }) => {
     }
     const check = variantList.find(
       (item) =>
-        item.id !== variant?.id && item.color.toLowerCase() === color.toLowerCase() && item.size.toLowerCase() === size.toLowerCase()
+        item.id !== variant?.id &&
+        item.color.toLowerCase() === color.toLowerCase() &&
+        item.size.toLowerCase() === size.toLowerCase()
     );
     if (check) {
-        toast.error("There is already this variant", {
-          autoClose: 3000,
-        });
-        return;
-      }
+      toast.error("There is already this variant", {
+        autoClose: 3000,
+      });
+      return;
+    }
     const editVariant = {
       id: variant.id,
       size,
