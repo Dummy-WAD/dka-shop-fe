@@ -1,85 +1,97 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SidebarProfile from "../../components/SidebarProfile/SidebarProfile";
 import classes from "./Profile.module.css"
 import { CUSTOMER } from "../../config/roles";
 import { Typography, Button, Grid2 } from "@mui/material";
-import { Formik } from "formik";
 import MyTextField from "../../components/MyTextField/MyTextField";
 import DateInput from "../../components/DateInput/DateInput";
 import SelectCustom from "../../components/SelectCustom/SelectCustom";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { phoneNumber } from "../../validator";
+import { phoneNumber as ValidPhoneNumber } from "../../validator";
+import { Navigate } from "react-router-dom";
+import { handleGetUserInfo } from "../../api/user";
+import moment from "moment/moment";
+import { handleUpdateProfileCustomer } from "../../api/personal";
+import { setAuthInfo } from "../../redux/slice/authSlice";
 
 const genderList = [
     {
-        key: "male",
+        key: "none",
+        value: "Select gender"
+    },
+    {
+        key: "MALE",
         value: "Male",
     },
     {
-        key: "female",
+        key: "FEMALE",
         value: "Female",
     }
 ]
 
-const initialProfile = {
-    firstName: "Ha",
-    lastName: "Phuong",
-    email: "phuongha@gmail.com",
-    phone: "0905478854",
-    joinDate: "24/07/2024",
-    gender: "male",
-}
+// const initialProfile = {
+//     firstName: "Ha",
+//     lastName: "Phuong",
+//     email: "phuongha@gmail.com",
+//     phone: "0905478854",
+//     joinDate: "24/07/2024",
+//     gender: "male",
+// }
 
 const Profile = () => {
-    const { isAuthenticated } = useSelector(state => state.auth);
+    const dispatch = useDispatch();
+    const { isAuthenticated, userInfo : profile } = useSelector(state => state.auth);
     const { role, firstName : firstNameProfile, lastName: lastNameProfile } = useSelector(state => state.auth.userInfo);
     const [isEdited, setIsEdited] = useState(false);
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [phone, setPhone] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
     const [gender, setGender] = useState("");
-    const [profile, setProfile] = useState(initialProfile);
+    // const [profile, setProfile] = useState({});
 
     const handleSetAttribute = (profile) => {
-        setFirstName(profile.firstName);
-        setLastName(profile.lastName);
-        setPhone(profile.phone);
-        setGender(profile.gender);
+        setFirstName(profile?.firstName);
+        setLastName(profile?.lastName);
+        setPhoneNumber(profile?.phoneNumber);
+        setGender(profile?.gender || "none");
     }
 
     const fetchData = async () => {
         // call API
-        const res = initialProfile;
-        setProfile(res);
+        const res = await handleGetUserInfo();
+        dispatch(setAuthInfo(res));
         handleSetAttribute(res);
     }
 
     useEffect(()=>{
-        fetchData();
+        handleSetAttribute(profile);
     },[])
 
-    const handleSaveChanges = () => {
+    const handleSaveChanges = async () => {
         let isValided = true;
         let error = "";
 
-        isValided = (firstName.trim() != "") && (lastName.trim() != "") && (phone.trim() != "") && (gender != "male" || gender != "female");
+        isValided = (firstName.trim() != "") && (lastName.trim() != "") && (phoneNumber.trim() != "") && (gender != "male" || gender != "female");
         error = isValided ? "" : "Fill full information";
 
-        isValided = isValided ?? phoneNumber(phone);
+        isValided = isValided ?? ValidPhoneNumber(phoneNumber);
         error = isValided ? "Phone number has 10 ligit" : error;
 
         if (isValided) {
-            console.log({firstName, lastName, phone, gender});
-            // send request
-
-            // update profile
-            fetchData();
-
-            //show toast
-            toast.success("Update profile successfully", {
-                autoClose: 3000,
-            });
+            try {
+                // send request
+                await handleUpdateProfileCustomer({firstName, lastName, phoneNumber, gender})
+                // update profile
+                fetchData();
+                toast.success("Update profile successfully", {
+                    autoClose: 3000,
+                });
+            } catch (err) {
+                toast.error("Update profile failed", {
+                    autoClose: 3000,
+                });
+            }
             setIsEdited(false);
         } else {
             toast.error(error, {
@@ -92,7 +104,7 @@ const Profile = () => {
         handleSetAttribute(profile);
         setIsEdited(false);
     })
-    if (isAuthenticated || role !== CUSTOMER) return <Navigate to="/unauthorized" />
+    if (!isAuthenticated || role !== CUSTOMER) return <Navigate to="/unauthorized" />
     return (
         <>
             {isAuthenticated && role == CUSTOMER && (
@@ -140,7 +152,7 @@ const Profile = () => {
                                         smallSize 
                                         disabled
                                         fullWidth 
-                                        value={profile.email}
+                                        value={profile?.email}
                                     />
                                 </div>
                                 <div className={classes.row}>
@@ -152,7 +164,7 @@ const Profile = () => {
                                         smallSize 
                                         disabled={!isEdited} 
                                         fullWidth 
-                                        value={phone}
+                                        value={phoneNumber}
                                         onChange={(e)=>setPhone(e.target.value)}
                                     />
                                 </div>
@@ -165,7 +177,7 @@ const Profile = () => {
                                         smallSize 
                                         disabled
                                         style={{width: "60%"}} 
-                                        value={profile.joinDate} 
+                                        value={moment(profile?.createdAt).format("DD/MM/YYYY")}
                                     />
                                     <SelectCustom
                                         id="label"
