@@ -93,7 +93,7 @@ const NavbarUser = () => {
                 <div>Account</div>
                 {isShowUserMenu && (
                   <div className={css.menu}>
-                    <Link className={css.menuLink} to="/">
+                    <Link className={css.menuLink} to="/profile">
                       Update Profile
                     </Link>
                     <Link className={css.menuLink} to="/">

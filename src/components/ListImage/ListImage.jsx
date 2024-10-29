@@ -45,7 +45,7 @@ const ListImage = ({primaryImage, otherImages}) => {
 
     return (
         <>
-            <img src={nowImage} loading="lazy" className={classes.image_now}/>
+            <img src={nowImage?.url} loading="lazy" className={classes.image_now}/>
             <div className={classes.main_list_image}>
                 <IconButton 
                     className={notPrev ? classes.hidden : classes.show}
@@ -72,7 +72,7 @@ const ListImage = ({primaryImage, otherImages}) => {
                         onClick={()=> handleSelectImage(0)}
                     >
                         <img
-                            src={primaryImage}
+                            src={primaryImage?.url}
                             loading="lazy"
                             className={classes.sub_image}
                         />
@@ -90,7 +90,7 @@ const ListImage = ({primaryImage, otherImages}) => {
                             onClick={()=> handleSelectImage(index+1)}
                         >
                         <img
-                            src={item}
+                            src={item?.url}
                             loading="lazy"
                             className={classes.sub_image}
                         />
