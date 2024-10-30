@@ -6,7 +6,7 @@ import { Typography, Button, Grid2 } from "@mui/material";
 import MyTextField from "../../components/MyTextField/MyTextField";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import { password as ValidPassword } from "../../validator";
+import { password, password as ValidPassword } from "../../validator";
 import { Navigate } from "react-router-dom";
 import { handleChangePassword } from "../../api/personal";
 
@@ -50,7 +50,7 @@ const ChangePassword = () => {
       try {
         await handleChangePassword({
           oldPassword,
-          newPassword,
+          password: newPassword,
           confirmPassword,
         });
         toast.success("Password changed successfully!", { autoClose: 3000 });
