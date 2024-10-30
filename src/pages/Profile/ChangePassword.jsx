@@ -19,7 +19,6 @@ const ChangePassword = () => {
     firstName: firstNameProfile,
     lastName: lastNameProfile,
   } = useSelector((state) => state.auth.userInfo);
-  const [isEdited, setIsEdited] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -107,7 +106,6 @@ const ChangePassword = () => {
                     variant="outlined"
                     color="var(--admin-color)"
                     type="password"
-                    disabled={!isEdited}
                     smallSize
                     style={{ width: "100%" }}
                     value={oldPassword}
@@ -121,7 +119,6 @@ const ChangePassword = () => {
                     variant="outlined"
                     type="password"
                     color="var(--admin-color)"
-                    disabled={!isEdited}
                     smallSize
                     style={{ width: "100%" }}
                     value={newPassword}
@@ -136,14 +133,13 @@ const ChangePassword = () => {
                     type="password"
                     color="var(--admin-color)"
                     smallSize
-                    disabled={!isEdited}
                     style={{ width: "100%" }}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
                 </div>
                 <div className={classes.button}>
-                  {isEdited ? (
+                  {
                     <>
                       <Button
                         variant="outlined"
@@ -171,20 +167,7 @@ const ChangePassword = () => {
                         Cancel
                       </Button>
                     </>
-                  ) : (
-                    <Button
-                      variant="outlined"
-                      sx={{
-                        color: "#000",
-                        textTransform: "none",
-                        fontSize: "16px",
-                        border: "1px solid #000",
-                      }}
-                      onClick={() => setIsEdited(true)}
-                    >
-                      Change password
-                    </Button>
-                  )}
+                  }
                 </div>
               </form>
             </Grid2>
