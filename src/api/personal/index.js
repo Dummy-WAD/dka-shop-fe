@@ -1,7 +1,11 @@
 import axiosInstance from "../../utils/axios";
 
 const handleUpdateProfileCustomer = (config) => {
-    return axiosInstance.patch('/customer/personal/profile', config);
-}
+  return axiosInstance.patch("/customer/personal/profile", config);
+};
 
-export { handleUpdateProfileCustomer }
+const handleChangePassword = (config) => {
+  return axiosInstance.patch("/customer/personal/password", config);
+};
+
+export { handleUpdateProfileCustomer, handleChangePassword };
