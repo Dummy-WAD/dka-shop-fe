@@ -22,6 +22,7 @@ import ProductDetailCustomer from "../pages/ProductCustomer/ProductDetailCustome
 import Search from "../pages/Search/Search";
 import CreateProduct from "../pages/CreateProduct/CreateProduct";
 import Profile from "../pages/Profile/Profile";
+import ChangePassword from "../pages/Profile/ChangePassword";
 import EditProduct from "../pages/EditProduct/EditProduct";
 
 const ProtectedRouteAuth = ({ children }) => {
@@ -66,6 +67,10 @@ const router = createBrowserRouter(
           path: "profile",
           element: <Profile />,
         },
+        {
+          path: "change-password",
+          element: <ChangePassword />,
+        }
       ],
     },
     {
