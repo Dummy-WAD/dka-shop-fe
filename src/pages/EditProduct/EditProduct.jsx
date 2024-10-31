@@ -1,9 +1,9 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   getDetailProductForAdminById,
   handleEditProduct,
 } from "../../api/product";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -37,13 +37,13 @@ import { getPresignedURLs, uploadImagesToS3 } from "../../api/image";
 import classNames from "classnames";
 import { getUniqueFileName } from "../../helper";
 import CreateVariantModal from "../../components/Modal/CreateVariantModal";
-import EditVariantModal from "../../components/Modal/EditVariantModal";
+import SecondaryEditVariantModal from "../../components/Modal/SecondaryEditVariantModal";
 
 const EditProduct = () => {
-  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
+  const [reloadPage, setReloadPage] = useState(false)
   const createVariantModal = useBoolean();
   const editVariantModal = useBoolean();
   const [categoriesList, setCategoriesList] = useState([]);
@@ -114,18 +114,21 @@ const EditProduct = () => {
             filename: id,
             isPrimary,
           })),
-          productVariants: variantList.map(({ size, color, quantity }) => ({
+          productVariants: variantList.map(({ id, size, color, quantity, changeValue, isPositive, isCreated }) => ({
+            id: isCreated ? null : id,
             size,
             color,
             quantity: parseInt(quantity),
+            changeValue: isPositive ? changeValue : changeValue * -1
           })),
         };
         await handleEditProduct(params, id);
         setIsLoading(false);
-        navigate("/admin/product");
+        setReloadPage(!reloadPage)
         toast.success("Edit product successfully", { autoClose: 3000 });
       } catch (err) {
         setIsLoading(false);
+        setReloadPage(!reloadPage)
         toast.error(err.response.data.message, { autoClose: 3000 });
       }
     };
@@ -134,32 +137,37 @@ const EditProduct = () => {
 
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
-    const newImages = files.map((file) => {
-      if (!file.type.startsWith("image/")) {
-        toast.error(
-          `${file.name} is not an image file. Please upload an image.`,
-          {
-            autoClose: 3000,
-          }
-        );
-        return null;
-      }
-      const newFileName = getUniqueFileName(file, uuidv4());
-      const newFile = new File([file], newFileName, {
-        type: file.type,
-        lastModified: file.lastModified,
-      });
-      return {
-        id: newFileName,
-        file: newFile,
-        src: URL.createObjectURL(newFile),
-        isPrimary: false,
-        isFetched: false,
-      };
-    }).filter(Boolean);
+    const newImages = files
+      .map((file) => {
+        if (!file.type.startsWith("image/")) {
+          toast.error(
+            `${file.name} is not an image file. Please upload an image.`,
+            {
+              autoClose: 3000,
+            }
+          );
+          return null;
+        }
+        const newFileName = getUniqueFileName(file, uuidv4());
+        const newFile = new File([file], newFileName, {
+          type: file.type,
+          lastModified: file.lastModified,
+        });
+        return {
+          id: newFileName,
+          file: newFile,
+          src: URL.createObjectURL(newFile),
+          isPrimary: false,
+          isFetched: false,
+        };
+      })
+      .filter(Boolean);
     setImages((prevImages) => {
       const updatedImages = [...prevImages, ...newImages];
-      if (!updatedImages.some((img) => img.isPrimary) && updatedImages.length > 0) {
+      if (
+        !updatedImages.some((img) => img.isPrimary) &&
+        updatedImages.length > 0
+      ) {
         updatedImages[0].isPrimary = true;
       }
       return updatedImages;
@@ -201,7 +209,7 @@ const EditProduct = () => {
     const { size, color, quantity } = item;
     setVariantList((prev) => [
       ...prev,
-      { id: uuidv4(), size, color, quantity },
+      { id: uuidv4(), size, color, quantity, changeValue: 0, isPositive: true, isCreated: true },
     ]);
     createVariantModal.setFalse();
   };
@@ -233,11 +241,13 @@ const EditProduct = () => {
           category: category.id,
         }));
         setVariantList(
-          productResponse.productVariants.map(({ size, color, quantity }) => ({
-            id: uuidv4(),
+          productResponse.productVariants.map(({id, size, color, quantity }) => ({
+            id,
             size,
             color,
             quantity,
+            changeValue: 0,
+            isPositive: true
           }))
         );
         const { primaryImage, otherImages = [] } = productResponse;
@@ -262,7 +272,7 @@ const EditProduct = () => {
       }
     };
     initialProductInfo();
-  }, []);
+  }, [reloadPage, id]);
 
   if (isLoading || !product) {
     return (
@@ -392,17 +402,38 @@ const EditProduct = () => {
                     <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
                       Quantity
                     </TableCell>
+                    <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
+                      Change value
+                    </TableCell>
                     <TableCell width={80}></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {variantList?.map((item) => {
-                    const { id, size, color, quantity } = item;
+                    const {
+                      id,
+                      size,
+                      color,
+                      quantity,
+                      changeValue,
+                      isPositive,
+                    } = item;
                     return (
                       <TableRow key={id} className={classes.table_row}>
                         <TableCell>{size}</TableCell>
                         <TableCell>{color}</TableCell>
                         <TableCell>{quantity}</TableCell>
+                        <TableCell>
+                          {isPositive ? (
+                            <div style={{ color: "green", display: 'flex', alignItems: 'center' }}>
+                              + {changeValue} 
+                            </div>
+                          ) : (
+                            <div style={{ color: "red", display: 'flex', alignItems: 'center' }}>
+                              - {changeValue} 
+                            </div>
+                          )}
+                        </TableCell>
                         <TableCell
                           sx={{
                             paddingRight: "1rem",
@@ -515,7 +546,7 @@ const EditProduct = () => {
         isOpen={editVariantModal.value}
         handleClose={editVariantModal.setFalse}
       >
-        <EditVariantModal
+        <SecondaryEditVariantModal
           variant={currentVariant}
           variantList={variantList}
           onEditVariant={handleEditVariant}
