@@ -6,11 +6,12 @@ import SidebarProfile from "../../components/SidebarProfile/SidebarProfile";
 import { Button, Divider, Typography } from "@mui/material";
 import { PlusIcon } from "../../icon/Icon";
 import { Navigate } from "react-router-dom";
-import { getCustomerAddresses } from "../../api/address";
+import { getCustomerAddresses, setAsDefault } from "../../api/address";
 import ModalCustom from "../../components/Modal/BasicModal";
 import UpdateAddress from "../../components/Address/UpdateAddress";
 import AddAddress from "../../components/Address/AddAddress";
 import DeleteModal from "../../components/Modal/DeleteModal";
+import { toast } from "react-toastify";
 
 function Address() {
   const dispatch = useDispatch();
@@ -61,7 +62,22 @@ function Address() {
 
   useEffect(() => {
     fetchAddresses();
-  }, []);
+  }, [isOpen]);
+
+  const setAddressAsDefault = async (addressId) => {
+    try {
+      await setAsDefault(addressId)
+      fetchAddresses()
+      toast.success("Set default address successfully", {
+        autoClose: 3000,
+      });
+    } catch (error) {
+      toast.error("Failed to set default address", {
+        autoClose: 3000,
+      });
+      console.error(error)
+    }
+  }
 
   if (!isAuthenticated || role !== CUSTOMER)
     return <Navigate to="/unauthorized" />;
@@ -104,9 +120,17 @@ function Address() {
           <div key={index}>
             <div className={classes.row}>
               <div>
-                <Typography variant="h6" sx={{ fontWeight: "500"}}>
-                  {profile.lastName} {profile.firstName}
+                <div className={classes.row_name}>
+                <Typography variant="h6" sx={{ fontWeight: "500", width: "250px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden"}}>
+                  {address.contactName}
                 </Typography>
+                <Typography variant="h6" sx={{ fontWeight: "400", marginX: "1rem"}}>
+                  |
+                </Typography>
+                <Typography variant="h6" sx={{ fontWeight: "400"}}>
+                  {address.phoneNumber}
+                </Typography>
+                </div>
                 <p>{address.localAddress}</p>
                 <p>
                   {address.ward.nameEn} Ward, {address.district.nameEn}{" "}
@@ -130,6 +154,7 @@ function Address() {
                     },
                   }}
                   disabled={address.isDefault}
+                  onClick={() => {if(!address.isDefault) setAddressAsDefault(address.id)}}
                 >
                   {address.isDefault ? "default" : "set as default"}
                 </Button>
@@ -157,12 +182,12 @@ function Address() {
       </div>
       {isOpen && modalType == "update" && (
         <ModalCustom isOpen={isOpen} handleClose={handleClose}>
-          <UpdateAddress addressId={selectedAddress}/>
+          <UpdateAddress addressId={selectedAddress} handleClose={handleClose}/>
         </ModalCustom>
       )}
       {isOpen && modalType == "add" && (
         <ModalCustom isOpen={isOpen} handleClose={handleClose}>
-          <AddAddress />
+          <AddAddress handleClose={handleClose}/>
         </ModalCustom>
       )}
       {isOpen && modalType == "delete" && (

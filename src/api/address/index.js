@@ -21,7 +21,15 @@ const getAddressDetail = (addressId) => {
 }
 
 const updateAdress = (addressId, config) => {
-    return axiosInstance.patch(`customer/addresses${addressId}`, config)
+    return axiosInstance.patch(`customer/addresses/${addressId}`, config)
 }
 
-export { getCustomerAddresses, getProvinces, getDistrictsByProvice, getWardsByDistrict, getAddressDetail, updateAdress }
+const setAsDefault = (addressId) => {
+    return axiosInstance.patch(`customer/addresses/${addressId}/set-default`)
+}
+
+const createAddress = (config) => {
+    return axiosInstance.post('customer/addresses', config)
+}
+
+export { getCustomerAddresses, getProvinces, getDistrictsByProvice, getWardsByDistrict, getAddressDetail, createAddress, updateAdress, setAsDefault }

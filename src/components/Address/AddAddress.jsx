@@ -9,13 +9,16 @@ import SelectCustom from "../SelectCustom/SelectCustom";
 import MyTextField from "../MyTextField/MyTextField";
 import SelectAddress from "./SelectAddress";
 
-function AddAddress() {
+function AddAddress({handleClose, ...props}) {
   const [provinces, setProvinces] = useState([{id: "", nameEn: ""}]);
   const [districts, setDistricts] = useState([])
   const [wards, setWards] = useState([])
   const [selectedProvince, setSelectedProvince] = useState({})
   const [selectedDistrict, setSelectedDistrict] = useState({})
   const [selectedWard, setSelectedWard] = useState({})
+  const [localAddress, setLocalAddress] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [contactName, setContactName] = useState("");
   const fetchProvinces = async () => {
     try {
       const res = await getProvinces();
@@ -60,6 +63,24 @@ function AddAddress() {
         New Address
       </Typography>
       <Box sx={{ mt: "1rem" }}>
+      <MyTextField
+          id="contactName"
+          label="Contact Name"
+          variant="outlined"
+          color="var(--admin-color)"
+          fullWidth
+          style={{ marginY: "1rem" }}
+          onChange={(e) => setContactName(e.target.value)}
+        />
+        <MyTextField
+          id="phoneNumber"
+          label="Phone Number"
+          variant="outlined"
+          color="var(--admin-color)"
+          fullWidth
+          style={{ marginY: "1rem" }}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+        />
         <SelectAddress
           style={{ width: "100%", marginY: "1rem" }}
           label="Province"
@@ -104,6 +125,7 @@ function AddAddress() {
             borderColor: "var(--user-second-color)",
             marginRight: "1rem",
           }}
+          onClick={handleClose}
         >
           Cancel
         </Button>
