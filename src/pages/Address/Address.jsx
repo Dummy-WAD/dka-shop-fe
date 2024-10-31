@@ -6,7 +6,7 @@ import SidebarProfile from "../../components/SidebarProfile/SidebarProfile";
 import { Button, Divider, Typography } from "@mui/material";
 import { PlusIcon } from "../../icon/Icon";
 import { Navigate } from "react-router-dom";
-import { getCustomerAddresses, setAsDefault } from "../../api/address";
+import { deleteAddress, getCustomerAddresses, setAsDefault } from "../../api/address";
 import ModalCustom from "../../components/Modal/BasicModal";
 import UpdateAddress from "../../components/Address/UpdateAddress";
 import AddAddress from "../../components/Address/AddAddress";
@@ -40,9 +40,17 @@ function Address() {
     setIsOpen(true);
   };
 
-  const handleOpenDelete = () => {
+  const handleOpenDelete = (address) => {
+    if (address.isDefault) {
+      toast.error("Cannot delete default address", {
+        autoClose: 3000,
+      });
+    } else {
+      setSelectedAddress(address.id)
     setModalType("delete");
     setIsOpen(true);
+    }
+    
   }
 
   const handleClose = () => {
@@ -53,7 +61,6 @@ function Address() {
   const fetchAddresses = async () => {
     try {
       const res = await getCustomerAddresses();
-
       setAddresses(res);
     } catch (error) {
       console.error(error);
@@ -76,6 +83,20 @@ function Address() {
         autoClose: 3000,
       });
       console.error(error)
+    }
+  }
+
+  const handleDeleteAddress = async () => {
+    try {
+      await deleteAddress(selectedAddress)
+      handleClose()
+      toast.success("Delete address successfully", {
+        autoClose: 3000,
+      });
+    } catch (error) {
+      toast.error(error, {
+        autoClose: 3000,
+      });
     }
   }
 
@@ -170,7 +191,7 @@ function Address() {
                 <Button
                   variant="text"
                   sx={{ color: "var(--user-color)", fontSize: "1rem" }}
-                  onClick={handleOpenDelete}
+                  onClick={() => handleOpenDelete(address)}
                 >
                   Delete
                 </Button>
@@ -194,7 +215,7 @@ function Address() {
         <DeleteModal
           isOpen={isOpen}
           handleClose={handleClose}
-          // onSubmit={handleDelete}
+          onSubmit={handleDeleteAddress}
           title="Delete address"
           description="Are you sure delete this address ?"
         />

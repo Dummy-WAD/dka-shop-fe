@@ -110,7 +110,7 @@ function UpdateAddress({ addressId, handleClose, ...props }) {
             }
           );
         } else
-          toast.error("Update profile failed", {
+          toast.error("Update address failed", {
             autoClose: 3000,
           });
       }

@@ -32,4 +32,8 @@ const createAddress = (config) => {
     return axiosInstance.post('customer/addresses', config)
 }
 
-export { getCustomerAddresses, getProvinces, getDistrictsByProvice, getWardsByDistrict, getAddressDetail, createAddress, updateAdress, setAsDefault }
+const deleteAddress = (addressId) => {
+    return axiosInstance.delete(`customer/addresses/${addressId}`)
+}
+
+export { getCustomerAddresses, getProvinces, getDistrictsByProvice, getWardsByDistrict, getAddressDetail, deleteAddress, createAddress, updateAdress, setAsDefault }
