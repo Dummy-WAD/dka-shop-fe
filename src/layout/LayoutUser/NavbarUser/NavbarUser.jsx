@@ -13,7 +13,10 @@ import classNames from "classnames";
 import { handleLogout } from "../../../api/user";
 import authSlice from "../../../redux/slice/authSlice";
 import { toast } from "react-toastify";
-import { setInfoPageSearch, setSearchText } from "../../../redux/slice/searchSlice";
+import {
+  setInfoPageSearch,
+  setSearchText,
+} from "../../../redux/slice/searchSlice";
 import { ADMIN, CUSTOMER } from "../../../config/roles";
 
 const NavbarUser = () => {
@@ -64,12 +67,14 @@ const NavbarUser = () => {
   }, []);
 
   const handleSearch = () => {
-    dispatch(setInfoPageSearch({
-      page: 1,
-      searchText: refInput.current.value.trim()
-    }))
+    dispatch(
+      setInfoPageSearch({
+        page: 1,
+        searchText: refInput.current.value.trim(),
+      })
+    );
     navigate("/search");
-  }
+  };
 
   return (
     <div className={css.container}>
@@ -77,7 +82,7 @@ const NavbarUser = () => {
         <Link to="/">
           <img alt="logo" src="/logo.png" className={css.logo} />
         </Link>
-        <SearchInput 
+        <SearchInput
           placeholder="Explore our products..."
           inputRef={refInput}
           onSearch={handleSearch}
@@ -94,9 +99,9 @@ const NavbarUser = () => {
                 {isShowUserMenu && (
                   <div className={css.menu}>
                     <Link className={css.menuLink} to="/profile">
-                      Update Profile
+                      My Profile
                     </Link>
-                    <Link className={css.menuLink} to="/">
+                    <Link className={css.menuLink} to="/change-password">
                       Change Password
                     </Link>
                     <Link
@@ -123,7 +128,17 @@ const NavbarUser = () => {
                 <div>Cart</div>
               </div>
             </>
-          ) : isAuthenticated && role === ADMIN ? <Link to='/admin'style={{color: 'var(--admin-color)', textDecoration: 'underline'}}>Back to admin page</Link> : (
+          ) : isAuthenticated && role === ADMIN ? (
+            <Link
+              to="/admin"
+              style={{
+                color: "var(--admin-color)",
+                textDecoration: "underline",
+              }}
+            >
+              Back to admin page
+            </Link>
+          ) : (
             <>
               <Link className={classNames(css.button, css.primary)} to="/login">
                 Login
