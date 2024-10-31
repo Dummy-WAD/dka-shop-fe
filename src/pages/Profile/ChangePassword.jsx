@@ -6,7 +6,7 @@ import { Typography, Button, Grid2 } from "@mui/material";
 import MyTextField from "../../components/MyTextField/MyTextField";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import { password, password as ValidPassword } from "../../validator";
+import { password as ValidPassword } from "../../validator";
 import { Navigate } from "react-router-dom";
 import { handleChangePassword } from "../../api/personal";
 
@@ -46,6 +46,11 @@ const ChangePassword = () => {
       error = "New password and confirm password do not match.";
     }
 
+    if (newPassword === oldPassword) {
+        isValided = false;
+        error = "New password must be different from the old password.";
+    }
+
     if (isValided) {
       try {
         await handleChangePassword({
@@ -63,7 +68,6 @@ const ChangePassword = () => {
           { autoClose: 3000 }
         );
       }
-      setIsEdited(false);
     } else {
       toast.error(error, { autoClose: 3000 });
     }
@@ -73,13 +77,12 @@ const ChangePassword = () => {
     setOldPassword("");
     setNewPassword("");
     setConfirmPassword("");
-    setIsEdited(false);
   };
   if (!isAuthenticated || role !== CUSTOMER)
     return <Navigate to="/unauthorized" />;
   return (
     <>
-      {isAuthenticated && role == CUSTOMER && (
+      {isAuthenticated && role === CUSTOMER && (
         <div className={classes.container}>
           <div className={classes.container_left}>
             <SidebarProfile
