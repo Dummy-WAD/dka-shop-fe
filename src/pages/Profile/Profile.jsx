@@ -58,7 +58,7 @@ const Profile = () => {
     }
 
     useEffect(()=>{
-        handleSetAttribute(profile);
+        fetchData();
     },[])
 
     const handleSaveChanges = async () => {
