@@ -1,10 +1,10 @@
 import { Box, Typography, Button } from "@mui/material";
-import { Add } from "@mui/icons-material";
 import { useRef } from "react";
-import MyTextField from "../../components/MyTextField/MyTextField";
+import MyTextField from "../MyTextField/MyTextField";
+import { Edit } from "@mui/icons-material";
 import { toast } from "react-toastify";
 
-const CreateVariantModal = ({ onCreateVariant, variantList }) => {
+const EditVariantModal = ({ variant, variantList, onEditVariant }) => {
   const sizeRef = useRef("");
   const colorRef = useRef("");
   const quantityRef = useRef("");
@@ -18,16 +18,23 @@ const CreateVariantModal = ({ onCreateVariant, variantList }) => {
       });
       return;
     }
-    const quantityNumber = Number(quantity)
-    if (!Number.isInteger(quantityNumber) || quantityNumber <= 0) {
-      toast.error("Quantity must be a positive integer", {
+    const quantityInput = quantity.trim();
+    const quantityNumber = parseInt(quantityInput, 10);
+    if (
+      isNaN(quantityNumber) ||
+      quantityNumber < 0 ||
+      quantityNumber.toString() !== quantityInput
+    ) {
+      toast.error("Quantity must be an integer greater than or equal to 0", {
         autoClose: 3000,
       });
       return;
     }
     const check = variantList.find(
       (item) =>
-        item.color.toLowerCase() === color.toLowerCase() && item.size.toLowerCase() === size.toLowerCase()
+        item.id !== variant?.id &&
+        item.color.toLowerCase() === color.toLowerCase() &&
+        item.size.toLowerCase() === size.toLowerCase()
     );
     if (check) {
       toast.error("There is already this variant", {
@@ -35,21 +42,23 @@ const CreateVariantModal = ({ onCreateVariant, variantList }) => {
       });
       return;
     }
-    const createdVariant = {
+    const editVariant = {
+      id: variant.id,
       size,
       color,
       quantity,
     };
-    onCreateVariant(createdVariant);
+    onEditVariant(editVariant);
   };
   return (
     <Box sx={{ width: "100%" }}>
       <Typography variant="h5" sx={{ fontWeight: "500", textAlign: "center" }}>
-        Create Variant
+        Edit Variant
       </Typography>
       <Box sx={{ mt: "2rem" }}>
         <MyTextField
           id="size"
+          defaultValue={variant?.size}
           label="Size"
           variant="outlined"
           color="var(--admin-color)"
@@ -59,6 +68,7 @@ const CreateVariantModal = ({ onCreateVariant, variantList }) => {
         />
         <MyTextField
           id="color"
+          defaultValue={variant?.color}
           label="Color"
           variant="outlined"
           color="var(--admin-color)"
@@ -68,6 +78,7 @@ const CreateVariantModal = ({ onCreateVariant, variantList }) => {
         />
         <MyTextField
           id="quantity"
+          defaultValue={variant?.quantity}
           label="Quantity"
           variant="outlined"
           color="var(--admin-color)"
@@ -85,13 +96,13 @@ const CreateVariantModal = ({ onCreateVariant, variantList }) => {
           float: "right",
           minWidth: "150px",
         }}
-        startIcon={<Add />}
+        startIcon={<Edit />}
         onClick={handleSubmit}
       >
-        Create
+        Edit
       </Button>
     </Box>
   );
 };
 
-export default CreateVariantModal;
+export default EditVariantModal;
