@@ -33,15 +33,11 @@ const ChangePassword = () => {
       confirmPassword.trim() !== "";
     if (!isValided) {
       error = "Please fill out all fields.";
-    }
-
-    if (isValided && !ValidPassword(newPassword)) {
+    } else if (isValided && !ValidPassword(newPassword)) {
       isValided = false;
       error =
         "Invalid password! Must be at least 8 characters with one uppercase, one lowercase, one number, and one special character.";
-    }
-
-    if (isValided && newPassword !== confirmPassword) {
+    } else if (isValided && newPassword !== confirmPassword) {
       isValided = false;
       error = "New password and confirm password do not match.";
     }
