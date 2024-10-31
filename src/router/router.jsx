@@ -21,6 +21,10 @@ import ResendEmail from "../pages/ResendEmail/ResendEmail";
 import ProductDetailCustomer from "../pages/ProductCustomer/ProductDetailCustomer";
 import Search from "../pages/Search/Search";
 import CreateProduct from "../pages/CreateProduct/CreateProduct";
+import Profile from "../pages/Profile/Profile";
+import ChangePassword from "../pages/Profile/ChangePassword";
+import EditProduct from "../pages/EditProduct/EditProduct";
+import Address from "../pages/Address/Address";
 
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
@@ -60,6 +64,18 @@ const router = createBrowserRouter(
           path: "product/:productId",
           element: <ProductDetailCustomer />,
         },
+        {
+          path: "profile",
+          element: <Profile />,
+        },
+        {
+          path: "address",
+          element: <Address />,
+        },
+        {
+          path: "change-password",
+          element: <ChangePassword />,
+        }
       ],
     },
     {
@@ -104,6 +120,10 @@ const router = createBrowserRouter(
         {
           path: "product/create",
           element: <CreateProduct />,
+        },
+        {
+          path: "product/edit/:id",
+          element: <EditProduct />,
         },
         {
           path: "product/:id",

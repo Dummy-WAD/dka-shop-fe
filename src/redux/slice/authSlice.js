@@ -20,3 +20,5 @@ export const authSlice = createSlice({
 
 // Export the reducer
 export default authSlice;
+
+export const { setAuthInfo } = authSlice.actions;

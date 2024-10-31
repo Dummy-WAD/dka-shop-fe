@@ -1,0 +1,22 @@
+.container{
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.container_left{
+    width: 25%;
+}
+.container_right{
+    flex: 1;
+}
+.row{
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+    margin: 1.5rem 0;
+}
+.button {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+}

@@ -164,12 +164,12 @@ function CustomerDetail() {
                   <List disablePadding>
                     {addresses.map((address) => (
                       <ListItem
-                        key={address.full_address}
+                        key={address.fullAddress}
                         sx={{ "&.MuiListItem-root": { paddingY: 0.5 } }}
                       >
                         <ListItemText
                           sx={{ flex: 1 }}
-                          primary={address.full_address}
+                          primary={address.fullAddress}
                         />
                       </ListItem>
                     ))}
@@ -177,10 +177,10 @@ function CustomerDetail() {
                   <List disablePadding>
                     {addresses.map((address) => (
                       <ListItem
-                        key={address.full_address}
+                        key={address.fullAddress}
                         sx={{ "&.MuiListItem-root": { paddingY: 0.5 } }}
                       >
-                        {address.is_default && (
+                        {address.isDefault && (
                           <StatusChip
                             label="Default"
                             style={{
