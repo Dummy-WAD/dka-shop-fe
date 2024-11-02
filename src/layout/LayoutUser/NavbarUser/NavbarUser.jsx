@@ -120,13 +120,15 @@ const NavbarUser = () => {
                 </div>
                 <div>Notification</div>
               </div>
-              <div className={css.actionItem}>
-                <div className={css.actionIcon}>
-                  <CartIcon className={css.actionIconDetail} />
-                  <span className={css.count}></span>
+              <Link to="/cart">
+                <div className={css.actionItem}>
+                  <div className={css.actionIcon}>
+                    <CartIcon className={css.actionIconDetail} />
+                    <span className={css.count}></span>
+                  </div>
+                  <div>Cart</div>
                 </div>
-                <div>Cart</div>
-              </div>
+              </Link>
             </>
           ) : isAuthenticated && role === ADMIN ? (
             <Link
