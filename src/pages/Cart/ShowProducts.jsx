@@ -42,7 +42,7 @@ const DeliveryOptions = ({ selectedOption, setSelectedOption }) => {
               option.price === 0 ? css.freePrice : ""
             }`}
           >
-            {option.price === 0 ? "Free" : `$${option.price.toFixed(2)}`}
+            {option.price === 0 ? "Free" : `${option.price.toFixed(2)}$`}
           </span>
         </label>
       ))}
@@ -139,8 +139,6 @@ const CartItem = ({
                   productVariantId: item.productVariantId,
                   quantity: item.orderedQuantity - 1,
                   currentPrice: item.price,
-                  type: "decrease",
-                  cartItemId: item.cartItemId,
                 })
               }
               disabled={item.orderedQuantity === 1}
@@ -155,8 +153,6 @@ const CartItem = ({
                   productVariantId: item.productVariantId,
                   quantity: item.orderedQuantity + 1,
                   currentPrice: item.price,
-                  type: "increase",
-                  cartItemId: item.cartItemId,
                 })
               }
             >
@@ -164,10 +160,10 @@ const CartItem = ({
             </button>
           </div>
           <div className={css.price} title={item.price.toFixed(2)}>
-            ${item.price.toFixed(2)}
+            {item.price.toFixed(2)}$
           </div>
           <div className={css.totalPrice} title={item.totalPrice.toFixed(2)}>
-            ${item.totalPrice.toFixed(2)}
+            {item.totalPrice.toFixed(2)}$
           </div>
         </div>
       </div>
@@ -278,8 +274,7 @@ const ShowProduct = () => {
 
   const handleChangeQuantityProduct = async (data = {}) => {
     try {
-      const { productVariantId, quantity, currentPrice, type, cartItemId } =
-        data;
+      const { productVariantId, quantity, currentPrice } = data;
       const response = await editCartItemQuantity({
         productVariantId,
         quantity,
@@ -287,18 +282,6 @@ const ShowProduct = () => {
       });
       if (response) {
         await fetchProducts();
-        if (listItemChecked.includes(cartItemId)) {
-          switch (type) {
-            case "increase":
-              setTotalCost((totalCost) => totalCost + currentPrice);
-              break;
-            case "decrease":
-              setTotalCost((totalCost) => totalCost - currentPrice);
-              break;
-            default:
-              break;
-          }
-        }
       }
     } catch (error) {
       console.error(error);
