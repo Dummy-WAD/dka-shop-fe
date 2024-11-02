@@ -311,3 +311,9 @@
   margin-top: 16px;
   transition: background-color 0.3s;
 }
+
+.errorText {
+  color: red;
+  font-size: 14px;
+  margin-top: 4px;
+}

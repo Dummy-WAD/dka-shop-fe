@@ -3,7 +3,11 @@ import { VoucherIcon } from "../../icon/Icon";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import Pagination from "@mui/material/Pagination";
-import { getAllProductsInCart, removeProductFromCart } from "../../api/cart";
+import {
+  editCartItemQuantity,
+  getAllProductsInCart,
+  removeProductFromCart,
+} from "../../api/cart";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
@@ -83,6 +87,8 @@ const CartItem = ({
   onCheckItem,
   listItemChecked,
   handleRemoveProduct,
+  handleChangeQuantityProduct,
+  errorQuantity,
 }) => {
   return (
     <div className={css.cartItemContainer}>
@@ -125,10 +131,37 @@ const CartItem = ({
               <span className={css.removeText}>Remove from cart</span>
             </button>
           </div>
-          <div className={css.quantityContainer}>
-            <button className={css.quantityButton}>-</button>
+          <div className={`${css.quantityContainer}`}>
+            <button
+              className={css.quantityButton}
+              onClick={() =>
+                handleChangeQuantityProduct({
+                  productVariantId: item.productVariantId,
+                  quantity: item.orderedQuantity - 1,
+                  currentPrice: item.price,
+                  type: "decrease",
+                  cartItemId: item.cartItemId,
+                })
+              }
+              disabled={item.orderedQuantity === 1}
+            >
+              -
+            </button>
             <span className={css.quantity}>{item.orderedQuantity}</span>
-            <button className={css.quantityButton}>+</button>
+            <button
+              className={css.quantityButton}
+              onClick={() =>
+                handleChangeQuantityProduct({
+                  productVariantId: item.productVariantId,
+                  quantity: item.orderedQuantity + 1,
+                  currentPrice: item.price,
+                  type: "increase",
+                  cartItemId: item.cartItemId,
+                })
+              }
+            >
+              +
+            </button>
           </div>
           <div className={css.price} title={item.price.toFixed(2)}>
             ${item.price.toFixed(2)}
@@ -137,6 +170,9 @@ const CartItem = ({
             ${item.totalPrice.toFixed(2)}
           </div>
         </div>
+        {errorQuantity && (
+          <div className={css.errorText}>Quantity exceeds available stock</div>
+        )}
       </div>
     </div>
   );
@@ -158,6 +194,8 @@ CartItem.propTypes = {
   onCheckItem: PropTypes.func.isRequired,
   listItemChecked: PropTypes.array.isRequired,
   handleRemoveProduct: PropTypes.func.isRequired,
+  handleChangeQuantityProduct: PropTypes.func.isRequired,
+  errorQuantity: PropTypes.bool,
 };
 
 const ShowProduct = () => {
@@ -169,6 +207,7 @@ const ShowProduct = () => {
   const [selectedOption, setSelectedOption] = useState("free");
   const [deliveryCost, setDeliveryCost] = useState(0);
   const [listItemChecked, setListItemChecked] = useState([]);
+  const [errorQuantity, setErrorQuantity] = useState({});
 
   const onCheckItem = (id, price) => {
     const index = listItemChecked.indexOf(id);
@@ -197,12 +236,16 @@ const ShowProduct = () => {
     }
   };
 
-  const handleRemoveProduct = async (productVariantId, totalPrice, uuid) => {
+  const handleRemoveProduct = async (
+    productVariantId,
+    totalPrice,
+    cartItemId
+  ) => {
     try {
       const response = await removeProductFromCart(productVariantId);
       if (response) {
-        toast.success("Product removed from cart");
-        if (listItemChecked.includes(uuid)) {
+        toast.success("Product was removed from cart");
+        if (listItemChecked.includes(cartItemId)) {
           setTotalCost((totalCost) => totalCost - totalPrice);
         }
         await fetchProducts();
@@ -217,6 +260,41 @@ const ShowProduct = () => {
     } catch (error) {
       console.error(error);
       toast.error("Failed to remove product from cart");
+    }
+  };
+
+  const handleChangeQuantityProduct = async (data = {}) => {
+    try {
+      const { productVariantId, quantity, currentPrice, type, cartItemId } =
+        data;
+      const response = await editCartItemQuantity({
+        productVariantId,
+        quantity,
+        currentPrice,
+      });
+      if (response) {
+        await fetchProducts();
+        if (listItemChecked.includes(cartItemId)) {
+          switch (type) {
+            case "increase":
+              setTotalCost((totalCost) => totalCost + currentPrice);
+              break;
+            case "decrease":
+              setTotalCost((totalCost) => totalCost - currentPrice);
+              break;
+            default:
+              break;
+          }
+        }
+        setErrorQuantity((prev) => ({ ...prev, [cartItemId]: false }));
+      }
+    } catch (error) {
+      console.error(error);
+      const { code, message } = error.response.data;
+      if (code === 400 && message === "Quantity exceeds available stock") {
+        setErrorQuantity((prev) => ({ ...prev, [data.cartItemId]: true }));
+        toast.error("Quantity exceeds available stock");
+      } else toast.error("Failed to update quantity");
     }
   };
 
@@ -262,6 +340,8 @@ const ShowProduct = () => {
               onCheckItem={onCheckItem}
               listItemChecked={listItemChecked}
               handleRemoveProduct={handleRemoveProduct}
+              handleChangeQuantityProduct={handleChangeQuantityProduct}
+              errorQuantity={errorQuantity[item.cartItemId]}
             />
           ))}
         </div>
