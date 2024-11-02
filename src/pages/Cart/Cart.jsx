@@ -84,6 +84,7 @@ const Cart = () => {
                 }
                 value="1"
                 className={css.tabLabel}
+                disabled={value !== "1"}
               />
               <Tab
                 label={
@@ -95,6 +96,7 @@ const Cart = () => {
                 }
                 value="2"
                 className={css.tabLabel}
+                disabled={value !== "2"}
               />
               <Tab
                 label={
@@ -106,6 +108,7 @@ const Cart = () => {
                 }
                 value="3"
                 className={css.tabLabel}
+                disabled={value !== "3"}
               />
             </TabList>
           </Box>
