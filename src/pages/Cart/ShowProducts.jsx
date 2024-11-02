@@ -3,9 +3,8 @@ import { VoucherIcon } from "../../icon/Icon";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import Pagination from "@mui/material/Pagination";
-import { getAllProductsInCart } from "../../api/cart";
+import { getAllProductsInCart, removeProductFromCart } from "../../api/cart";
 import { toast } from "react-toastify";
-import { v4 as uuidv4 } from "uuid";
 import { Link } from "react-router-dom";
 
 const DeliveryOptions = ({ selectedOption, setSelectedOption }) => {
@@ -79,15 +78,20 @@ TotalCost.propTypes = {
   deliveryCost: PropTypes.number.isRequired,
 };
 
-const CartItem = ({ item, onCheckItem, listItemChecked }) => {
+const CartItem = ({
+  item,
+  onCheckItem,
+  listItemChecked,
+  handleRemoveProduct,
+}) => {
   return (
     <div className={css.cartItemContainer}>
       <input
         type="checkbox"
         className={css.checkbox}
-        checked={listItemChecked.includes(item.uuid)}
+        checked={listItemChecked.includes(item.cartItemId)}
         onClick={() => {
-          onCheckItem(item.uuid, item.totalPrice);
+          onCheckItem(item.cartItemId, item.totalPrice);
         }}
       />
       <div className={css.productImageContainer}>
@@ -107,7 +111,16 @@ const CartItem = ({ item, onCheckItem, listItemChecked }) => {
             <p className={css.productVariant}>
               Variant: {item.size}, {item.color}
             </p>
-            <button className={css.removeButton}>
+            <button
+              className={css.removeButton}
+              onClick={() =>
+                handleRemoveProduct(
+                  item.productVariantId,
+                  item.totalPrice,
+                  item.cartItemId
+                )
+              }
+            >
               <span className={css.removeIcon}>✕</span>
               <span className={css.removeText}>Remove from cart</span>
             </button>
@@ -130,7 +143,7 @@ const CartItem = ({ item, onCheckItem, listItemChecked }) => {
 };
 CartItem.propTypes = {
   item: PropTypes.shape({
-    uuid: PropTypes.string.isRequired,
+    cartItemId: PropTypes.string.isRequired,
     productImage: PropTypes.string.isRequired,
     productName: PropTypes.string.isRequired,
     size: PropTypes.string.isRequired,
@@ -138,9 +151,13 @@ CartItem.propTypes = {
     orderedQuantity: PropTypes.number.isRequired,
     price: PropTypes.number.isRequired,
     totalPrice: PropTypes.number.isRequired,
+    productVariantId: PropTypes.string.isRequired,
+    remainingQuantity: PropTypes.number.isRequired,
+    productId: PropTypes.string.isRequired,
   }).isRequired,
   onCheckItem: PropTypes.func.isRequired,
   listItemChecked: PropTypes.array.isRequired,
+  handleRemoveProduct: PropTypes.func.isRequired,
 };
 
 const ShowProduct = () => {
@@ -171,13 +188,35 @@ const ShowProduct = () => {
         response.results.map((item) => {
           return {
             ...item,
-            uuid: uuidv4(),
           };
         })
       );
     } catch (error) {
       console.error(error);
       toast.error("Failed to fetch products in cart");
+    }
+  };
+
+  const handleRemoveProduct = async (productVariantId, totalPrice, uuid) => {
+    try {
+      const response = await removeProductFromCart(productVariantId);
+      if (response) {
+        toast.success("Product removed from cart");
+        if (listItemChecked.includes(uuid)) {
+          setTotalCost((totalCost) => totalCost - totalPrice);
+        }
+        await fetchProducts();
+
+        const newTotalPages = Math.ceil(
+          response.totalCartItems / ITEM_PER_PAGE
+        );
+        if (page > newTotalPages) {
+          setPage(newTotalPages);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to remove product from cart");
     }
   };
 
@@ -222,6 +261,7 @@ const ShowProduct = () => {
               item={item}
               onCheckItem={onCheckItem}
               listItemChecked={listItemChecked}
+              handleRemoveProduct={handleRemoveProduct}
             />
           ))}
         </div>
@@ -232,7 +272,7 @@ const ShowProduct = () => {
             marginTop: "20px",
           }}
         >
-          {paginatedProducts && paginatedProducts.length > 0 && (
+          {products && products.length > 0 && (
             <Pagination
               count={totalPages}
               page={page}
@@ -242,19 +282,22 @@ const ShowProduct = () => {
             />
           )}
         </div>
-        {paginatedProducts && paginatedProducts.length === 0 && (
-          <div className={css.emptyContainer}>
-            <div className={css.emptyTitle}>
-              Your cart is currently empty. Browse our products and add items to
-              your cart!
+        {paginatedProducts &&
+          paginatedProducts.length === 0 &&
+          products &&
+          products.length === 0 && (
+            <div className={css.emptyContainer}>
+              <div className={css.emptyTitle}>
+                Your cart is currently empty. Browse our products and add items
+                to your cart!
+              </div>
+              <div>
+                <Link to="/">
+                  <button className={css.emptyButton}>Start shopping!</button>
+                </Link>
+              </div>
             </div>
-            <div>
-              <Link to="/">
-                <button className={css.emptyButton}>Start shopping!</button>
-              </Link>
-            </div>
-          </div>
-        )}
+          )}
       </div>
       <div className={css.rightPanel}>
         <div className={css.headerRightPanel}>Order information</div>
