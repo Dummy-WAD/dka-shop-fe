@@ -152,8 +152,8 @@ function Address() {
                   {address.phoneNumber}
                 </Typography>
                 </div>
-                <p>{address.localAddress}</p>
-                <p>
+                <p className={classes.text}>{address.localAddress}</p>
+                <p className={classes.text}>
                   {address.ward.nameEn} Ward, {address.district.nameEn}{" "}
                   District, {address.province.nameEn}
                 </p>

@@ -8,7 +8,7 @@ import DateInput from "../../components/DateInput/DateInput";
 import SelectCustom from "../../components/SelectCustom/SelectCustom";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { phoneNumber as ValidPhoneNumber } from "../../validator";
+import { phoneNumber as validPhoneNumber } from "../../validator";
 import { Navigate } from "react-router-dom";
 import { handleGetUserInfo } from "../../api/user";
 import moment from "moment/moment";
@@ -68,8 +68,8 @@ const Profile = () => {
         isValided = (firstName.trim() != "") && (lastName.trim() != "") && (phoneNumber.trim() != "") && (gender != "none");
         error = isValided ? "" : "Fill full information";
 
-        isValided = isValided ?? ValidPhoneNumber(phoneNumber);
-        error = isValided ? "Phone number has 10 ligit" : error;
+        isValided = isValided ? validPhoneNumber(phoneNumber) : isValided;
+        error = isValided ? error : "Incorrect format phone number";
 
         if (isValided) {
             try {
