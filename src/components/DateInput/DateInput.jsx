@@ -1,35 +1,23 @@
-import { TextField } from "@mui/material";
-import { forwardRef, useState } from "react";
+import { forwardRef } from "react";
+import { DateField } from '@mui/x-date-pickers/DateField';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+
 
 const DateInput = forwardRef(({color, fullWidth, smallSize, style, value, ...props}, ref) => {
-    const [selectedDate, setSelectedDate] = useState(value);
-
-    const handleDateChange = (event) => {
-        const value = event.target.value; 
-        setSelectedDate(convertToDDMMYYYY(value));
-    };
-
-    const convertToDDMMYYYY = (date) => {
-        const [year, month, day] = date.split('-');
-        return `${day}/${month}/${year}`; 
-    };
-
-    const convertToISODate = (date) => {
-        const [day, month, year] = date.split('/');
-        return `${year}-${month}-${day}`; 
-    };
     return (
-        <TextField
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DateField
             {...props}
             inputRef={ref}
-            type="date"
-            value={convertToISODate(selectedDate)}
-            onChange={handleDateChange}
+            defaultValue={value ? dayjs(value) : null}
+            format={"DD/MM/YYYY"}
             InputLabelProps={{
                 sx: {
                     color: color,
                     '&.Mui-focused': {
-                        color: color, 
+                        color: color,
                     },
                 },
             }}
@@ -47,11 +35,12 @@ const DateInput = forwardRef(({color, fullWidth, smallSize, style, value, ...pro
                         borderColor: color,
                     },
                     "&.Mui-focused fieldset": {
-                        borderColor: color, 
+                        borderColor: color,
                     },
                 },
             }}
         />
+      </LocalizationProvider>
     );
 });
 
