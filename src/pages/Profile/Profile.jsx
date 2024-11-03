@@ -176,7 +176,7 @@ const Profile = () => {
                                         smallSize 
                                         disabled
                                         style={{width: "60%"}} 
-                                        value={moment(profile?.createdAt).format("DD/MM/YYYY")}
+                                        value={new Date(profile?.createdAt).toISOString()}
                                     />
                                     <SelectCustom
                                         id="label"
