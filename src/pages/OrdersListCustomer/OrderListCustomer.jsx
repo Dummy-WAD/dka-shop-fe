@@ -1,50 +1,56 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import SidebarProfile from "../../components/SidebarProfile/SidebarProfile";
 import classes from "./OrderListCustomer.module.css"
 import { CUSTOMER } from "../../config/roles";
-import { Typography, Button, Grid2, Tabs, Tab } from "@mui/material";
-import MyTextField from "../../components/MyTextField/MyTextField";
-import DateInput from "../../components/DateInput/DateInput";
-import SelectCustom from "../../components/SelectCustom/SelectCustom";
-import { toast } from "react-toastify";
+import { Typography, Grid2, Tabs, Tab } from "@mui/material";
 import { useEffect, useState } from "react";
-import { phoneNumber as ValidPhoneNumber } from "../../validator";
-import { Navigate } from "react-router-dom";
-import { handleGetUserInfo } from "../../api/user";
-import moment from "moment/moment";
-import { handleUpdateProfileCustomer } from "../../api/personal";
-import { setAuthInfo } from "../../redux/slice/authSlice";
-import { MALE, FEMALE } from "../../config/gender";
 import { PENDING, PACKAGED, DELIVERING, COMPLETED } from "../../config/status";
-import { listOrder } from "../../config/order";
 import OrderCard from "../../components/OrderCard/OrderCard";
+import PaginationCustom from "../../components/Pagination/Pagination";
+import { getAllOrder } from "../../api/order";
+
+const LIMIT = 10;
 
 const OrderListCustomer = () => {
-    const dispatch = useDispatch();
-    const { isAuthenticated, userInfo : profile } = useSelector(state => state.auth);
+    const { isAuthenticated } = useSelector(state => state.auth);
     const { role, firstName : firstNameProfile, lastName: lastNameProfile } = useSelector(state => state.auth.userInfo);
+    const [orderList, setOrderList] = useState([]);
     const [selectedTab, setSelectedTab] = useState("all");
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
     const fetchData = async () => {
-        // call API
-        // const res = await handleGetUserInfo();
-        // dispatch(setAuthInfo({
-        //     userInfo: res,
-        // }));
-        // handleSetAttribute(res);
+        try{
+            const res = await getAllOrder({
+                ...(selectedTab && selectedTab != "all" && {status: selectedTab}),
+                limit: LIMIT, 
+                page,
+            });
+            setOrderList(res.results);
+            setPage(res.page);
+            setTotalPages(res.totalPages);
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     useEffect(()=>{
         fetchData();
-    },[]);
+    },[page, selectedTab])
 
     const handleChange = (e, newValue) => {
         setSelectedTab(newValue);
+        setPage(1);
     }
 
-    // if (!isAuthenticated || role !== CUSTOMER) return <Navigate to="/unauthorized" />
+    const handleChangePage = (e, newValue) => {
+        setPage(newValue);
+    }
+
+    if (!isAuthenticated || role !== CUSTOMER) return <Navigate to="/unauthorized" />
     return (
         <>
-            {/* {isAuthenticated && role == CUSTOMER && ( */}
+            {isAuthenticated && role == CUSTOMER && (
                 <div className={classes.container}>
                     <div className={classes.container_left}>
                         <SidebarProfile firstName={firstNameProfile} lastName={lastNameProfile}/>
@@ -80,13 +86,26 @@ const OrderListCustomer = () => {
                                 <Tab label="Delivering" value={DELIVERING}/>
                                 <Tab label="Completed" value={COMPLETED}/>
                             </Tabs>
-                            {listOrder.map((item)=> (
-                                <OrderCard order={item} key={item.id} />
+                            {orderList.map((item)=> (
+                                <OrderCard order={item} key={item.orderId} />
                             ))}
+                            {orderList.length > 0 ? (
+                                <Grid2>
+                                    <PaginationCustom 
+                                        page={page}
+                                        totalPages={totalPages}
+                                        handleChangePage={handleChangePage}
+                                    />
+                                </Grid2>
+                            ) : (
+                                <Grid2 sx={{ textAlign: "center", padding: "1rem 0", mt: "1rem" }}>
+                                    No orders available
+                                </Grid2>
+                            )}
                         </Grid2>
                     </div>
                 </div>
-            {/* )} */}
+            )}
         </>
     )
 }

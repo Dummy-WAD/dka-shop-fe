@@ -1,4 +1,4 @@
-import { Grid2, Typography } from "@mui/material";
+import {Typography } from "@mui/material";
 import classes from "./OrderCardItem.module.css"
 const OrderCardItem = ({product}) => {
     return (

@@ -1,10 +1,13 @@
 import { CardActionArea, Typography, Card } from "@mui/material"
 import classes from "./OrderCard.module.css"
 import OrderCardItem from "./OrderCardItem"
+import { useNavigate } from "react-router-dom"
 const OrderCard = ({order}) => {
-
+    const navigate = useNavigate();
+    const product = order?.orderItem;
     const handleAction = () => {
-        console.log("Order card");
+        navigate(`/orders/${order.orderId}`);
+        window.scrollTo(0, 0);
     }
     return (
         <Card sx={{borderRadius: "10px", border: "2px solid #E8ECEF", margin: "1.5rem 0"}}>
@@ -14,11 +17,9 @@ const OrderCard = ({order}) => {
                     <Typography sx={{color: "#FACC15"}}>{order?.currentStatus}</Typography>
                 </div>
                 <div className={classes.section_products}>
-                    {order?.listOfOrderItems.map((product)=>(
-                        <div className={classes.product}>
-                            <OrderCardItem product={product} key={product?.productId} />
-                        </div>
-                    ))}
+                    <div className={classes.product} key={product?.productId}>
+                        <OrderCardItem product={product} key={product?.productId} />
+                    </div> 
                 </div>
                 <div className={classes.section_footer}>
                     <Typography sx={{color: "#6C7275"}}>{order?.numberOfOrderItems} products</Typography>
