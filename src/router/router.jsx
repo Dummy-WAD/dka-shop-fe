@@ -26,6 +26,7 @@ import ChangePassword from "../pages/Profile/ChangePassword";
 import EditProduct from "../pages/EditProduct/EditProduct";
 import Address from "../pages/Address/Address";
 import Cart from "../pages/Cart/Cart";
+import OrderListCustomer from "../pages/OrdersListCustomer/OrderListCustomer";
 
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
@@ -76,6 +77,10 @@ const router = createBrowserRouter(
         {
           path: "change-password",
           element: <ChangePassword />,
+        },
+        {
+          path: "purchase",
+          element: <OrderListCustomer />,
         }
       ],
     },
