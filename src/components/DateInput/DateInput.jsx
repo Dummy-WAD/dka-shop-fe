@@ -1,30 +1,17 @@
 import { TextField } from "@mui/material";
 import { forwardRef, useState } from "react";
+import moment from "moment/moment";
 
 const DateInput = forwardRef(({color, fullWidth, smallSize, style, value, ...props}, ref) => {
-    const [selectedDate, setSelectedDate] = useState(value);
-
-    const handleDateChange = (event) => {
-        const value = event.target.value; 
-        setSelectedDate(convertToDDMMYYYY(value));
-    };
-
-    const convertToDDMMYYYY = (date) => {
-        const [year, month, day] = date.split('-');
-        return `${day}/${month}/${year}`; 
-    };
-
     const convertToISODate = (date) => {
-        const [day, month, year] = date.split('/');
-        return `${year}-${month}-${day}`; 
+        return moment(date, "DD/MM/YYYY").format("YYYY-MM-DD");
     };
     return (
         <TextField
             {...props}
             inputRef={ref}
             type="date"
-            value={convertToISODate(selectedDate)}
-            onChange={handleDateChange}
+            value={convertToISODate(value)}
             InputLabelProps={{
                 sx: {
                     color: color,

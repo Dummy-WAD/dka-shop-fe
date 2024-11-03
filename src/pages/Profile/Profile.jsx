@@ -59,17 +59,22 @@ const Profile = () => {
 
     useEffect(()=>{
         fetchData();
-    },[])
+    },[]);
+
+    const handleValid = () => {
+        let isValided = true;
+
+        isValided = (firstName && firstName.trim() != "") && (lastName && lastName.trim() != "") && (phoneNumber && phoneNumber.trim() != "") && (gender != "none");
+        if (!isValided) return { isValided : false, error: "Fill full information"}
+
+        isValided = validPhoneNumber(phoneNumber);
+        if (!isValided) return { isValided : false, error: "Incorrect format phone number"}
+
+        return { isValided: true}
+    }
 
     const handleSaveChanges = async () => {
-        let isValided = true;
-        let error = "";
-
-        isValided = (firstName.trim() != "") && (lastName.trim() != "") && (phoneNumber.trim() != "") && (gender != "none");
-        error = isValided ? "" : "Fill full information";
-
-        isValided = isValided ? validPhoneNumber(phoneNumber) : isValided;
-        error = isValided ? error : "Incorrect format phone number";
+        const {isValided, error } = handleValid();
 
         if (isValided) {
             try {
