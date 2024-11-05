@@ -160,7 +160,6 @@ const CartItem = ({
                   currentPrice: item.price,
                 })
               }
-              disabled={item.remainingQuantity === 0}
             >
               +
             </button>
@@ -240,6 +239,13 @@ const ShowProduct = () => {
             currentPrice: item.price,
           })
         );
+        response.results.forEach((item) => {
+          if (item.remainingQuantity === 0) {
+            setListItemChecked(
+              listItemChecked.filter((id) => id !== item.cartItemId)
+            );
+          }
+        });
         await Promise.all(updatePromises);
         if (cartItemsOutOfStock.length > 0) {
           const updatedResponse = await getAllProductsInCart();
