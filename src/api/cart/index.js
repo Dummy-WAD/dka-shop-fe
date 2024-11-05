@@ -1,7 +1,8 @@
 import axiosInstance from "../../utils/axios";
 
-const getAllProductsInCart = () => {
-  return axiosInstance.get(`/customer/carts`);
+const getAllProductsInCart = (page, limit) => {
+  if (page > 0)
+    return axiosInstance.get(`/customer/carts?page=${page}&limit=${limit}`);
 };
 const removeProductFromCart = (id) => {
   const data = {

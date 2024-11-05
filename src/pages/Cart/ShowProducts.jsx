@@ -42,7 +42,7 @@ const DeliveryOptions = ({ selectedOption, setSelectedOption }) => {
               option.price === 0 ? css.freePrice : ""
             }`}
           >
-            {option.price === 0 ? "Free" : `${option.price.toFixed(2)}$`}
+            {option.price === 0 ? "Free" : `$${option.price.toFixed(2)}`}
           </span>
         </label>
       ))}
@@ -59,18 +59,18 @@ const TotalCost = ({ totalCost, deliveryCost }) => {
     <div className={css.containerTotalCost}>
       <div className={css.costRow}>
         <span className={css.label}>Total product cost</span>
-        <span className={css.amount}>{totalCost.toFixed(2)}$</span>
+        <span className={css.amount}>${totalCost.toFixed(2)}</span>
       </div>
       <hr className={css.divider} />
       <div className={css.costRow}>
         <span className={css.label}>Delivery cost</span>
-        <span className={css.amount}>{deliveryCost.toFixed(2)}$</span>
+        <span className={css.amount}>${deliveryCost.toFixed(2)}</span>
       </div>
       <hr className={css.divider} />
       <div className={css.totalRow}>
         <span className={css.totalLabel}>Total payable amount</span>
         <span className={css.totalAmount}>
-          {(totalCost + deliveryCost).toFixed(2)}$
+          ${(totalCost + deliveryCost).toFixed(2)}
         </span>
       </div>
       <button className={css.checkoutButton}>Check out</button>
@@ -139,6 +139,8 @@ const CartItem = ({
                   productVariantId: item.productVariantId,
                   quantity: item.orderedQuantity - 1,
                   currentPrice: item.price,
+                  cartItemId: item.cartItemId,
+                  type: "decrease",
                 })
               }
               disabled={item.orderedQuantity === 1}
@@ -153,6 +155,8 @@ const CartItem = ({
                   productVariantId: item.productVariantId,
                   quantity: item.orderedQuantity + 1,
                   currentPrice: item.price,
+                  cartItemId: item.cartItemId,
+                  type: "increase",
                 })
               }
             >
@@ -160,10 +164,10 @@ const CartItem = ({
             </button>
           </div>
           <div className={css.price} title={item.price.toFixed(2)}>
-            {item.price.toFixed(2)}$
+            ${item.price.toFixed(2)}
           </div>
           <div className={css.totalPrice} title={item.totalPrice.toFixed(2)}>
-            {item.totalPrice.toFixed(2)}$
+            ${item.totalPrice.toFixed(2)}
           </div>
         </div>
       </div>
@@ -200,43 +204,52 @@ const ShowProduct = () => {
   const [deliveryCost, setDeliveryCost] = useState(0);
   const [listItemChecked, setListItemChecked] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const [openModalPriceChanged, setOpenModalPriceChanged] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
 
-  const onCheckItem = (id, price) => {
+  const onCheckItem = (id, totalPrice) => {
     const index = listItemChecked.indexOf(id);
     if (index === -1) {
       setListItemChecked([...listItemChecked, id]);
-      setTotalCost((totalCost) => totalCost + price);
+      setTotalCost((totalCost) => totalCost + totalPrice);
     } else {
       setListItemChecked(listItemChecked.filter((item) => item !== id));
-      setTotalCost((totalCost) => totalCost - price);
+      setTotalCost((totalCost) => totalCost - totalPrice);
     }
   };
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (page = 1, limit = ITEM_PER_PAGE) => {
     try {
-      const response = await getAllProductsInCart();
+      const response = await getAllProductsInCart(page, limit);
       if (response) {
         const cartItemsOutOfStock = response.results.filter(
           (item) => item.orderedQuantity > item.remainingQuantity
         );
-        const updatePromises = cartItemsOutOfStock.map((item) =>
-          editCartItemQuantity({
-            productVariantId: item.productVariantId,
-            quantity: item.remainingQuantity,
-            currentPrice: item.price,
-          })
-        );
-        await Promise.all(updatePromises);
-        const updatedResponse = await getAllProductsInCart();
-        if (updatedResponse) {
-          const newTotalCost = updatedResponse.results.reduce((total, item) => {
+        if (cartItemsOutOfStock.length > 0) {
+          const adjustCost = cartItemsOutOfStock.reduce((sum, item) => {
             if (listItemChecked.includes(item.cartItemId)) {
-              return total + item.price * item.orderedQuantity;
+              sum +=
+                item.price * (item.orderedQuantity - item.remainingQuantity);
             }
-            return total;
+            return sum;
           }, 0);
-          setTotalCost(newTotalCost);
-          setProducts(updatedResponse.results);
+          setTotalCost((totalCost) => totalCost - adjustCost);
+          const updatePromises = cartItemsOutOfStock.map((item) =>
+            editCartItemQuantity({
+              productVariantId: item.productVariantId,
+              quantity: item.remainingQuantity,
+              currentPrice: item.price,
+            })
+          );
+          await Promise.all(updatePromises);
+          const updatedResponse = await getAllProductsInCart(page, limit);
+          if (updatedResponse) {
+            setProducts(updatedResponse.results);
+            setTotalPages(updatedResponse.totalPages);
+          }
+        } else {
+          setProducts(response.results);
+          setTotalPages(response.totalPages);
         }
       }
     } catch (error) {
@@ -257,11 +270,12 @@ const ShowProduct = () => {
         if (listItemChecked.includes(cartItemId)) {
           setTotalCost((totalCost) => totalCost - totalPrice);
         }
-        await fetchProducts();
+        await fetchProducts(page, ITEM_PER_PAGE);
 
         const newTotalPages = Math.ceil(
           response.totalCartItems / ITEM_PER_PAGE
         );
+        setTotalPages(newTotalPages);
         if (page > newTotalPages) {
           setPage(newTotalPages);
         }
@@ -274,27 +288,60 @@ const ShowProduct = () => {
 
   const handleChangeQuantityProduct = async (data = {}) => {
     try {
-      const { productVariantId, quantity, currentPrice } = data;
+      const { productVariantId, quantity, currentPrice, cartItemId, type } =
+        data;
       const response = await editCartItemQuantity({
         productVariantId,
         quantity,
         currentPrice,
       });
+
       if (response) {
-        await fetchProducts();
+        await fetchProducts(page, ITEM_PER_PAGE);
+        if (listItemChecked.includes(cartItemId)) {
+          const adjustment = type === "increase" ? currentPrice : -currentPrice;
+          setTotalCost((totalCost) => totalCost + adjustment);
+        }
       }
     } catch (error) {
       console.error(error);
       const { code, message } = error.response.data;
-      if (code === 400 && message === "Quantity exceeds available stock") {
-        setOpenModal(true);
-      } else toast.error("Failed to update quantity");
+      const { quantity, currentPrice, cartItemId, type } = data;
+
+      if (code === 400) {
+        if (message === "Quantity exceeds available stock") {
+          setOpenModal(true);
+        } else if (
+          message ===
+          "The price of this product has been updated. Please check the new price"
+        ) {
+          handlePriceChange(quantity, currentPrice, cartItemId, type);
+        }
+      } else {
+        toast.error("Failed to update quantity");
+      }
     }
   };
 
+  const handlePriceChange = (quantity, currentPrice, cartItemId, type) => {
+    if (!listItemChecked.includes(cartItemId)) {
+      setOpenModalPriceChanged(true);
+      return;
+    }
+
+    const adjustment =
+      type === "increase"
+        ? -(quantity - 1) * currentPrice
+        : -(quantity + 1) * currentPrice;
+
+    setTotalCost((totalCost) => totalCost + adjustment);
+    listItemChecked.splice(listItemChecked.indexOf(cartItemId), 1);
+    setOpenModalPriceChanged(true);
+  };
+
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    fetchProducts(page, ITEM_PER_PAGE);
+  }, [page]);
 
   useEffect(() => {
     const deliveryOptions = {
@@ -305,16 +352,9 @@ const ShowProduct = () => {
     setDeliveryCost(deliveryOptions[selectedOption]);
   }, [selectedOption]);
 
-  const totalPages = Math.ceil(products.length / ITEM_PER_PAGE);
-
   const handleChangePage = (event, value) => {
     setPage(value);
   };
-
-  const paginatedProducts = products.slice(
-    (page - 1) * ITEM_PER_PAGE,
-    page * ITEM_PER_PAGE
-  );
 
   return (
     <>
@@ -328,7 +368,7 @@ const ShowProduct = () => {
             ))}
           </div>
           <div>
-            {paginatedProducts.map((item, index) => (
+            {products.map((item, index) => (
               <CartItem
                 key={index}
                 item={item}
@@ -356,22 +396,19 @@ const ShowProduct = () => {
               />
             )}
           </div>
-          {paginatedProducts &&
-            paginatedProducts.length === 0 &&
-            products &&
-            products.length === 0 && (
-              <div className={css.emptyContainer}>
-                <div className={css.emptyTitle}>
-                  Your cart is currently empty. Browse our products and add
-                  items to your cart!
-                </div>
-                <div>
-                  <Link to="/">
-                    <button className={css.emptyButton}>Start shopping!</button>
-                  </Link>
-                </div>
+          {products && products.length === 0 && (
+            <div className={css.emptyContainer}>
+              <div className={css.emptyTitle}>
+                Your cart is currently empty. Browse our products and add items
+                to your cart!
               </div>
-            )}
+              <div>
+                <Link to="/">
+                  <button className={css.emptyButton}>Start shopping!</button>
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
         <div className={css.rightPanel}>
           <div className={css.headerRightPanel}>Order information</div>
@@ -417,8 +454,60 @@ const ShowProduct = () => {
           </Typography>
           <Button
             onClick={async () => {
-              await fetchProducts();
+              await fetchProducts(page, ITEM_PER_PAGE);
               setOpenModal(false);
+            }}
+            variant="contained"
+            sx={{ mt: 2 }}
+            fullWidth
+            style={{
+              padding: "6px",
+              backgroundColor: "#274c50",
+              color: "#ffffff",
+              fontSize: "16px",
+              fontWeight: "bold",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              marginTop: "16px",
+              transition: "background-color 0.3s",
+            }}
+          >
+            OK
+          </Button>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={openModalPriceChanged}
+        onClose={() => setOpenModalPriceChanged(false)}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 350,
+            bgcolor: "background.paper",
+            borderRadius: 1,
+            boxShadow: 24,
+            p: 3,
+          }}
+        >
+          <Typography id="modal-title" variant="h6" component="h2">
+            Price Changed
+          </Typography>
+          <Typography id="modal-description" sx={{ mt: 1 }}>
+            The price of this product has been updated. Please check the new
+            price.
+          </Typography>
+          <Button
+            onClick={async () => {
+              await fetchProducts(page, ITEM_PER_PAGE);
+              setOpenModalPriceChanged(false);
             }}
             variant="contained"
             sx={{ mt: 2 }}
