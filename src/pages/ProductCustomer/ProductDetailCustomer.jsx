@@ -6,6 +6,7 @@ import { CartIcon, MinusIcon, PlusIcon } from "../../icon/Icon";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDetailProductForCustomerById } from "../../api/product";
 import { toast } from "react-toastify";
+import { addProductToCart } from "../../api/cart";
 
 function ProductDetailCustomer() {
   const { productId } = useParams();
@@ -18,7 +19,9 @@ function ProductDetailCustomer() {
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [selectedId, setSelectedId] = useState("");
   const [quantity, setQuantity] = useState(null); // Initial value set to 1
+  const [errorMessage, setErrorMessage] = useState("");
 
   const fetchProductDetail = async (productId) => {
     try {
@@ -48,6 +51,7 @@ function ProductDetailCustomer() {
         (item) => item.size == selectedSize && item.color == selectedColor
       );
       setQuantity(variant ? variant.quantity : null);
+      setSelectedId(variant ? variant.id : null);
     }
   };
 
@@ -67,51 +71,70 @@ function ProductDetailCustomer() {
     fetchProductDetail(productId);
   }, [productId]);
 
-  const validate = () => {
+  const validate = (quan) => {
     let error = null;
     if (!(selectedColor && selectedSize))
       error = "Please choose color and size of the product";
-    else if (!/^\d*$/.test(selectedQuantity))
-      error = "Quantity must be an integer";
-    else if (selectedQuantity < 1) error = "Quantity must be greater than 0";
-    else if (selectedQuantity > quantity)
-      error = "Quantity exceeds available stock";
+    else if (!/^\d*$/.test(quan)) error = "Quantity must be an integer";
+    else if (quan < 1) error = "Quantity must be at least 1";
+    else if (quan > quantity) error = "Quantity exceeds available stock";
     return error;
   };
 
   const onDecrease = () => {
-    const error = validate();
-    if(error) {
-      toast.error(error);
-    } else if (selectedQuantity == 1){
-      toast.error("Quantity must be greater than 0");
-    } else {
-      setSelectedQuantity(Number(selectedQuantity) - 1)
+    const error = validate(selectedQuantity);
+    if (!error && selectedQuantity != 1) {
+      setSelectedQuantity(Number(selectedQuantity) - 1);
     }
-  }
+    setErrorMessage("");
+  };
+
+  const onTextChange = (input) => {
+    if (input == "") setSelectedQuantity(1);
+    else {
+      const error = validate(input);
+      if (error) {
+        if (input < 1) {
+          setErrorMessage("Quantity must be at least 1");
+          setSelectedQuantity(1);
+        } else {
+          setErrorMessage(error);
+          setSelectedQuantity(quantity);
+        }
+      } else {
+        setSelectedQuantity(Number(input));
+        setErrorMessage("");
+      }
+    }
+  };
 
   const onIncrease = () => {
-    const error = validate();
-    if(error) {
-      toast.error(error);
-    } else if (selectedQuantity == quantity){
-      toast.error("Quantity exceeds available stock");
-    } else {
-      setSelectedQuantity(Number(selectedQuantity) + 1)
+    const error = validate(selectedQuantity);
+    if (!error && selectedQuantity != quantity) {
+      setSelectedQuantity(Number(selectedQuantity) + 1);
     }
-  }
+  };
 
-  const handleSubmit = () => {
-    const error = validate();
+  const handleSubmit = async () => {
+    const error = validate(selectedQuantity);
     if (!error) {
-      console.log(selectedColor, selectedSize, selectedQuantity, quantity);
+      try {
+        await addProductToCart({
+          productVariantId: selectedId,
+          quantity: selectedQuantity,
+        });
+        toast.success("Add product to cart successfully");
+        setErrorMessage(null);
+      } catch (err) {
+        toast.error(err);
+      }
     } else {
-      toast.error(error);
+      setErrorMessage(error);
     }
   };
 
   return (
-    <div className="wrapper" style={{ minHeight: "60vh", marginTop : "2rem" }}>
+    <div className="wrapper" style={{ minHeight: "60vh", marginTop: "2rem" }}>
       <div className={classes.container}>
         <div className={classes.container_left}>
           <ListImage
@@ -183,7 +206,12 @@ function ProductDetailCustomer() {
                       : classes.disabled
                   } ${size == selectedSize ? classes.selected : ""}`}
                   key={size}
-                  onClick={() => {if(availableSizes.some((sizeItem) => sizeItem.size === size)) handleSelectSize(size)}}
+                  onClick={() => {
+                    if (
+                      availableSizes.some((sizeItem) => sizeItem.size === size)
+                    )
+                      handleSelectSize(size);
+                  }}
                 >
                   {size}
                 </div>
@@ -192,32 +220,26 @@ function ProductDetailCustomer() {
           </div>
           <div className={classes.row}>
             <div className={classes.row_quantity}>
-              {quantity > 20 ? (
-                <p>Remaining </p>
-              ) : (
-                <p>Only remaining </p>
-              )}
-              <p style={{ color: "#000", fontSize: "20px" }}>{Number(quantity).toLocaleString()}</p>
+              {quantity > 20 ? <p>Remaining </p> : <p>Only remaining </p>}
+              <p style={{ color: "#000", fontSize: "20px" }}>
+                {Number(quantity).toLocaleString()}
+              </p>
               <p>products</p>
             </div>
           </div>
+          <div className={classes.row_error}>{errorMessage} </div>
           <div className={classes.row}>
             <div className={classes.quantity_selector}>
-              <div
-                className={classes.icon}
-                onClick={onDecrease}
-              >
+              <div className={classes.icon} onClick={onDecrease}>
                 <MinusIcon />
               </div>
               <input
                 type="number"
                 value={selectedQuantity}
-                onChange={(e) => setSelectedQuantity(e.target.value)}
+                // onChange={(e) => setSelectedQuantity(Number(e.target.value))}
+                onChange={(e) => onTextChange(e.target.value)}
               />
-              <div
-                className={classes.icon}
-                onClick={onIncrease}
-              >
+              <div className={classes.icon} onClick={onIncrease}>
                 <PlusIcon />
               </div>
             </div>
