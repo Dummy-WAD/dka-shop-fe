@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 import { phoneNumber as validPhoneNumber } from "../../validator";
 import { Navigate } from "react-router-dom";
 import { handleGetUserInfo } from "../../api/user";
-import moment from "moment/moment";
 import { handleUpdateProfileCustomer } from "../../api/personal";
 import { setAuthInfo } from "../../redux/slice/authSlice";
 import { MALE, FEMALE } from "../../config/gender";
@@ -40,12 +39,14 @@ const Profile = () => {
     const [lastName, setLastName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [gender, setGender] = useState("");
+    const [joinDate, setJoinDate] = useState("");
 
     const handleSetAttribute = (profile) => {
         setFirstName(profile?.firstName);
         setLastName(profile?.lastName);
         setPhoneNumber(profile?.phoneNumber);
         setGender(profile?.gender || "none");
+        setJoinDate(profile?.createdAt);
     }
 
     const fetchData = async () => {
@@ -176,7 +177,7 @@ const Profile = () => {
                                         smallSize 
                                         disabled
                                         style={{width: "60%"}} 
-                                        value={new Date(profile?.createdAt).toISOString()}
+                                        value={joinDate && new Date(joinDate).toISOString()}
                                     />
                                     <SelectCustom
                                         id="label"

@@ -11,7 +11,7 @@ const DateInput = forwardRef(({color, fullWidth, smallSize, style, value, ...pro
         <DateField
             {...props}
             inputRef={ref}
-            defaultValue={value ? dayjs(value) : null}
+            value={value ? dayjs(value) : null}
             format={"DD/MM/YYYY"}
             InputLabelProps={{
                 sx: {
