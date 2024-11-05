@@ -115,3 +115,17 @@
   right: -7px;
   background-color: red;
 }
+.countItemCart {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  position: absolute;
+  top: -5px;
+  right: -7px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -24,6 +24,7 @@ const NavbarUser = () => {
 
   const { isAuthenticated } = useSelector((state) => state.auth);
   const { role } = useSelector((state) => state.auth.userInfo);
+  const { totalCartItems } = useSelector((state) => state.cart);
   const [isShowUserMenu, setShowUserMenu] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -124,7 +125,7 @@ const NavbarUser = () => {
                 <div className={css.actionItem}>
                   <div className={css.actionIcon}>
                     <CartIcon className={css.actionIconDetail} />
-                    <span className={css.count}></span>
+                    <span className={css.countItemCart}>{totalCartItems}</span>
                   </div>
                   <div>Cart</div>
                 </div>

@@ -317,3 +317,8 @@
   font-size: 14px;
   margin-top: 4px;
 }
+.messageOutOfStock {
+  color: red;
+  font-size: 14px;
+  margin-top: 4px;
+}

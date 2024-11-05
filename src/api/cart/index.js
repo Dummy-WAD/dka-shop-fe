@@ -20,3 +20,13 @@ const addProductToCart = (config) => {
   return axiosInstance.post(`/customer/carts`, config)
 }
 export { getAllProductsInCart, removeProductFromCart, editCartItemQuantity, addProductToCart };
+
+const getTotalCartItems = () => {
+  return axiosInstance.get(`/customer/carts/count`);
+};
+export {
+  getAllProductsInCart,
+  removeProductFromCart,
+  editCartItemQuantity,
+  getTotalCartItems,
+};

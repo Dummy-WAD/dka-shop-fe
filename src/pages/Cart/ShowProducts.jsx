@@ -11,6 +11,8 @@ import {
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { Modal, Box, Typography, Button } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setTotalCartItems } from "../../redux/slice/cartSlice";
 
 const DeliveryOptions = ({ selectedOption, setSelectedOption }) => {
   const options = [
@@ -99,6 +101,7 @@ const CartItem = ({
         onClick={() => {
           onCheckItem(item.cartItemId, item.totalPrice);
         }}
+        disabled={item.remainingQuantity === 0}
       />
       <div className={css.productImageContainer}>
         <img
@@ -141,7 +144,9 @@ const CartItem = ({
                   currentPrice: item.price,
                 })
               }
-              disabled={item.orderedQuantity === 1}
+              disabled={
+                item.orderedQuantity === 1 || item.remainingQuantity === 0
+              }
             >
               -
             </button>
@@ -155,6 +160,7 @@ const CartItem = ({
                   currentPrice: item.price,
                 })
               }
+              disabled={item.remainingQuantity === 0}
             >
               +
             </button>
@@ -166,6 +172,11 @@ const CartItem = ({
             ${item.totalPrice.toFixed(2)}
           </div>
         </div>
+        {item.remainingQuantity === 0 && (
+          <span className={css.messageOutOfStock}>
+            This product is out of stock.
+          </span>
+        )}
       </div>
     </div>
   );
@@ -201,6 +212,8 @@ const ShowProduct = () => {
   const [listItemChecked, setListItemChecked] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [openModalPriceChanged, setModalPriceChanged] = useState(false);
+
+  const dispatch = useDispatch();
 
   const onCheckItem = (id, price) => {
     const index = listItemChecked.indexOf(id);
@@ -240,6 +253,7 @@ const ShowProduct = () => {
               },
               0
             );
+            dispatch(setTotalCartItems(updatedResponse.totalCartItems));
             setTotalCost(newTotalCost);
             setProducts(updatedResponse.results);
           }
@@ -250,6 +264,7 @@ const ShowProduct = () => {
             }
             return total;
           }, 0);
+          dispatch(setTotalCartItems(response.totalCartItems));
           setTotalCost(newTotalCost);
           setProducts(response.results);
         }
