@@ -7,6 +7,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import ShowProduct from "./ShowProducts";
+import PaymentDetail from "./PaymentDetail";
 
 const TabLabel = ({ number, text, isActive }) => {
   const tabLabelStyle = {
@@ -112,7 +113,9 @@ const Cart = () => {
           <TabPanel value="1">
             <ShowProduct setValue={setValue} />
           </TabPanel>
-          <TabPanel value="2">Item Two</TabPanel>
+          <TabPanel value="2">
+            <PaymentDetail />
+          </TabPanel>
           <TabPanel value="3">Item Three</TabPanel>
         </TabContext>
       </div>
