@@ -16,6 +16,10 @@ const editCartItemQuantity = (data) => {
   return axiosInstance.patch(`/customer/carts`, data);
 };
 
+const addProductToCart = (config) => {
+  return axiosInstance.post(`/customer/carts`, config)
+};
+
 const getTotalCartItems = () => {
   return axiosInstance.get(`/customer/carts/count`);
 };
@@ -24,4 +28,5 @@ export {
   removeProductFromCart,
   editCartItemQuantity,
   getTotalCartItems,
+  addProductToCart
 };
