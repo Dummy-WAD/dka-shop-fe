@@ -7,6 +7,10 @@ import { useEffect, useState } from "react";
 import { handleGetUserInfo } from "./api/user";
 import { useDispatch } from "react-redux";
 import authSlice from "./redux/slice/authSlice";
+import { CUSTOMER } from "./config/roles";
+import { getTotalCartItems } from "./api/cart";
+import cartSlice from "./redux/slice/cartSlice";
+
 function App() {
   const dispatch = useDispatch();
   const accessToken = localStorage.getItem("accessToken");
@@ -21,6 +25,11 @@ function App() {
             userInfo: res,
           })
         );
+
+        if (res?.role === CUSTOMER) {
+          const cartsCount = await getTotalCartItems();
+          dispatch(cartSlice.actions.setTotalCartItems(cartsCount.totalCartItems));
+        };
       } catch (err) {
         console.error(err);
       } finally {
