@@ -85,22 +85,21 @@ function ProductDetailCustomer() {
     const error = validate(selectedQuantity);
     if (!error && selectedQuantity != 1) {
       setSelectedQuantity(Number(selectedQuantity) - 1);
+      setErrorMessage("");
     }
-    setErrorMessage("");
   };
 
   const onTextChange = (input) => {
-    if (input == "") setSelectedQuantity(1);
+    if (input == "") setSelectedQuantity("");
     else {
       const error = validate(input);
       if (error) {
         if (input < 1) {
-          setErrorMessage("Quantity must be at least 1");
           setSelectedQuantity(1);
         } else {
-          setErrorMessage(error);
           setSelectedQuantity(quantity);
         }
+        setErrorMessage(error);
       } else {
         setSelectedQuantity(Number(input));
         setErrorMessage("");
@@ -112,6 +111,7 @@ function ProductDetailCustomer() {
     const error = validate(selectedQuantity);
     if (!error && selectedQuantity != quantity) {
       setSelectedQuantity(Number(selectedQuantity) + 1);
+      setErrorMessage("");
     }
   };
 
