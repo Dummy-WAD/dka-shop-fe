@@ -27,6 +27,8 @@ import EditProduct from "../pages/EditProduct/EditProduct";
 import Address from "../pages/Address/Address";
 import Cart from "../pages/Cart/Cart";
 import OrderListCustomer from "../pages/OrdersListCustomer/OrderListCustomer";
+import OrderAdmin from "../pages/OrderAdmin/OrderAdmin";
+
 
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
@@ -81,7 +83,7 @@ const router = createBrowserRouter(
         {
           path: "purchase",
           element: <OrderListCustomer />,
-        }
+        },
       ],
     },
     {
@@ -138,6 +140,10 @@ const router = createBrowserRouter(
         {
           path: "product/:id",
           element: <ProductDetail />,
+        },
+        {
+          path: "order",
+          element: <OrderAdmin />,
         },
         {
           path: "customer",
