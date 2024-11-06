@@ -56,7 +56,7 @@ DeliveryOptions.propTypes = {
   setSelectedOption: PropTypes.func.isRequired,
 };
 
-const TotalCost = ({ totalCost, deliveryCost }) => {
+const TotalCost = ({ totalCost, deliveryCost, setValue }) => {
   return (
     <div className={css.containerTotalCost}>
       <div className={css.costRow}>
@@ -75,7 +75,14 @@ const TotalCost = ({ totalCost, deliveryCost }) => {
           ${(totalCost + deliveryCost).toFixed(2)}
         </span>
       </div>
-      <button className={css.checkoutButton}>Check out</button>
+      <button
+        className={css.checkoutButton}
+        onClick={() => {
+          setValue("2");
+        }}
+      >
+        Check out
+      </button>
     </div>
   );
 };
@@ -83,6 +90,7 @@ const TotalCost = ({ totalCost, deliveryCost }) => {
 TotalCost.propTypes = {
   totalCost: PropTypes.number.isRequired,
   deliveryCost: PropTypes.number.isRequired,
+  setValue: PropTypes.func.isRequired,
 };
 
 const CartItem = ({
@@ -200,7 +208,7 @@ CartItem.propTypes = {
   handleChangeQuantityProduct: PropTypes.func.isRequired,
 };
 
-const ShowProduct = () => {
+const ShowProduct = (props) => {
   const label = ["Product", "Amount", "Price", "Total"];
   const ITEM_PER_PAGE = 3;
   const [page, setPage] = useState(1);
@@ -210,6 +218,7 @@ const ShowProduct = () => {
   const [deliveryCost, setDeliveryCost] = useState(0);
   const [listItemChecked, setListItemChecked] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const { setValue } = props;
   const [openModalPriceChanged, setModalPriceChanged] = useState(false);
 
   const dispatch = useDispatch();
@@ -428,7 +437,11 @@ const ShowProduct = () => {
             selectedOption={selectedOption}
             setSelectedOption={setSelectedOption}
           />
-          <TotalCost totalCost={totalCost} deliveryCost={deliveryCost} />
+          <TotalCost
+            totalCost={totalCost}
+            deliveryCost={deliveryCost}
+            setValue={setValue}
+          />
         </div>
       </div>
       <Modal
@@ -535,6 +548,9 @@ const ShowProduct = () => {
       </Modal>
     </>
   );
+};
+ShowProduct.propTypes = {
+  setValue: PropTypes.func.isRequired,
 };
 
 export default ShowProduct;
