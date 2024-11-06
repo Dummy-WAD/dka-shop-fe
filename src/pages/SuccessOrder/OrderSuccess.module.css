@@ -1,0 +1,30 @@
+.container{
+    width: 50%;
+    text-align: center;
+    background-color: #FFF;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.14) 0px 3px 8px;
+    padding: 1.5rem 2rem 2rem;
+    margin: 0 auto;
+}
+
+.order_info {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin: 2rem auto 2.5rem;
+}
+
+.column_left, .column_right {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    font-weight: bold;
+    color: #141718;
+    font-size: 16px;
+}
+
+.column_left {
+    color: #6C7275;
+}
