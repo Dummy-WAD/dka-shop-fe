@@ -275,7 +275,7 @@
 
 .productAction {
   display: grid;
-  grid-template-columns: 200px 100px 100px 100px;
+  grid-template-columns: 200px 110px 120px 100px;
   align-items: center;
   gap: 10px;
   overflow: hidden;
@@ -313,6 +313,11 @@
 }
 
 .errorText {
+  color: red;
+  font-size: 14px;
+  margin-top: 4px;
+}
+.messageOutOfStock {
   color: red;
   font-size: 14px;
   margin-top: 4px;

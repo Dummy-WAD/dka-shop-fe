@@ -11,6 +11,8 @@ import {
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { Modal, Box, Typography, Button } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setTotalCartItems } from "../../redux/slice/cartSlice";
 
 const DeliveryOptions = ({ selectedOption, setSelectedOption }) => {
   const options = [
@@ -42,7 +44,7 @@ const DeliveryOptions = ({ selectedOption, setSelectedOption }) => {
               option.price === 0 ? css.freePrice : ""
             }`}
           >
-            {option.price === 0 ? "Free" : `${option.price.toFixed(2)}$`}
+            {option.price === 0 ? "Free" : `$${option.price.toFixed(2)}`}
           </span>
         </label>
       ))}
@@ -59,18 +61,18 @@ const TotalCost = ({ totalCost, deliveryCost }) => {
     <div className={css.containerTotalCost}>
       <div className={css.costRow}>
         <span className={css.label}>Total product cost</span>
-        <span className={css.amount}>{totalCost.toFixed(2)}$</span>
+        <span className={css.amount}>${totalCost.toFixed(2)}</span>
       </div>
       <hr className={css.divider} />
       <div className={css.costRow}>
         <span className={css.label}>Delivery cost</span>
-        <span className={css.amount}>{deliveryCost.toFixed(2)}$</span>
+        <span className={css.amount}>${deliveryCost.toFixed(2)}</span>
       </div>
       <hr className={css.divider} />
       <div className={css.totalRow}>
         <span className={css.totalLabel}>Total payable amount</span>
         <span className={css.totalAmount}>
-          {(totalCost + deliveryCost).toFixed(2)}$
+          ${(totalCost + deliveryCost).toFixed(2)}
         </span>
       </div>
       <button className={css.checkoutButton}>Check out</button>
@@ -99,6 +101,7 @@ const CartItem = ({
         onClick={() => {
           onCheckItem(item.cartItemId, item.totalPrice);
         }}
+        disabled={item.remainingQuantity === 0}
       />
       <div className={css.productImageContainer}>
         <img
@@ -141,7 +144,9 @@ const CartItem = ({
                   currentPrice: item.price,
                 })
               }
-              disabled={item.orderedQuantity === 1}
+              disabled={
+                item.orderedQuantity === 1 || item.remainingQuantity === 0
+              }
             >
               -
             </button>
@@ -160,12 +165,17 @@ const CartItem = ({
             </button>
           </div>
           <div className={css.price} title={item.price.toFixed(2)}>
-            {item.price.toFixed(2)}$
+            ${item.price.toFixed(2)}
           </div>
           <div className={css.totalPrice} title={item.totalPrice.toFixed(2)}>
-            {item.totalPrice.toFixed(2)}$
+            ${item.totalPrice.toFixed(2)}
           </div>
         </div>
+        {item.remainingQuantity === 0 && (
+          <span className={css.messageOutOfStock}>
+            This product is out of stock.
+          </span>
+        )}
       </div>
     </div>
   );
@@ -200,6 +210,9 @@ const ShowProduct = () => {
   const [deliveryCost, setDeliveryCost] = useState(0);
   const [listItemChecked, setListItemChecked] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const [openModalPriceChanged, setModalPriceChanged] = useState(false);
+
+  const dispatch = useDispatch();
 
   const onCheckItem = (id, price) => {
     const index = listItemChecked.indexOf(id);
@@ -226,17 +239,40 @@ const ShowProduct = () => {
             currentPrice: item.price,
           })
         );
+        response.results.forEach((item) => {
+          if (item.remainingQuantity === 0) {
+            setListItemChecked(
+              listItemChecked.filter((id) => id !== item.cartItemId)
+            );
+          }
+        });
         await Promise.all(updatePromises);
-        const updatedResponse = await getAllProductsInCart();
-        if (updatedResponse) {
-          const newTotalCost = updatedResponse.results.reduce((total, item) => {
+        if (cartItemsOutOfStock.length > 0) {
+          const updatedResponse = await getAllProductsInCart();
+          if (updatedResponse) {
+            const newTotalCost = updatedResponse.results.reduce(
+              (total, item) => {
+                if (listItemChecked.includes(item.cartItemId)) {
+                  return total + item.price * item.orderedQuantity;
+                }
+                return total;
+              },
+              0
+            );
+            dispatch(setTotalCartItems(updatedResponse.totalCartItems));
+            setTotalCost(newTotalCost);
+            setProducts(updatedResponse.results);
+          }
+        } else {
+          const newTotalCost = response.results.reduce((total, item) => {
             if (listItemChecked.includes(item.cartItemId)) {
               return total + item.price * item.orderedQuantity;
             }
             return total;
           }, 0);
+          dispatch(setTotalCartItems(response.totalCartItems));
           setTotalCost(newTotalCost);
-          setProducts(updatedResponse.results);
+          setProducts(response.results);
         }
       }
     } catch (error) {
@@ -288,6 +324,12 @@ const ShowProduct = () => {
       const { code, message } = error.response.data;
       if (code === 400 && message === "Quantity exceeds available stock") {
         setOpenModal(true);
+      } else if (
+        code === 400 &&
+        message ===
+          "The price of this product has been updated. Please check the new price"
+      ) {
+        setModalPriceChanged(true);
       } else toast.error("Failed to update quantity");
     }
   };
@@ -419,6 +461,58 @@ const ShowProduct = () => {
             onClick={async () => {
               await fetchProducts();
               setOpenModal(false);
+            }}
+            variant="contained"
+            sx={{ mt: 2 }}
+            fullWidth
+            style={{
+              padding: "6px",
+              backgroundColor: "#274c50",
+              color: "#ffffff",
+              fontSize: "16px",
+              fontWeight: "bold",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              marginTop: "16px",
+              transition: "background-color 0.3s",
+            }}
+          >
+            OK
+          </Button>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={openModalPriceChanged}
+        onClose={() => setModalPriceChanged(false)}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 350,
+            bgcolor: "background.paper",
+            borderRadius: 1,
+            boxShadow: 24,
+            p: 3,
+          }}
+        >
+          <Typography id="modal-title" variant="h6" component="h2">
+            Price Changed
+          </Typography>
+          <Typography id="modal-description" sx={{ mt: 1 }}>
+            The price of this product has been updated. Please check the new
+            price.
+          </Typography>
+          <Button
+            onClick={async () => {
+              await fetchProducts();
+              setModalPriceChanged(false);
             }}
             variant="contained"
             sx={{ mt: 2 }}
