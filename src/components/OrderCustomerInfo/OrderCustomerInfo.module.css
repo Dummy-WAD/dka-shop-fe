@@ -1,0 +1,17 @@
+.container {
+    margin-top: 15px;
+}
+
+.heading {
+    font-weight: 400;
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #000000cc;
+}
+
+.item {
+    font-weight: 300;
+    font-size: 14px;
+    margin: 10px 0;
+    color: #0000008a
+}

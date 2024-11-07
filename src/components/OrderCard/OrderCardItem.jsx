@@ -13,11 +13,11 @@ const OrderCardItem = ({product}) => {
                     </Typography>
                     <Typography>Variant: {product?.size}, {product?.color}</Typography>
                 </div>
-                <Typography sx={{mb: "1rem"}}>Amount: {product?.orderItemQuantity}</Typography>
+                <Typography sx={{mb: "1rem"}}>Amount: {product?.quantity}</Typography>
             </div>
             <div className={classes.price}>
                 <Typography>Price</Typography>
-                <Typography>${product?.orderItemPrice}</Typography>
+                <Typography sx={{minWidth: '80px', textAlign: 'end'}}>${product?.price}</Typography>
             </div>
         </div>
     )

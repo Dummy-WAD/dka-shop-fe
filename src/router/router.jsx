@@ -27,6 +27,7 @@ import EditProduct from "../pages/EditProduct/EditProduct";
 import Address from "../pages/Address/Address";
 import Cart from "../pages/Cart/Cart";
 import OrderListCustomer from "../pages/OrdersListCustomer/OrderListCustomer";
+import DetailOrderCustomer from "../pages/DetailOrderCustomer/DetailOrderCustomer";
 import OrderAdmin from "../pages/OrderAdmin/OrderAdmin";
 
 
@@ -79,6 +80,10 @@ const router = createBrowserRouter(
         {
           path: "change-password",
           element: <ChangePassword />,
+        },
+        {
+          path: "orders/:id",
+          element: <DetailOrderCustomer />,
         },
         {
           path: "purchase",
