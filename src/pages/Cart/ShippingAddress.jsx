@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import {
   Modal,
   Box,
@@ -10,13 +11,15 @@ import {
 import css from "./ShippingAddress.module.css";
 import { getCustomerAddresses } from "../../api/address";
 
-const ShippingAddress = () => {
+const ShippingAddress = ({ selectedAddress, setSelectedAddress }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState(0);
   const [addresses, setAddresses] = useState([]);
 
-  const handleAddressChange = (index) => {
-    setSelectedAddress(index);
+  const handleAddressChange = (e) => {
+    const element = addresses.filter(
+      (addresses) => addresses.id == e.target.value
+    );
+    setSelectedAddress(element[0]);
     setIsModalOpen(false);
   };
 
@@ -24,12 +27,16 @@ const ShippingAddress = () => {
     try {
       const res = await getCustomerAddresses();
       const formattedAddresses = res.map((address) => ({
+        id: address.id,
         name: address.contactName,
         phone: address.phoneNumber,
         street: address.localAddress,
         city: `${address.ward.nameEn}, ${address.district.nameEn}, ${address.province.nameEn}`,
+        isDefault: address.isDefault,
       }));
+      const element = formattedAddresses.filter((address) => address.isDefault);
       setAddresses(formattedAddresses);
+      setSelectedAddress(element[0]);
     } catch (error) {
       console.error(error);
     }
@@ -76,14 +83,12 @@ const ShippingAddress = () => {
       {addresses.length > 0 && (
         <div className={css.addressDetails}>
           <div className={css.addressItem}>
-            <div className={css.name}>{addresses[selectedAddress].name}</div>
-            <div className={css.street}>
-              {addresses[selectedAddress].street}
-            </div>
+            <div className={css.name}>{selectedAddress?.name}</div>
+            <div className={css.street}>{selectedAddress?.street}</div>
           </div>
           <div className={css.addressItem}>
-            <div className={css.phone}>{addresses[selectedAddress].phone}</div>
-            <div className={css.city}>{addresses[selectedAddress].city}</div>
+            <div className={css.phone}>{selectedAddress?.phone}</div>
+            <div className={css.city}>{selectedAddress?.city}</div>
           </div>
         </div>
       )}
@@ -113,13 +118,13 @@ const ShippingAddress = () => {
           <Typography id="modal-description" sx={{ mt: 1 }}>
             <RadioGroup
               value={selectedAddress}
-              onChange={(e) => handleAddressChange(Number(e.target.value))}
+              onChange={(e) => handleAddressChange(e)}
               sx={{ mt: 2 }}
             >
               {addresses.map((address, index) => (
                 <FormControlLabel
                   key={index}
-                  value={index}
+                  value={address.id}
                   control={<Radio />}
                   label={
                     <div
@@ -145,6 +150,15 @@ const ShippingAddress = () => {
       </Modal>
     </div>
   );
+};
+ShippingAddress.propTypes = {
+  selectedAddress: PropTypes.shape({
+    name: PropTypes.string,
+    phone: PropTypes.string,
+    street: PropTypes.string,
+    city: PropTypes.string,
+  }),
+  setSelectedAddress: PropTypes.func.isRequired,
 };
 
 export default ShippingAddress;

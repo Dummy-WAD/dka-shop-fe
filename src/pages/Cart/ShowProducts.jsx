@@ -64,6 +64,7 @@ const TotalCost = ({
   selectedOption,
   deliveryOptions,
   setValuePaymentDetails,
+  setModalPriceChanged,
 }) => {
   function createCartData(
     products,
@@ -103,7 +104,7 @@ const TotalCost = ({
       );
       const response = await prepareOrder(data);
       if (response.costChange) {
-        toast.error("The cost of the order has changed. Please review it.");
+        setModalPriceChanged(true);
       } else {
         setValuePaymentDetails(response);
         setValue("2");
@@ -135,7 +136,6 @@ const TotalCost = ({
         className={css.checkoutButton}
         onClick={() => {
           handlePrepareOrder();
-          setValue("2");
         }}
       >
         Check out
@@ -153,6 +153,7 @@ TotalCost.propTypes = {
   selectedOption: PropTypes.string.isRequired,
   deliveryOptions: PropTypes.array.isRequired,
   setValuePaymentDetails: PropTypes.func.isRequired,
+  setModalPriceChanged: PropTypes.func.isRequired,
 };
 
 const CartItem = ({
@@ -283,8 +284,8 @@ const ShowProduct = (props) => {
   const [openModalPriceChanged, setModalPriceChanged] = useState(false);
 
   const dispatch = useDispatch();
-    const [selectedOption, setSelectedOption] = useState();
-    const [deliveryOptions, setDeliveryOptions] = useState([]);
+  const [selectedOption, setSelectedOption] = useState();
+  const [deliveryOptions, setDeliveryOptions] = useState([]);
 
   const onCheckItem = (id, price) => {
     const index = listItemChecked.indexOf(id);
@@ -525,6 +526,7 @@ const ShowProduct = (props) => {
             selectedOption={selectedOption}
             deliveryOptions={deliveryOptions}
             setValuePaymentDetails={setValuePaymentDetails}
+            setModalPriceChanged={setModalPriceChanged}
           />
         </div>
       </div>

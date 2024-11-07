@@ -2,7 +2,12 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import styles from "./CheckoutSummary.module.css";
 import { VoucherIcon } from "../../icon/Icon";
-const CheckoutSummary = ({ deliveryService, productCost, totalCost }) => {
+const CheckoutSummary = ({
+  deliveryService,
+  productCost,
+  totalCost,
+  handlePlaceOrder,
+}) => {
   const [paymentMethod, setPaymentMethod] = useState("cash");
 
   const handlePaymentChange = (method) => {
@@ -87,18 +92,35 @@ const CheckoutSummary = ({ deliveryService, productCost, totalCost }) => {
             <span>Total</span>
             <span className={styles.totalAmount}>$ {totalCost}</span>
           </div>
-          <button className={styles.placeOrderButton}>Place order</button>
+          <button
+            className={styles.placeOrderButton}
+            onClick={handlePlaceOrder}
+          >
+            Place order
+          </button>
         </div>
       </div>
     </div>
   );
 };
 CheckoutSummary.propTypes = {
+  products: PropTypes.arrayOf(
+    PropTypes.shape({
+      cartItemId: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      size: PropTypes.string.isRequired,
+      color: PropTypes.string.isRequired,
+      quantity: PropTypes.number.isRequired,
+      price: PropTypes.number.isRequired,
+    })
+  ).isRequired,
   deliveryService: PropTypes.shape({
     deliveryFee: PropTypes.number.isRequired,
   }).isRequired,
   productCost: PropTypes.number.isRequired,
   totalCost: PropTypes.number.isRequired,
+  handlePlaceOrder: PropTypes.func.isRequired,
 };
 
 export default CheckoutSummary;
