@@ -289,7 +289,6 @@ const ShowProduct = () => {
     try {
       const response = await removeProductFromCart(productVariantId);
       if (response) {
-        toast.success("Product was removed from cart");
         if (listItemChecked.includes(cartItemId)) {
           setTotalCost((totalCost) => totalCost - totalPrice);
         }
