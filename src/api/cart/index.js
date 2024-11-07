@@ -23,10 +23,19 @@ const addProductToCart = (config) => {
 const getTotalCartItems = () => {
   return axiosInstance.get(`/customer/carts/count`);
 };
+const getDeliveryService = () => {
+    return axiosInstance.get(`/customer/delivery-services`);
+};
+
+const prepareOrder = (data) => {
+    return axiosInstance.post("/customer/orders/prepare", data);
+};
 export {
   getAllProductsInCart,
   removeProductFromCart,
   editCartItemQuantity,
   getTotalCartItems,
-  addProductToCart
+  addProductToCart,
+    getDeliveryService,
+    prepareOrder,
 };

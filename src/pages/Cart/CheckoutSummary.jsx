@@ -1,8 +1,8 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 import styles from "./CheckoutSummary.module.css";
 import { VoucherIcon } from "../../icon/Icon";
-
-const CheckoutSummary = () => {
+const CheckoutSummary = ({ deliveryService, productCost, totalCost }) => {
   const [paymentMethod, setPaymentMethod] = useState("cash");
 
   const handlePaymentChange = (method) => {
@@ -76,22 +76,29 @@ const CheckoutSummary = () => {
         <div className={styles.summary}>
           <div className={styles.summaryItem}>
             <span>Product cost</span>
-            <span>$ 120.98</span>
+            <span>$ {productCost}</span>
           </div>
           <div className={styles.summaryItem}>
             <span>Delivery fee</span>
-            <span>$ 2.49</span>
+            <span>$ {deliveryService.deliveryFee}</span>
           </div>
 
           <div className={`${styles.summaryItem} ${styles.total}`}>
             <span>Total</span>
-            <span className={styles.totalAmount}>$ 122.32</span>
+            <span className={styles.totalAmount}>$ {totalCost}</span>
           </div>
           <button className={styles.placeOrderButton}>Place order</button>
         </div>
       </div>
     </div>
   );
+};
+CheckoutSummary.propTypes = {
+  deliveryService: PropTypes.shape({
+    deliveryFee: PropTypes.number.isRequired,
+  }).isRequired,
+  productCost: PropTypes.number.isRequired,
+  totalCost: PropTypes.number.isRequired,
 };
 
 export default CheckoutSummary;

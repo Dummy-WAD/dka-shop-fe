@@ -1,36 +1,8 @@
 import styles from "./ProductTable.module.css";
-import reactImage from "../../assets/avatar.jpeg";
-const products = [
-  {
-    id: 1,
-    name: "[NEW][V6 SIREN HOLIDAY] Son Kem Lì Merzy The First Velv",
-    variant: "Nâu đất, Holiday",
-    amount: 2,
-    price: 18.99,
-    total: 37.98,
-    imageUrl: reactImage,
-  },
-  {
-    id: 2,
-    name: "[NEW][V6 SIREN HOLIDAY] Son Kem Lì Merzy The First Velv",
-    variant: "Nâu đất, Holiday",
-    amount: 2,
-    price: 18.99,
-    total: 37.98,
-    imageUrl: reactImage,
-  },
-  {
-    id: 3,
-    name: "[NEW][V6 SIREN HOLIDAY] Son Kem Lì Merzy The First Velv",
-    variant: "Nâu đất, Holiday",
-    amount: 2,
-    price: 18.99,
-    total: 37.98,
-    imageUrl: reactImage,
-  },
-];
+import PropTypes from "prop-types";
 
-const ProductTable = () => {
+const ProductTable = (props) => {
+  const { products } = props;
   return (
     <div className={styles.tableContainer}>
       <div className={styles.tableHeader}>
@@ -40,20 +12,20 @@ const ProductTable = () => {
       </div>
       <div className={styles.tableBody}>
         {products.map((product) => (
-          <div key={product.id} className={styles.tableRow}>
+          <div key={product.cartItemId} className={styles.tableRow}>
             <div className={styles.productInfo}>
               <img
-                src={product.imageUrl}
+                src={product.image}
                 alt={product.name}
                 className={styles.productImage}
               />
               <div className={styles.productInforRight}>
                 <div className={styles.productName}>{product.name}</div>
                 <div className={styles.productVariant}>
-                  Variant: {product.variant}
+                  Variant: {product.size}, {product.color}
                 </div>
                 <div className={styles.productAmount}>
-                  Amount: {product.amount}
+                  Amount: {product.quantity}
                 </div>
               </div>
             </div>
@@ -61,13 +33,26 @@ const ProductTable = () => {
               ${product.price.toFixed(2)}
             </div>
             <div className={styles.productTotal}>
-              ${product.total.toFixed(2)}
+              ${(product.price * product.quantity).toFixed(2)}
             </div>
           </div>
         ))}
       </div>
     </div>
   );
+};
+ProductTable.propTypes = {
+  products: PropTypes.arrayOf(
+    PropTypes.shape({
+      cartItemId: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      size: PropTypes.string.isRequired,
+      color: PropTypes.string.isRequired,
+      quantity: PropTypes.number.isRequired,
+      price: PropTypes.number.isRequired,
+    })
+  ).isRequired,
 };
 
 export default ProductTable;

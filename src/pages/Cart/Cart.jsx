@@ -55,6 +55,8 @@ const Cart = () => {
 
   const handleChange = (event, newValue) => setValue(newValue);
 
+  const [valuePaymentDetails, setValuePaymentDetails] = useState(null);
+
   return (
     <div className={css.cartContainer}>
       <h1 className={css.title}>Shopping cart</h1>
@@ -111,10 +113,13 @@ const Cart = () => {
             </TabList>
           </Box>
           <TabPanel value="1">
-            <ShowProduct setValue={setValue} />
+            <ShowProduct
+              setValue={setValue}
+              setValuePaymentDetails={setValuePaymentDetails}
+            />
           </TabPanel>
           <TabPanel value="2">
-            <PaymentDetail />
+            <PaymentDetail valuePaymentDetails={valuePaymentDetails} />
           </TabPanel>
           <TabPanel value="3">Item Three</TabPanel>
         </TabContext>
