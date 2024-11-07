@@ -1,0 +1,105 @@
+.container {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  width: 100%;
+  margin: 20px;
+}
+.section {
+  margin-bottom: 16px;
+}
+.sectionHeaderVoucher {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+.sectionPaymentOptions {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  height: 70px;
+  border-top: 1px dashed #e0e0e0;
+  border-bottom: 1px dashed #e0e0e0;
+}
+
+.sectionHeaderOptionsPayment {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: 16px;
+  height: 100%;
+  width: 40%;
+}
+.paymentOptions {
+  display: flex;
+  gap: 30px;
+  height: 30px;
+}
+.icon {
+  margin-top: 2px;
+}
+
+.voucherText {
+  margin-left: 10px;
+}
+
+.pickOne {
+  margin-left: auto;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.paymentOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+.paymentOption > input {
+  width: 18px;
+  height: 18px;
+}
+.summaryContainer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.summary {
+  width: 300px;
+}
+.summaryItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.summaryItem span:nth-child(1) {
+  font-weight: 500;
+  font-size: 17px;
+  width: 75%;
+}
+
+.summaryItem span:nth-child(2) {
+  text-align: left;
+  width: 150px;
+  font-weight: 500;
+}
+.totalAmount {
+  font-size: 18px;
+  font-weight: 500;
+  color: green;
+}
+.placeOrderButton {
+  width: 90%;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #264652;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}

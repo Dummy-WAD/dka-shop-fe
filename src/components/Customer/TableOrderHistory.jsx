@@ -75,6 +75,7 @@ function TableOrderHistory({
                 <TableCell>
                   <Link
                     style={{ color: "#000000", textDecoration: "underline" }}
+                    to={`/admin/order/${order.id}`}
                   >
                     View Details
                   </Link>

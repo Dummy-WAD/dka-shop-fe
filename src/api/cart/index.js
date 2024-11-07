@@ -17,16 +17,30 @@ const editCartItemQuantity = (data) => {
 };
 
 const addProductToCart = (config) => {
-  return axiosInstance.post(`/customer/carts`, config)
-}
+  return axiosInstance.post(`/customer/carts`, config);
+};
 
 const getTotalCartItems = () => {
   return axiosInstance.get(`/customer/carts/count`);
+};
+const getDeliveryService = () => {
+  return axiosInstance.get(`/customer/delivery-services`);
+};
+
+const prepareOrder = (data) => {
+  return axiosInstance.post("/customer/orders/prepare", data);
+};
+
+const placeOrder = (data) => {
+  return axiosInstance.post("/customer/orders", data);
 };
 export {
   getAllProductsInCart,
   removeProductFromCart,
   editCartItemQuantity,
   getTotalCartItems,
-  addProductToCart
+  addProductToCart,
+  getDeliveryService,
+  prepareOrder,
+  placeOrder,
 };

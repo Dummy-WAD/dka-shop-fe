@@ -6,6 +6,8 @@ import Pagination from "@mui/material/Pagination";
 import {
   editCartItemQuantity,
   getAllProductsInCart,
+  getDeliveryService,
+  prepareOrder,
   removeProductFromCart,
 } from "../../api/cart";
 import { toast } from "react-toastify";
@@ -14,13 +16,7 @@ import { Modal, Box, Typography, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setTotalCartItems } from "../../redux/slice/cartSlice";
 
-const DeliveryOptions = ({ selectedOption, setSelectedOption }) => {
-  const options = [
-    { id: "free", label: "Free delivery", price: 0 },
-    { id: "fast", label: "Fast delivery", price: 1.99 },
-    { id: "express", label: "Express delivery", price: 2.49 },
-  ];
-
+const DeliveryOptions = ({ options, selectedOption, setSelectedOption }) => {
   return (
     <div className={css.optionsContainer}>
       {options.map((option) => (
@@ -38,13 +34,15 @@ const DeliveryOptions = ({ selectedOption, setSelectedOption }) => {
             onChange={() => setSelectedOption(option.id)}
             className={css.radioInput}
           />
-          <span className={css.labelText}>{option.label}</span>
+          <span className={css.labelText}>{option.name}</span>
           <span
             className={`${css.price} ${
-              option.price === 0 ? css.freePrice : ""
+              option.deliveryFee === 0 ? css.freePrice : ""
             }`}
           >
-            {option.price === 0 ? "Free" : `$${option.price.toFixed(2)}`}
+            {option.deliveryFee === 0
+              ? "Free"
+              : `$${option.deliveryFee.toFixed(2)}`}
           </span>
         </label>
       ))}
@@ -52,11 +50,70 @@ const DeliveryOptions = ({ selectedOption, setSelectedOption }) => {
   );
 };
 DeliveryOptions.propTypes = {
+  options: PropTypes.array.isRequired,
   selectedOption: PropTypes.string.isRequired,
   setSelectedOption: PropTypes.func.isRequired,
 };
 
-const TotalCost = ({ totalCost, deliveryCost }) => {
+const TotalCost = ({
+  totalCost,
+  deliveryCost,
+  setValue,
+  products,
+  listItemChecked,
+  selectedOption,
+  deliveryOptions,
+  setValuePaymentDetails,
+  setModalPriceChanged,
+}) => {
+  function createCartData(
+    products,
+    listItemChecked,
+    selectedOption,
+    deliveryOptions
+  ) {
+    const cartItems = products
+      .filter((product) => listItemChecked.includes(product.cartItemId))
+      .map((product) => ({
+        id: product.cartItemId,
+        currentPrice: product.price,
+      }));
+    const deliveryService = deliveryOptions.find(
+      (option) => option.id === selectedOption
+    );
+
+    return {
+      cartItems: cartItems,
+      deliveryService: {
+        id: deliveryService.id,
+        deliveryFee: deliveryService.deliveryFee,
+      },
+    };
+  }
+  const handlePrepareOrder = async () => {
+    try {
+      if (selectedOption === undefined) {
+        toast.error("Please select a delivery option");
+        return;
+      }
+      const data = createCartData(
+        products,
+        listItemChecked,
+        selectedOption,
+        deliveryOptions
+      );
+      const response = await prepareOrder(data);
+      if (response.costChange) {
+        setModalPriceChanged(true);
+      } else {
+        setValuePaymentDetails(response);
+        setValue("2");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className={css.containerTotalCost}>
       <div className={css.costRow}>
@@ -75,7 +132,14 @@ const TotalCost = ({ totalCost, deliveryCost }) => {
           ${(totalCost + deliveryCost).toFixed(2)}
         </span>
       </div>
-      <button className={css.checkoutButton}>Check out</button>
+      <button
+        className={css.checkoutButton}
+        onClick={() => {
+          handlePrepareOrder();
+        }}
+      >
+        Check out
+      </button>
     </div>
   );
 };
@@ -83,6 +147,13 @@ const TotalCost = ({ totalCost, deliveryCost }) => {
 TotalCost.propTypes = {
   totalCost: PropTypes.number.isRequired,
   deliveryCost: PropTypes.number.isRequired,
+  setValue: PropTypes.func.isRequired,
+  products: PropTypes.array.isRequired,
+  listItemChecked: PropTypes.array.isRequired,
+  selectedOption: PropTypes.string.isRequired,
+  deliveryOptions: PropTypes.array.isRequired,
+  setValuePaymentDetails: PropTypes.func.isRequired,
+  setModalPriceChanged: PropTypes.func.isRequired,
 };
 
 const CartItem = ({
@@ -200,19 +271,21 @@ CartItem.propTypes = {
   handleChangeQuantityProduct: PropTypes.func.isRequired,
 };
 
-const ShowProduct = () => {
+const ShowProduct = (props) => {
   const label = ["Product", "Amount", "Price", "Total"];
   const ITEM_PER_PAGE = 3;
   const [page, setPage] = useState(1);
   const [products, setProducts] = useState([]);
   const [totalCost, setTotalCost] = useState(0);
-  const [selectedOption, setSelectedOption] = useState("free");
   const [deliveryCost, setDeliveryCost] = useState(0);
   const [listItemChecked, setListItemChecked] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const { setValue, setValuePaymentDetails } = props;
   const [openModalPriceChanged, setModalPriceChanged] = useState(false);
 
   const dispatch = useDispatch();
+  const [selectedOption, setSelectedOption] = useState();
+  const [deliveryOptions, setDeliveryOptions] = useState([]);
 
   const onCheckItem = (id, price) => {
     const index = listItemChecked.indexOf(id);
@@ -338,13 +411,28 @@ const ShowProduct = () => {
   }, []);
 
   useEffect(() => {
-    const deliveryOptions = {
-      free: 0,
-      fast: 1.99,
-      express: 2.49,
-    };
-    setDeliveryCost(deliveryOptions[selectedOption]);
-  }, [selectedOption]);
+    const selectedDeliveryOption = deliveryOptions.find(
+      (option) => option.id === selectedOption
+    );
+    setDeliveryCost(
+      selectedDeliveryOption ? selectedDeliveryOption.deliveryFee : 0
+    );
+  }, [selectedOption, deliveryOptions]);
+
+  const fetchDeliveryOptions = async () => {
+    try {
+      const response = await getDeliveryService();
+      if (response) {
+        setDeliveryOptions(response);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDeliveryOptions();
+  }, []);
 
   const totalPages = Math.ceil(products.length / ITEM_PER_PAGE);
 
@@ -425,10 +513,21 @@ const ShowProduct = () => {
           </div>
 
           <DeliveryOptions
+            options={deliveryOptions}
             selectedOption={selectedOption}
             setSelectedOption={setSelectedOption}
           />
-          <TotalCost totalCost={totalCost} deliveryCost={deliveryCost} />
+          <TotalCost
+            totalCost={totalCost}
+            deliveryCost={deliveryCost}
+            setValue={setValue}
+            products={products}
+            listItemChecked={listItemChecked}
+            selectedOption={selectedOption}
+            deliveryOptions={deliveryOptions}
+            setValuePaymentDetails={setValuePaymentDetails}
+            setModalPriceChanged={setModalPriceChanged}
+          />
         </div>
       </div>
       <Modal
@@ -535,6 +634,10 @@ const ShowProduct = () => {
       </Modal>
     </>
   );
+};
+ShowProduct.propTypes = {
+  setValue: PropTypes.func.isRequired,
+  setValuePaymentDetails: PropTypes.func.isRequired,
 };
 
 export default ShowProduct;
