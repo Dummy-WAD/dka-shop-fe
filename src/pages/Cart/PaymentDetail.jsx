@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import { placeOrder } from "../../api/cart";
 import { toast } from "react-toastify";
 const PaymentDetail = (props) => {
-  const { valuePaymentDetails, setValue } = props;
+  const { valuePaymentDetails, setValue, setValueOrderSuccess } = props;
   const { preparedOrderItems, deliveryService, productCost, totalCost } =
     valuePaymentDetails;
   const [selectedAddress, setSelectedAddress] = useState(0);
@@ -43,6 +43,7 @@ const PaymentDetail = (props) => {
       const response = await placeOrder(data);
       if (response) {
         toast.success("Order placed successfully");
+        setValueOrderSuccess(response);
         setValue("3");
       }
     } catch (error) {
@@ -74,6 +75,7 @@ PaymentDetail.propTypes = {
     totalCost: PropTypes.number.isRequired,
   }).isRequired,
   setValue: PropTypes.func.isRequired,
+  setValueOrderSuccess: PropTypes.func.isRequired,
 };
 
 export default PaymentDetail;

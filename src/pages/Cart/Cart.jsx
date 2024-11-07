@@ -8,6 +8,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import ShowProduct from "./ShowProducts";
 import PaymentDetail from "./PaymentDetail";
+import OrderSuccess from "../SuccessOrder/OrderSuccess";
 
 const TabLabel = ({ number, text, isActive }) => {
   const tabLabelStyle = {
@@ -56,6 +57,7 @@ const Cart = () => {
   const handleChange = (event, newValue) => setValue(newValue);
 
   const [valuePaymentDetails, setValuePaymentDetails] = useState(null);
+  const [valueOrderSuccess, setValueOrderSuccess] = useState(null);
 
   return (
     <div className={css.cartContainer}>
@@ -125,9 +127,12 @@ const Cart = () => {
             <PaymentDetail
               valuePaymentDetails={valuePaymentDetails}
               setValue={setValue}
+              setValueOrderSuccess={setValueOrderSuccess}
             />
           </TabPanel>
-          <TabPanel value="3">Item Three</TabPanel>
+          <TabPanel value="3">
+            <OrderSuccess valueOrderSuccess={valueOrderSuccess} />
+          </TabPanel>
         </TabContext>
       </div>
     </div>
