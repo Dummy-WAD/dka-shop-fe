@@ -4,7 +4,7 @@ const OrderCardItem = ({product}) => {
     return (
         <div className={classes.container}>
             <div className={classes.image}>
-                <img src={product?.productImageUrl} alt="thumnail" />
+                <img src={product?.productImageUrl} alt="thumnail" style={{objectFit: 'cover'}}/>
             </div>
             <div className={classes.info}>
                 <div>

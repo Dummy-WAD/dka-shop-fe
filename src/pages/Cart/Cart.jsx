@@ -7,6 +7,8 @@ import TabPanel from "@mui/lab/TabPanel";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import ShowProduct from "./ShowProducts";
+import PaymentDetail from "./PaymentDetail";
+import OrderSuccess from "../SuccessOrder/OrderSuccess";
 
 const TabLabel = ({ number, text, isActive }) => {
   const tabLabelStyle = {
@@ -53,6 +55,9 @@ const Cart = () => {
   const [value, setValue] = useState("1");
 
   const handleChange = (event, newValue) => setValue(newValue);
+
+  const [valuePaymentDetails, setValuePaymentDetails] = useState(null);
+  const [valueOrderSuccess, setValueOrderSuccess] = useState(null);
 
   return (
     <div className={css.cartContainer}>
@@ -113,10 +118,21 @@ const Cart = () => {
             </TabList>
           </Box>
           <TabPanel value="1">
-            <ShowProduct />
+            <ShowProduct
+              setValue={setValue}
+              setValuePaymentDetails={setValuePaymentDetails}
+            />
           </TabPanel>
-          <TabPanel value="2">Item Two</TabPanel>
-          <TabPanel value="3">Item Three</TabPanel>
+          <TabPanel value="2">
+            <PaymentDetail
+              valuePaymentDetails={valuePaymentDetails}
+              setValue={setValue}
+              setValueOrderSuccess={setValueOrderSuccess}
+            />
+          </TabPanel>
+          <TabPanel value="3">
+            <OrderSuccess valueOrderSuccess={valueOrderSuccess} />
+          </TabPanel>
         </TabContext>
       </div>
     </div>

@@ -30,6 +30,7 @@ import OrderListCustomer from "../pages/OrdersListCustomer/OrderListCustomer";
 import DetailOrderCustomer from "../pages/DetailOrderCustomer/DetailOrderCustomer";
 import OrderAdmin from "../pages/OrderAdmin/OrderAdmin";
 
+import DetailOrderAdmin from "../pages/DetailOrderAdmin/DetailOrderAdmin";
 
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
@@ -157,6 +158,10 @@ const router = createBrowserRouter(
         {
           path: "customer/:customerId",
           element: <CustomerDetail />,
+        },
+        {
+          path: "order/:id",
+          element: <DetailOrderAdmin />,
         },
       ],
     },

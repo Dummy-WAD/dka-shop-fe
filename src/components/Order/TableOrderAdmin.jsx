@@ -78,7 +78,7 @@ const TableOrderAdmin = ({
                 </TableSortLabelCustom>
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
-                  Status
+                Status
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
                 <TableSortLabelCustom
@@ -113,7 +113,15 @@ const TableOrderAdmin = ({
                   <TableCell>{item.orderId}</TableCell>
 
                   {/* Customer Email */}
-                  <TableCell>{item.email}</TableCell>
+                  <TableCell>
+                    {" "}
+                    <Link
+                      to={`/admin/customer/${item.customerId}`}
+                      style={{ color: "#000000" }}
+                    >
+                      {item.email}
+                    </Link>
+                  </TableCell>
 
                   {/* Price */}
                   <TableCell>{item.totalPrice} $</TableCell>
@@ -132,8 +140,7 @@ const TableOrderAdmin = ({
                   </TableCell>
 
                   {/* Actions */}
-                  <TableCell
-                  >
+                  <TableCell>
                     <Link
                       to={`${item.orderId}`}
                       style={{ color: "#000000", textDecoration: "underline" }}
