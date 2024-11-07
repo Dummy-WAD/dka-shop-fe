@@ -37,7 +37,6 @@ const ProductDetail = ({}) => {
                         sx={{backgroundColor: "var(--admin-color)", color: "#fff"}}
                         variant="contained"
                         startIcon={<ArrowBack/>}
-                        onClick={() => window.history.back()}
                     >
                         Back
                     </Button>
