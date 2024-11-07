@@ -125,7 +125,7 @@ const NavbarUser = () => {
                 <div className={css.actionItem}>
                   <div className={css.actionIcon}>
                     <CartIcon className={css.actionIconDetail} />
-                    <span className={css.countItemCart}>{totalCartItems}</span>
+                    {totalCartItems > 0 && (<span className={css.countItemCart}>{totalCartItems}</span>)}
                   </div>
                   <div>Cart</div>
                 </div>

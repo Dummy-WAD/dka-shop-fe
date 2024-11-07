@@ -7,6 +7,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getDetailProductForCustomerById } from "../../api/product";
 import { toast } from "react-toastify";
 import { addProductToCart } from "../../api/cart";
+import { useDispatch } from "react-redux";
+import { setTotalCartItems } from '../../redux/slice/cartSlice';
 
 function ProductDetailCustomer() {
   const { productId } = useParams();
@@ -22,6 +24,7 @@ function ProductDetailCustomer() {
   const [selectedId, setSelectedId] = useState("");
   const [quantity, setQuantity] = useState(null); // Initial value set to 1
   const [errorMessage, setErrorMessage] = useState("");
+  const dispatch = useDispatch();
 
   const fetchProductDetail = async (productId) => {
     try {
@@ -119,10 +122,11 @@ function ProductDetailCustomer() {
     const error = validate(selectedQuantity);
     if (!error) {
       try {
-        await addProductToCart({
+        const res = await addProductToCart({
           productVariantId: selectedId,
           quantity: selectedQuantity,
         });
+        dispatch(setTotalCartItems(res.totalCartItems));
         toast.success("Add product to cart successfully");
         setErrorMessage(null);
       } catch (err) {
@@ -236,7 +240,6 @@ function ProductDetailCustomer() {
               <input
                 type="number"
                 value={selectedQuantity}
-                // onChange={(e) => setSelectedQuantity(Number(e.target.value))}
                 onChange={(e) => onTextChange(e.target.value)}
               />
               <div className={classes.icon} onClick={onIncrease}>
