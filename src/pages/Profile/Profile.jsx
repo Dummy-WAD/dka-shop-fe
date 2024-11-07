@@ -8,10 +8,9 @@ import DateInput from "../../components/DateInput/DateInput";
 import SelectCustom from "../../components/SelectCustom/SelectCustom";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { phoneNumber as ValidPhoneNumber } from "../../validator";
+import { phoneNumber as validPhoneNumber } from "../../validator";
 import { Navigate } from "react-router-dom";
 import { handleGetUserInfo } from "../../api/user";
-import moment from "moment/moment";
 import { handleUpdateProfileCustomer } from "../../api/personal";
 import { setAuthInfo } from "../../redux/slice/authSlice";
 import { MALE, FEMALE } from "../../config/gender";
@@ -40,12 +39,14 @@ const Profile = () => {
     const [lastName, setLastName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [gender, setGender] = useState("");
+    const [joinDate, setJoinDate] = useState("");
 
     const handleSetAttribute = (profile) => {
         setFirstName(profile?.firstName);
         setLastName(profile?.lastName);
         setPhoneNumber(profile?.phoneNumber);
         setGender(profile?.gender || "none");
+        setJoinDate(profile?.createdAt);
     }
 
     const fetchData = async () => {
@@ -59,17 +60,22 @@ const Profile = () => {
 
     useEffect(()=>{
         fetchData();
-    },[])
+    },[]);
+
+    const handleValid = () => {
+        let isValided = true;
+
+        isValided = (firstName && firstName.trim() != "") && (lastName && lastName.trim() != "") && (phoneNumber && phoneNumber.trim() != "") && (gender != "none");
+        if (!isValided) return { isValided : false, error: "Fill full information"}
+
+        isValided = validPhoneNumber(phoneNumber);
+        if (!isValided) return { isValided : false, error: "Incorrect format phone number"}
+
+        return { isValided: true}
+    }
 
     const handleSaveChanges = async () => {
-        let isValided = true;
-        let error = "";
-
-        isValided = (firstName.trim() != "") && (lastName.trim() != "") && (phoneNumber.trim() != "") && (gender != "none");
-        error = isValided ? "" : "Fill full information";
-
-        isValided = isValided ?? ValidPhoneNumber(phoneNumber);
-        error = isValided ? "Phone number has 10 ligit" : error;
+        const {isValided, error } = handleValid();
 
         if (isValided) {
             try {
@@ -171,7 +177,7 @@ const Profile = () => {
                                         smallSize 
                                         disabled
                                         style={{width: "60%"}} 
-                                        value={moment(profile?.createdAt).format("DD/MM/YYYY")}
+                                        value={joinDate && new Date(joinDate).toISOString()}
                                     />
                                     <SelectCustom
                                         id="label"

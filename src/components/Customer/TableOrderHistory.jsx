@@ -12,8 +12,6 @@ import {
 } from "@mui/material";
 import React from "react";
 import StatusChip from "../StatusChip/StatusChip";
-import IconButton from "../IconButton/IconButton";
-import { Visibility } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import moment from "moment/moment";
 import TableSortLabelCustom from "../TableSortLabelCustom/TableSortLabelCustom";
@@ -50,7 +48,7 @@ function TableOrderHistory({
                   name="updatedAt"
                   onClick={handleSortOrder}
                 >
-                  Updated Date
+                  Last Update
                 </TableSortLabelCustom>
               </TableCell>
               <TableCell sx={{ color: "white" }}>Current Status</TableCell>
@@ -63,7 +61,7 @@ function TableOrderHistory({
               <TableRow key={order.id}>
                 <TableCell>{order.id}</TableCell>
                 <TableCell>
-                  {moment(order.ordered_at).format("DD/MM/YYYY HH:mm")}
+                  {moment(order.createdAt).format("DD/MM/YYYY HH:mm")}
                 </TableCell>
                 <TableCell>
                   {moment(order.updatedAt).format("DD/MM/YYYY HH:mm")}
@@ -72,11 +70,12 @@ function TableOrderHistory({
                   <StatusChip status={order.status} />
                 </TableCell>
                 <TableCell>
-                  ${(order.total + order.delivery_fee).toFixed(2)}
+                  ${(order.total + order.deliveryFee).toFixed(2)}
                 </TableCell>
                 <TableCell>
                   <Link
                     style={{ color: "#000000", textDecoration: "underline" }}
+                    to={`/admin/order/${order.id}`}
                   >
                     View Details
                   </Link>

@@ -90,15 +90,14 @@ function CustomerDetail() {
     <>
       <div>
         <div>
-          <Link to="/admin/customer">
-            <Button
-              sx={{ backgroundColor: "var(--admin-color)", color: "#fff" }}
-              variant="contained"
-              startIcon={<ArrowBack />}
-            >
-              Back
-            </Button>
-          </Link>
+          <Button
+            sx={{ backgroundColor: "var(--admin-color)", color: "#fff" }}
+            variant="contained"
+            startIcon={<ArrowBack />}
+            onClick={() => window.history.back()}
+          >
+            Back
+          </Button>
           <Typography
             variant="h5"
             sx={{ textAlign: "center", mt: "-2rem", fontWeight: 600 }}

@@ -1,6 +1,7 @@
-import { Grid2, Pagination, Typography } from "@mui/material";
+import { Grid2, Typography } from "@mui/material";
 import CardProduct from "../CardProduct/CardProduct";
 import classes from "./ListProduct.module.css";
+import PaginationCustom from "../Pagination/Pagination";
 
 const ListProduct = ({page, onChangePage, listProducts, totalPages}) => {
     const handleChangePage = (e, value) => {
@@ -16,32 +17,10 @@ const ListProduct = ({page, onChangePage, listProducts, totalPages}) => {
                     ))}
                 </div>
                 <Grid2 sx={{mt: "1rem", mb: "2rem"}}>
-                    <Pagination 
-                        count={totalPages} 
-                        siblingCount={0}
-                        boundaryCount={1}
-                        onChange={handleChangePage}
+                    <PaginationCustom 
                         page={page}
-                        sx={{
-                            "& .MuiPagination-ul": {
-                                justifyContent: "center",
-                            },
-                            "& .MuiPaginationItem-root": {
-                            backgroundColor: '#fff', 
-                            color: '#000',
-                            },
-                            "& .Mui-selected": {
-                            backgroundColor: '#faa564 !important',
-                            color: '#fff',
-                            },
-                            "& .MuiPaginationItem-previousNext" : {
-                                backgroundColor: "rgba(250, 165, 100, 0.2)",
-                            },
-                            "& .MuiPaginationItem-icon" : {
-                                borderRadius: "90px",
-                                color: "#faa564",
-                            }
-                        }}
+                        totalPages={totalPages}
+                        handleChangePage={handleChangePage}
                     />
                 </Grid2>
             </>}

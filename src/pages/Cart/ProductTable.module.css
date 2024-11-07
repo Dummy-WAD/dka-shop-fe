@@ -1,0 +1,88 @@
+.tableContainer {
+  overflow: hidden;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  font-weight: bold;
+  margin: 10px 0px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.tableHeader span:nth-child(1) {
+  width: 70%;
+}
+.tableHeader span:nth-child(2) {
+  width: 10%;
+}
+.tableHeader span:nth-child(3) {
+  width: 10%;
+}
+
+.tableBody {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.tableRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tableRow:last-child {
+  border-bottom: none;
+}
+
+.productInfo {
+  display: flex;
+  align-items: center;
+  width: 70%;
+}
+
+.productImage {
+  width: 80px;
+  height: 80px;
+  margin-right: 16px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.productInforRight {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 7px;
+}
+
+.productName {
+  font-weight: 400;
+  font-size: 17px;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 600px;
+}
+
+.productVariant,
+.productAmount {
+  font-size: 14px;
+  color: #666;
+}
+
+.productPrice,
+.productTotal {
+  width: 195px;
+  text-align: center;
+  font-size: 16px;
+}

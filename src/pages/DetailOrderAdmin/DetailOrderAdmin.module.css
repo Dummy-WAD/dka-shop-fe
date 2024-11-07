@@ -1,0 +1,50 @@
+.container {
+  position: relative;
+}
+.container_left {
+  width: 25%;
+}
+.container_right {
+  flex: 1;
+}
+
+.section {
+  padding: 25px 30px;
+  flex: 1;
+  &.multipleSection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-right: 1px solid #00000017;
+    width: 45%;
+  }
+}
+
+
+.orderItem {
+  padding: 20px 15px;
+  background-color:  #fafafa;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.09);
+  }
+}
+
+.breakdown {
+  padding: 20px 15px 0;
+}
+
+.lineItem {
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 0;
+
+  &.active {
+    color: var(--user-color);
+  }
+}
+
+.value {
+  text-align: end;
+  min-width: 80px;
+}

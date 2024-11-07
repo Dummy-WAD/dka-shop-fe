@@ -1,0 +1,33 @@
+.section_header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.section_header p {
+    font-weight: bold;
+    font-size: 18px;
+    padding-right: 2rem;
+}
+.section_products {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.section_products .product{
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #E8ECEF;
+    padding-right: 2rem;
+}
+.section_footer{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2rem;
+    margin-top: 1rem;
+    /* margin: 2rem 0 1rem; */
+    
+}
+.price {
+    display: flex;
+    gap: 5rem;
+}
