@@ -5,7 +5,7 @@ const getAllOrder = (config) => {
   return axiosInstance.get(`/customer/orders?limit=${limit}&page=${page}${status ? `&status=${status}` : ""}`);
 }
 
-const getDetailOrder = (id) => {
+const getDetailOrderByCustomer = (id) => {
     return axiosInstance.get(`/customer/orders/${id}`)
 }
 
@@ -20,4 +20,8 @@ const getAllOrdersForAdmin = (config) => {
   );
 };
 
-export { getAllOrder, getDetailOrder, getAllOrdersForAdmin };
+const getDetailOrderByAdmin = (id) => {
+    return axiosInstance.get(`admin/orders/${id}`)
+}
+
+export {getAllOrder, getDetailOrderByCustomer, getAllOrdersForAdmin, getDetailOrderByAdmin}

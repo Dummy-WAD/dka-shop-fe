@@ -8,7 +8,7 @@ import OrderHistory from "../../components/OrderHistory/OrderHistory";
 import classNames from "classnames";
 import OrderCardItem from "../../components/OrderCard/OrderCardItem";
 import { useEffect, useState } from "react";
-import { getDetailOrder } from "../../api/order";
+import { getDetailOrderByCustomer } from "../../api/order";
 import { toast } from "react-toastify";
 import { CUSTOMER } from "../../config/roles";
 
@@ -24,8 +24,7 @@ const DetailOrderCustomer = () => {
   useEffect(() => {
     const getOrder = async () => {
       try {
-        const orderResponse = await getDetailOrder(id);
-        console.log("orderResponse", orderResponse);
+        const orderResponse = await getDetailOrderByCustomer(id);
         setOrder(orderResponse);
       } catch (err) {
         console.error(err);
@@ -63,7 +62,6 @@ const DetailOrderCustomer = () => {
           <div className={classNames(classes.section, classes.multipleSection)}>
             <OrderCustomerInfo
               className={classes.sectionLeft}
-              user={user}
               order={order}
             />
             <OrderHistory className={classes.sectionRight} order={order} />
