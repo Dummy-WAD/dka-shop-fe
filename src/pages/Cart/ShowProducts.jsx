@@ -42,7 +42,7 @@ const DeliveryOptions = ({ options, selectedOption, setSelectedOption }) => {
           >
             {option.deliveryFee === 0
               ? "Free"
-              : `${option.deliveryFee.toFixed(2)}$`}
+              : `$${option.deliveryFee.toFixed(2)}`}
           </span>
         </label>
       ))}
