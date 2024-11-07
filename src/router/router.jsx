@@ -25,6 +25,9 @@ import Profile from "../pages/Profile/Profile";
 import ChangePassword from "../pages/Profile/ChangePassword";
 import EditProduct from "../pages/EditProduct/EditProduct";
 import Address from "../pages/Address/Address";
+import Cart from "../pages/Cart/Cart";
+import OrderListCustomer from "../pages/OrdersListCustomer/OrderListCustomer";
+import DetailOrderCustomer from "../pages/DetailOrderCustomer/DetailOrderCustomer";
 
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
@@ -75,7 +78,15 @@ const router = createBrowserRouter(
         {
           path: "change-password",
           element: <ChangePassword />,
-        }
+        },
+        {
+          path: "orders/:id",
+          element: <DetailOrderCustomer />,
+        },
+        {
+          path: "purchase",
+          element: <OrderListCustomer />,
+        },
       ],
     },
     {
@@ -86,8 +97,12 @@ const router = createBrowserRouter(
         {
           index: true,
           element: <Home />,
-        }
-      ]
+        },
+        {
+          path: "cart",
+          element: <Cart />,
+        },
+      ],
     },
     {
       path: "/search",
@@ -97,8 +112,8 @@ const router = createBrowserRouter(
         {
           index: true,
           element: <Search />,
-        }
-      ]
+        },
+      ],
     },
     {
       path: "/admin",

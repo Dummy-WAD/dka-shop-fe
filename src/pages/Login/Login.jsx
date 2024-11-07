@@ -11,13 +11,14 @@ import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 import { BackIcon } from "../../icon/Icon";
 import { toast } from "react-toastify";
 import { ADMIN } from "../../config/roles";
+import { getTotalCartItems } from "../../api/cart";
+import { setTotalCartItems } from "../../redux/slice/cartSlice";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
     .required("Email is required.")
     .test("Email test", "Email is invalid.", email),
-  password: Yup.string()
-    .required("Password is required.")
+  password: Yup.string().required("Password is required."),
 });
 
 function Login() {
@@ -61,6 +62,10 @@ function Login() {
                 );
                 localStorage.setItem("accessToken", tokens?.access?.token);
                 localStorage.setItem("refreshToken", tokens?.refresh?.token);
+                const response = await getTotalCartItems();
+                if (response) {
+                  dispatch(setTotalCartItems(response.totalCartItems));
+                }
                 return user.role === ADMIN ? navigate("/admin") : navigate("/");
               } catch (err) {
                 console.error(err);
