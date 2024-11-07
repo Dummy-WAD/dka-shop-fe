@@ -14,8 +14,8 @@
 .price {
     width: 20%;
     display: flex;
-    gap: 1.5rem;
     align-items: center;
+    justify-content: end;
 }
 .info {
     flex: 1;

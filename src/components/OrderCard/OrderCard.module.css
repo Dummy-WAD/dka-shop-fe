@@ -17,11 +17,12 @@
 .section_products .product{
     padding-bottom: 0.5rem;
     border-bottom: 1px solid #E8ECEF;
+    padding-right: 2rem;
 }
 .section_footer{
     display: flex;
     justify-content: space-between;
-    padding: 0 3rem;
+    padding: 0 2rem;
     margin-top: 1rem;
     /* margin: 2rem 0 1rem; */
     
