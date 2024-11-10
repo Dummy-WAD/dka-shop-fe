@@ -50,3 +50,27 @@
 .name {
   width: 200px;
 }
+.noAddress {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.titleNoAddress {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.buttonAddNewAddress {
+  width: 150px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #264652;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+}
+.icon {
+  margin-right: 5px;
+  display: flex;
+}

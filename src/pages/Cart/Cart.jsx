@@ -58,6 +58,7 @@ const Cart = () => {
 
   const [valuePaymentDetails, setValuePaymentDetails] = useState(null);
   const [valueOrderSuccess, setValueOrderSuccess] = useState(null);
+  const [listItemChecked, setListItemChecked] = useState([]);
 
   return (
     <div className={css.cartContainer}>
@@ -121,6 +122,8 @@ const Cart = () => {
             <ShowProduct
               setValue={setValue}
               setValuePaymentDetails={setValuePaymentDetails}
+              listItemChecked={listItemChecked}
+              setListItemChecked={setListItemChecked}
             />
           </TabPanel>
           <TabPanel value="2">

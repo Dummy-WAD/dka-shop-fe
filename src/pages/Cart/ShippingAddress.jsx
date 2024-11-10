@@ -7,13 +7,18 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Button,
 } from "@mui/material";
 import css from "./ShippingAddress.module.css";
 import { getCustomerAddresses } from "../../api/address";
+import { PlusIcon } from "../../icon/Icon";
+import ModalCustom from "../../components/Modal/BasicModal";
+import AddAddress from "../../components/Address/AddAddress";
 
 const ShippingAddress = ({ selectedAddress, setSelectedAddress }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [addresses, setAddresses] = useState([]);
+  const [openModalAddNewAddress, setOpenModalAddNewAddress] = useState(false);
 
   const handleAddressChange = (e) => {
     const element = addresses.filter(
@@ -80,7 +85,7 @@ const ShippingAddress = ({ selectedAddress, setSelectedAddress }) => {
           Change
         </span>
       </div>
-      {addresses.length > 0 && (
+      {addresses.length > 0 ? (
         <div className={css.addressDetails}>
           <div className={css.addressItem}>
             <div className={css.name}>{selectedAddress?.name}</div>
@@ -91,6 +96,42 @@ const ShippingAddress = ({ selectedAddress, setSelectedAddress }) => {
             <div className={css.city}>{selectedAddress?.city}</div>
           </div>
         </div>
+      ) : (
+        <>
+          <div className={css.noAddress}>
+            <div className={css.titleNoAddress}>No address available</div>
+            <Button
+              variant="outlined"
+              sx={{
+                color: "var(--user-second-color)",
+                borderColor: "var(--user-second-color)",
+                "&:hover": {
+                  backgroundColor: "var(--user-second-color)",
+                  color: "white",
+                },
+              }}
+              onClick={() => setOpenModalAddNewAddress(true)}
+            >
+              <div className={css.icon}>
+                <PlusIcon />
+              </div>
+              New Address
+            </Button>
+          </div>
+          <ModalCustom
+            isOpen={openModalAddNewAddress}
+            handleClose={() => {
+              setOpenModalAddNewAddress(false);
+            }}
+          >
+            <AddAddress
+              handleClose={async () => {
+                await fetchAddresses();
+                setOpenModalAddNewAddress(false);
+              }}
+            />
+          </ModalCustom>
+        </>
       )}
 
       <Modal
@@ -117,7 +158,8 @@ const ShippingAddress = ({ selectedAddress, setSelectedAddress }) => {
           </Typography>
           <Typography id="modal-description" sx={{ mt: 1 }}>
             <RadioGroup
-              value={selectedAddress}
+              // value={selectedAddress}
+              value={selectedAddress?.id || ""}
               onChange={(e) => handleAddressChange(e)}
               sx={{ mt: 2 }}
             >
@@ -153,6 +195,7 @@ const ShippingAddress = ({ selectedAddress, setSelectedAddress }) => {
 };
 ShippingAddress.propTypes = {
   selectedAddress: PropTypes.shape({
+    id: PropTypes.number,
     name: PropTypes.string,
     phone: PropTypes.string,
     street: PropTypes.string,

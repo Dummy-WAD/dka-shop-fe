@@ -81,16 +81,16 @@ const CheckoutSummary = ({
         <div className={styles.summary}>
           <div className={styles.summaryItem}>
             <span>Product cost</span>
-            <span>$ {productCost}</span>
+            <span>$ {productCost.toFixed(2)}</span>
           </div>
           <div className={styles.summaryItem}>
             <span>Delivery fee</span>
-            <span>$ {deliveryService.deliveryFee}</span>
+            <span>$ {deliveryService.deliveryFee.toFixed(2)}</span>
           </div>
 
           <div className={`${styles.summaryItem} ${styles.total}`}>
             <span>Total</span>
-            <span className={styles.totalAmount}>$ {totalCost}</span>
+            <span className={styles.totalAmount}>$ {totalCost.toFixed(2)}</span>
           </div>
           <button
             className={styles.placeOrderButton}
