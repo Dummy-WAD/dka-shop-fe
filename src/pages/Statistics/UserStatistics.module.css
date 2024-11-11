@@ -1,14 +1,31 @@
-.title_page{
+.titlePage{
     display: flex;
     gap: 0.5rem;
     align-items: center;
 }
 
-.title_page p{
+.titlePage p{
     font-size: 20px;
     font-weight: bold;
 }
 
-.icon_style{
+.iconStyle{
     width: 20px;
+}
+
+.mainContent {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    gap: 30px;
+}
+
+.chartContainer {
+    background-color: #f7f7f7;
+    padding: 15px 0 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
 }
