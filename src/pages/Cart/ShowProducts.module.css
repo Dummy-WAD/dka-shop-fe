@@ -190,6 +190,7 @@
   position: absolute;
   left: 0;
   top: 0;
+  cursor: pointer;
 }
 
 .productVariant {
@@ -271,6 +272,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 600px;
+  cursor: pointer;
 }
 
 .productAction {

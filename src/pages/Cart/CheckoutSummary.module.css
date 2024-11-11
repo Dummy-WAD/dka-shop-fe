@@ -81,7 +81,7 @@
 .summaryItem span:nth-child(1) {
   font-weight: 500;
   font-size: 17px;
-  width: 75%;
+  width: 50%;
 }
 
 .summaryItem span:nth-child(2) {
@@ -95,7 +95,7 @@
   color: green;
 }
 .placeOrderButton {
-  width: 90%;
+  width: 80%;
   padding: 10px;
   border-radius: 5px;
   background-color: #264652;
