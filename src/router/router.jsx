@@ -1,4 +1,4 @@
-import { createBrowserRouter, useNavigate } from "react-router-dom";
+import { createBrowserRouter, Navigate, useNavigate } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import LayoutAdmin from "../layout/LayoutAdmin/LayoutAdmin";
 import LayoutUser from "../layout/LayoutUser/LayoutUser";
@@ -31,6 +31,8 @@ import DetailOrderCustomer from "../pages/DetailOrderCustomer/DetailOrderCustome
 import OrderAdmin from "../pages/OrderAdmin/OrderAdmin";
 
 import DetailOrderAdmin from "../pages/DetailOrderAdmin/DetailOrderAdmin";
+import OrderStatistics from "../pages/Statistics/OrderStatistics";
+import UserStatistics from "../pages/Statistics/UserStatistics";
 
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
@@ -125,7 +127,36 @@ const router = createBrowserRouter(
       children: [
         {
           index: true,
-          element: <ShowCategory />,
+          element: <Navigate to="statistics" replace />,
+        },
+        {
+          path: "statistics",
+          children: [
+            {
+              index: true,
+              element: <Navigate to="order" replace />,
+            },
+            {
+              path: "order",
+              element: <OrderStatistics />,
+            },
+            {
+              path: "user",
+              element: <UserStatistics />,
+            },
+            {
+              path: "revenue",
+              // element: <OrderStatistics />,
+            },
+            {
+              path: "top-products",
+              // element: <OrderStatistics />,
+            },
+            {
+              path: "top-categories",
+              // element: <OrderStatistics />,
+            },
+          ],
         },
         {
           path: "category",
