@@ -29,3 +29,10 @@ export const STATUS_STYLES = {
   },
   // Add more statuses and their styles as needed
 };
+
+export const statisticsUnit = {
+  YEAR: 'year',
+  QUARTER: 'quarter',
+  MONTH: 'month',
+  WEEK: 'week'
+}
