@@ -92,6 +92,19 @@ const OrderAdmin = () => {
     refInput?.current?.addEventListener("keypress", handleKeyPress);
     return () => {
       refInput?.current?.removeEventListener("keypress", handleKeyPress);
+      dispatch(
+        setListOrderInfo({
+          dataOrders: [],
+          page: 0,
+          totalPages: null,
+          totalResults: null,
+          order: "",
+          sortBy: "",
+          search: "",
+          limit: 10,
+          status: "",
+        })
+      );
     };
   }, []);
 
@@ -141,7 +154,7 @@ const OrderAdmin = () => {
 
           <div className={classes.search_create}>
             <SearchInput
-              placeholder="Search by Email"
+              placeholder="Search"
               inputRef={refInput}
               onSearch={handleSearchOrder}
             />
