@@ -76,6 +76,9 @@ const OrderStatistics = () => {
     };
     getOrderData();
   }, []);
+
+  if(!orderData || numberOfOrderInToday === null) return null
+
   return (
     <>
       <div className={classes.mainTitle}>

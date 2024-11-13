@@ -1,7 +1,11 @@
 import axiosInstance from "../../utils/axios";
 
 const handleGetOrderStatistics = (params) => {
-    return axiosInstance.get("/admin/statistics/orders", { params });
-  };
+  return axiosInstance.get("/admin/statistics/orders", { params });
+};
 
-export {handleGetOrderStatistics}
+const handleGetCustomerStatistics = (params) => {
+  return axiosInstance.get("/admin/statistics/customers", { params });
+};
+
+export { handleGetOrderStatistics, handleGetCustomerStatistics };
