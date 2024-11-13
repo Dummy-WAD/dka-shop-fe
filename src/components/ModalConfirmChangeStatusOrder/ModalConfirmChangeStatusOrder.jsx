@@ -12,7 +12,7 @@ const ModalConfirmChangeStatusOrder = ({
 }) => {
   const successMessage = {
     CANCELLED: "Order has been successfully cancelled.",
-    PACKAGING: "Order is now marked as packaged.",
+    PACKAGING: "Order is now being prepared for packaging.",
     DELIVERING: "Order is now out for delivery.",
     COMPLETED: "Order has been successfully completed.",
   };
@@ -25,9 +25,8 @@ const ModalConfirmChangeStatusOrder = ({
         };
       case "PACKAGING":
         return {
-          title: "Package Order",
-          message:
-            "The order will be marked as packaged and ready for delivery.",
+          title: "Accept Order",
+          message: "The order will be accepted. Do you want to proceed?",
         };
       case "DELIVERING":
         return {
