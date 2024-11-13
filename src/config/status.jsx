@@ -1,7 +1,8 @@
 export const PENDING = "PENDING";
-export const PACKAGED = "PACKAGED";
+export const PACKAGING = "PACKAGING";
 export const DELIVERING = "DELIVERING";
 export const COMPLETED = "COMPLETED";
+export const CANCELLED = "CANCELLED";
 
 export const ACTIVE = "ACTIVE";
 export const INACTIVE = "INACTIVE";
@@ -11,7 +12,7 @@ export const STATUS_STYLES = {
     backgroundColor: "grey",
     color: "white",
   },
-  [PACKAGED]: {
+  [PACKAGING]: {
     backgroundColor: "#faa564",
     color: "black",
   },

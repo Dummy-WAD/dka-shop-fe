@@ -8,11 +8,11 @@ import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import moment from "moment";
-import { COMPLETED, DELIVERING, PACKAGED, PENDING } from "../../config/status";
+import { COMPLETED, DELIVERING, PACKAGING, PENDING } from "../../config/status";
 
 const statusMessages = {
   [PENDING]: "Your order is being processed.",
-  [PACKAGED]: "Your order has been packaged and is ready for shipment.",
+  [PACKAGING]: "Your order has been packaged and is ready for shipment.",
   [DELIVERING]: "Your order is on its way. Please keep an eye on your phone.",
   [COMPLETED]: "Your order has been delivered. Thank you for shopping with us!",
 };
