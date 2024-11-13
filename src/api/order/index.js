@@ -1,13 +1,17 @@
 import axiosInstance from "../../utils/axios";
 
 const getAllOrder = (config) => {
-  const {status, limit, page} = config
-  return axiosInstance.get(`/customer/orders?limit=${limit}&page=${page}${status ? `&status=${status}` : ""}`);
-}
+  const { status, limit, page } = config;
+  return axiosInstance.get(
+    `/customer/orders?limit=${limit}&page=${page}${
+      status ? `&status=${status}` : ""
+    }`
+  );
+};
 
 const getDetailOrderByCustomer = (id) => {
-    return axiosInstance.get(`/customer/orders/${id}`)
-}
+  return axiosInstance.get(`/customer/orders/${id}`);
+};
 
 const getAllOrdersForAdmin = (config) => {
   const { keyword, status, sortBy, order, page, limit } = config;
@@ -21,7 +25,19 @@ const getAllOrdersForAdmin = (config) => {
 };
 
 const getDetailOrderByAdmin = (id) => {
-    return axiosInstance.get(`admin/orders/${id}`)
-}
+  return axiosInstance.get(`admin/orders/${id}`);
+};
 
-export {getAllOrder, getDetailOrderByCustomer, getAllOrdersForAdmin, getDetailOrderByAdmin}
+const changeStatusOrder = (id, status) => {
+  const data = {
+    status: status,
+  };
+  return axiosInstance.patch(`/admin/orders/${id}`, data);
+};
+export {
+  getAllOrder,
+  getDetailOrderByCustomer,
+  getAllOrdersForAdmin,
+  getDetailOrderByAdmin,
+  changeStatusOrder,
+};

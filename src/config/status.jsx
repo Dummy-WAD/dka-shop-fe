@@ -27,12 +27,11 @@ export const STATUS_STYLES = {
     backgroundColor: "green",
     color: "white",
   },
-  // Add more statuses and their styles as needed
 };
 
 export const statisticsUnit = {
-  YEAR: 'year',
-  QUARTER: 'quarter',
-  MONTH: 'month',
-  WEEK: 'week'
-}
+  YEAR: "year",
+  QUARTER: "quarter",
+  MONTH: "month",
+  WEEK: "week",
+};
