@@ -109,7 +109,7 @@ const TableProductAdmin = ({
                   <TableCell>{item.name}</TableCell>
 
                   {/* Price */}
-                  <TableCell>{item.price} $</TableCell>
+                  <TableCell>${item.price}</TableCell>
 
                   {/* Category */}
                   <TableCell>
