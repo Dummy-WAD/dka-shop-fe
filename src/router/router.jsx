@@ -35,6 +35,7 @@ import OrderStatistics from "../pages/Statistics/OrderStatistics";
 import UserStatistics from "../pages/Statistics/UserStatistics";
 import TopProductStatistics from "../pages/Statistics/TopProductStatistics";
 import TopCategoryStatistics from "../pages/Statistics/TopCategoryStatistics";
+import RevenueStatistics from "../pages/Statistics/RevenueStatistics";
 
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
@@ -148,7 +149,7 @@ const router = createBrowserRouter(
             },
             {
               path: "revenue",
-              // element: <OrderStatistics />,
+              element: <RevenueStatistics />,
             },
             {
               path: "top-products",
