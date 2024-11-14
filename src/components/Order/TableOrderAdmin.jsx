@@ -124,7 +124,7 @@ const TableOrderAdmin = ({
                   </TableCell>
 
                   {/* Price */}
-                  <TableCell>{item.totalPrice} $</TableCell>
+                  <TableCell>${item.totalPrice}</TableCell>
 
                   {/* Status */}
                   <TableCell>{item.currentStatus}</TableCell>

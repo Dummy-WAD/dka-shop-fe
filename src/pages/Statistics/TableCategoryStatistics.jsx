@@ -22,8 +22,8 @@ const TableCategoryStatistics = ({
                         <TableRow>
                             <TableCell sx={{color: "#FFF", fontWeight: "bold"}}>Category ID</TableCell>
                             <TableCell sx={{color: "#FFF", fontWeight: "bold"}}>Name category</TableCell>
-                            {isRevenue && <TableCell sx={{color: "#FFF", fontWeight: "bold"}}>Total price</TableCell>}
-                            {!isRevenue && <TableCell sx={{color: "#FFF", fontWeight: "bold"}}>Total quantity</TableCell>}
+                            {isRevenue && <TableCell sx={{color: "#FFF", fontWeight: "bold"}}>Revenue</TableCell>}
+                            {!isRevenue && <TableCell sx={{color: "#FFF", fontWeight: "bold"}}>Sold</TableCell>}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -34,7 +34,7 @@ const TableCategoryStatistics = ({
                             >
                                 <TableCell>{item?.categoryId}</TableCell>
                                 <TableCell>{item?.categoryName}</TableCell>
-                                {isRevenue && <TableCell>{item?.totalPrice?.toFixed(2)}</TableCell>}
+                                {isRevenue && <TableCell>${item?.totalPrice?.toFixed(2)}</TableCell>}
                                 {!isRevenue && <TableCell>{item?.totalQuantity}</TableCell>}
                             </TableRow>
                         ))}
