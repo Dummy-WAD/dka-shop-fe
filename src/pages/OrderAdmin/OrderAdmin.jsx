@@ -7,7 +7,7 @@ import TableOrderAdmin from "../../components/Order/TableOrderAdmin";
 import { getAllOrdersForAdmin } from "../../api/order/index";
 import { setListOrderInfo } from "../../redux/slice/orderSlice";
 import SearchInput from "../../components/SearchInput/SearchInput";
-import { PENDING, PACKAGED, DELIVERING, COMPLETED } from "../../config/status";
+import { PENDING, PACKAGING, DELIVERING, COMPLETED } from "../../config/status";
 
 const OrderAdmin = () => {
   const dispatch = useDispatch();
@@ -92,6 +92,19 @@ const OrderAdmin = () => {
     refInput?.current?.addEventListener("keypress", handleKeyPress);
     return () => {
       refInput?.current?.removeEventListener("keypress", handleKeyPress);
+      dispatch(
+        setListOrderInfo({
+          dataOrders: [],
+          page: 0,
+          totalPages: null,
+          totalResults: null,
+          order: "",
+          sortBy: "",
+          search: "",
+          limit: 10,
+          status: "",
+        })
+      );
     };
   }, []);
 
@@ -133,7 +146,7 @@ const OrderAdmin = () => {
             >
               <MenuItem value="All status">All status</MenuItem>
               <MenuItem value={PENDING}>Pending</MenuItem>
-              <MenuItem value={PACKAGED}>Packaged</MenuItem>
+              <MenuItem value={PACKAGING}>Packaging</MenuItem>
               <MenuItem value={DELIVERING}>Delivering</MenuItem>
               <MenuItem value={COMPLETED}>Completed</MenuItem>
             </Select>
@@ -141,7 +154,7 @@ const OrderAdmin = () => {
 
           <div className={classes.search_create}>
             <SearchInput
-              placeholder="Search by Email"
+              placeholder="Search"
               inputRef={refInput}
               onSearch={handleSearchOrder}
             />

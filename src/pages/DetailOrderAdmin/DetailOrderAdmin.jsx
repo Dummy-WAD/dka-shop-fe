@@ -11,6 +11,7 @@ import { getDetailOrderByAdmin } from "../../api/order";
 import { toast } from "react-toastify";
 import { ADMIN } from "../../config/roles";
 import { ArrowBack } from "@mui/icons-material";
+import ButtonChangeStatusOrder from "../../components/ButtonChangeStatusOrder/ButtonChangeStatusOrder";
 
 const DetailOrderAdmin = () => {
   const { id } = useParams();
@@ -21,16 +22,17 @@ const DetailOrderAdmin = () => {
   );
   const { role } = user;
 
+  const getOrder = async () => {
+    try {
+      const orderResponse = await getDetailOrderByAdmin(id);
+      setOrder(orderResponse);
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response.data.message);
+    }
+  };
+
   useEffect(() => {
-    const getOrder = async () => {
-      try {
-        const orderResponse = await getDetailOrderByAdmin(id);
-        setOrder(orderResponse);
-      } catch (err) {
-        console.error(err);
-        toast.error(err.response.data.message);
-      }
-    };
     getOrder();
   }, [id]);
 
@@ -135,6 +137,8 @@ const DetailOrderAdmin = () => {
               </div>
             </div>
           </div>
+
+          <ButtonChangeStatusOrder order={order} getOrder={getOrder} />
         </div>
       </Grid2>
     </div>
