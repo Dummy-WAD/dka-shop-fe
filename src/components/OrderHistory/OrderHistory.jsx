@@ -21,7 +21,7 @@ const OrderHistory = ({ order, className }) => {
   const currentStatus = order?.status;
   const isCompleted = currentStatus === COMPLETED;
   const isDelivering = currentStatus === DELIVERING;
-  const isPackaged = currentStatus === PACKAGED;
+  const isPackaged = currentStatus === PACKAGING;
   const isPending = currentStatus === PENDING;
   const { completed, delivered, packaged } = order?.history;
   const completedTime = completed?.at;
@@ -131,9 +131,9 @@ const OrderHistory = ({ order, className }) => {
                 </div>
                 <div>
                   <div style={{ fontWeight: "500", marginBottom: "5px" }}>
-                    {PACKAGED}
+                    {PACKAGING}
                   </div>
-                  <div>{statusMessages.PACKAGED}</div>
+                  <div>{statusMessages.PACKAGING}</div>
                 </div>
               </TimelineContent>
             </TimelineItem>
