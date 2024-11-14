@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { toast } from "react-toastify";
@@ -23,6 +23,18 @@ const PaymentDetail = ({
   const [openModalDeliveryFeeChanged, setModalDeliveryFeeChanged] =
     useState(false);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   const createCartData = (
     preparedOrderItems,
