@@ -11,7 +11,7 @@ import {
   removeProductFromCart,
 } from "../../api/cart";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Modal, Box, Typography, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setTotalCartItems } from "../../redux/slice/cartSlice";
@@ -65,6 +65,7 @@ const TotalCost = ({
   deliveryOptions,
   setValuePaymentDetails,
   setModalPriceChanged,
+  setOpenModal,
 }) => {
   function createCartData(
     products,
@@ -96,6 +97,10 @@ const TotalCost = ({
         toast.error("Please select a delivery option");
         return;
       }
+      if (listItemChecked.length === 0) {
+        toast.error("Please select at least one product to checkout");
+        return;
+      }
       const data = createCartData(
         products,
         listItemChecked,
@@ -110,7 +115,10 @@ const TotalCost = ({
         setValue("2");
       }
     } catch (error) {
-      console.log(error);
+      const { code, message } = error.response.data;
+      if (code === 400 && message === "Quantity of product is not enough!") {
+        setOpenModal(true);
+      }
     }
   };
 
@@ -154,6 +162,7 @@ TotalCost.propTypes = {
   deliveryOptions: PropTypes.array.isRequired,
   setValuePaymentDetails: PropTypes.func.isRequired,
   setModalPriceChanged: PropTypes.func.isRequired,
+  setOpenModal: PropTypes.func.isRequired,
 };
 
 const CartItem = ({
@@ -163,6 +172,7 @@ const CartItem = ({
   handleRemoveProduct,
   handleChangeQuantityProduct,
 }) => {
+  const navigate = useNavigate();
   return (
     <div className={css.cartItemContainer}>
       <input
@@ -179,11 +189,16 @@ const CartItem = ({
           src={item.productImage}
           alt="Product"
           className={css.productImage}
+          onClick={() => navigate(`/product/${item.productId}`)}
         />
       </div>
 
       <div className={css.cartItemRightPanel}>
-        <div className={css.productName} title={item.productName}>
+        <div
+          className={css.productName}
+          title={item.productName}
+          onClick={() => navigate(`/product/${item.productId}`)}
+        >
           {item.productName}
         </div>
         <div className={css.productAction}>
@@ -278,9 +293,14 @@ const ShowProduct = (props) => {
   const [products, setProducts] = useState([]);
   const [totalCost, setTotalCost] = useState(0);
   const [deliveryCost, setDeliveryCost] = useState(0);
-  const [listItemChecked, setListItemChecked] = useState([]);
+  // const [listItemChecked, setListItemChecked] = useState([]);
   const [openModal, setOpenModal] = useState(false);
-  const { setValue, setValuePaymentDetails } = props;
+  const {
+    setValue,
+    setValuePaymentDetails,
+    listItemChecked,
+    setListItemChecked,
+  } = props;
   const [openModalPriceChanged, setModalPriceChanged] = useState(false);
 
   const dispatch = useDispatch();
@@ -527,6 +547,7 @@ const ShowProduct = (props) => {
             deliveryOptions={deliveryOptions}
             setValuePaymentDetails={setValuePaymentDetails}
             setModalPriceChanged={setModalPriceChanged}
+            setOpenModal={setOpenModal}
           />
         </div>
       </div>
@@ -553,7 +574,8 @@ const ShowProduct = (props) => {
             Out of Stock
           </Typography>
           <Typography id="modal-description" sx={{ mt: 1 }}>
-            The quantity you requested exceeds the available stock.
+            The quantity you requested exceeds the available stock. Please check
+            the new quantity.
           </Typography>
           <Button
             onClick={async () => {
@@ -638,6 +660,8 @@ const ShowProduct = (props) => {
 ShowProduct.propTypes = {
   setValue: PropTypes.func.isRequired,
   setValuePaymentDetails: PropTypes.func.isRequired,
+  listItemChecked: PropTypes.array.isRequired,
+  setListItemChecked: PropTypes.func.isRequired,
 };
 
 export default ShowProduct;

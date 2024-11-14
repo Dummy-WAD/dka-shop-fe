@@ -8,24 +8,27 @@ import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import moment from "moment";
-import { COMPLETED, DELIVERING, PACKAGED, PENDING } from "../../config/status";
+import { CANCELLED, COMPLETED, DELIVERING, PACKAGING, PENDING } from "../../config/status";
 
 const statusMessages = {
-  [PENDING]: "Your order is being processed.",
-  [PACKAGED]: "Your order has been packaged and is ready for shipment.",
-  [DELIVERING]: "Your order is on its way. Please keep an eye on your phone.",
-  [COMPLETED]: "Your order has been delivered. Thank you for shopping with us!",
+  [PENDING]: "Order is being processed.",
+  [PACKAGING]: "Order has been packaged and is ready for shipment.",
+  [DELIVERING]: "Order is on its way. Please keep an eye on your phone.",
+  [COMPLETED]: "Order has been delivered. Thank you for shopping with us!",
+  [CANCELLED]: "Order has been cancelled.",
 };
 
 const OrderHistory = ({ order, className }) => {
   const currentStatus = order?.status;
   const isCompleted = currentStatus === COMPLETED;
   const isDelivering = currentStatus === DELIVERING;
-  const isPackaged = currentStatus === PACKAGED;
+  const isCancelled = currentStatus === CANCELLED;
+  const isPackaged = currentStatus === PACKAGING;
   const isPending = currentStatus === PENDING;
-  const { completed, delivered, packaged } = order?.history;
+  const { completed, delivered, packaged, cancelled } = order?.history;
   const completedTime = completed?.at;
   const deliveredTime = delivered?.at;
+  const cancelledTime = cancelled?.at;
   const packagedTime = packaged?.at;
   const pendingTime = order?.createdAt;
 
@@ -104,6 +107,40 @@ const OrderHistory = ({ order, className }) => {
               </TimelineContent>
             </TimelineItem>
           )}
+          {cancelledTime && (
+            <TimelineItem
+              className={classNames(css.item, {
+                [css.activeColor]: isCancelled,
+              })}
+            >
+              <TimelineSeparator>
+                <TimelineDot
+                  className={classNames({
+                    [css.activeColor]: isCancelled,
+                    [css.activeBackgroundColor]: isCancelled,
+                  })}
+                />
+                <TimelineConnector
+                  className={classNames({
+                    [css.activeBackgroundColor]: isCancelled,
+                  })}
+                />
+              </TimelineSeparator>
+              <TimelineContent
+                sx={{ display: "flex", gap: "20px", alignItems: "flex-start" }}
+              >
+                <div style={{ whiteSpace: "nowrap" }}>
+                  {moment(cancelledTime).format("DD/MM/YYYY hh:mm:ss")}
+                </div>
+                <div>
+                  <div style={{ fontWeight: "500", marginBottom: "5px" }}>
+                    {CANCELLED}
+                  </div>
+                  <div>{statusMessages.CANCELLED}</div>
+                </div>
+              </TimelineContent>
+            </TimelineItem>
+          )}
           {packagedTime && (
             <TimelineItem
               className={classNames(css.item, {
@@ -131,9 +168,9 @@ const OrderHistory = ({ order, className }) => {
                 </div>
                 <div>
                   <div style={{ fontWeight: "500", marginBottom: "5px" }}>
-                    {PACKAGED}
+                    {PACKAGING}
                   </div>
-                  <div>{statusMessages.PACKAGED}</div>
+                  <div>{statusMessages.PACKAGING}</div>
                 </div>
               </TimelineContent>
             </TimelineItem>

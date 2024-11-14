@@ -4,7 +4,7 @@ import classes from "./OrderListCustomer.module.css"
 import { CUSTOMER } from "../../config/roles";
 import { Typography, Grid2, Tabs, Tab } from "@mui/material";
 import { useEffect, useState } from "react";
-import { PENDING, PACKAGED, DELIVERING, COMPLETED } from "../../config/status";
+import { PENDING, PACKAGING, DELIVERING, COMPLETED, CANCELLED } from "../../config/status";
 import OrderCard from "../../components/OrderCard/OrderCard";
 import PaginationCustom from "../../components/Pagination/Pagination";
 import { getAllOrder } from "../../api/order";
@@ -82,9 +82,10 @@ const OrderListCustomer = () => {
                             >
                                 <Tab label="All orders" value="all" />
                                 <Tab label="Pending" value={PENDING} />
-                                <Tab label="Packaged" value={PACKAGED}/>
+                                <Tab label="Packaging" value={PACKAGING}/>
                                 <Tab label="Delivering" value={DELIVERING}/>
                                 <Tab label="Completed" value={COMPLETED}/>
+                                <Tab label="Cancelled" value={CANCELLED}/>
                             </Tabs>
                             {orderList.map((item)=> (
                                 <OrderCard order={item} key={item.orderId} />
