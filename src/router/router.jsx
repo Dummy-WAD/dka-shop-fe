@@ -33,6 +33,8 @@ import OrderAdmin from "../pages/OrderAdmin/OrderAdmin";
 import DetailOrderAdmin from "../pages/DetailOrderAdmin/DetailOrderAdmin";
 import OrderStatistics from "../pages/Statistics/OrderStatistics";
 import UserStatistics from "../pages/Statistics/UserStatistics";
+import TopProductStatistics from "../pages/Statistics/TopProductStatistics";
+import TopCategoryStatistics from "../pages/Statistics/TopCategoryStatistics";
 
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
@@ -150,11 +152,11 @@ const router = createBrowserRouter(
             },
             {
               path: "top-products",
-              // element: <OrderStatistics />,
+              element: <TopProductStatistics />,
             },
             {
               path: "top-categories",
-              // element: <OrderStatistics />,
+              element: <TopCategoryStatistics />,
             },
           ],
         },

@@ -7,7 +7,7 @@ import TableOrderAdmin from "../../components/Order/TableOrderAdmin";
 import { getAllOrdersForAdmin } from "../../api/order/index";
 import { setListOrderInfo } from "../../redux/slice/orderSlice";
 import SearchInput from "../../components/SearchInput/SearchInput";
-import { PENDING, PACKAGED, DELIVERING, COMPLETED } from "../../config/status";
+import { PENDING, PACKAGING, DELIVERING, COMPLETED } from "../../config/status";
 
 const OrderAdmin = () => {
   const dispatch = useDispatch();
@@ -146,7 +146,7 @@ const OrderAdmin = () => {
             >
               <MenuItem value="All status">All status</MenuItem>
               <MenuItem value={PENDING}>Pending</MenuItem>
-              <MenuItem value={PACKAGED}>Packaged</MenuItem>
+              <MenuItem value={PACKAGING}>Packaging</MenuItem>
               <MenuItem value={DELIVERING}>Delivering</MenuItem>
               <MenuItem value={COMPLETED}>Completed</MenuItem>
             </Select>
