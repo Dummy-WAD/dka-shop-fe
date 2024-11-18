@@ -1,5 +1,9 @@
 import axiosInstance from "../../utils/axios";
 
+const createDiscount = (data) => {
+  return axiosInstance.post("/admin/discounts", data)
+}
+
 const getAllDiscountsForAdmin = (config) => {
   const {
     keyword,
@@ -57,5 +61,6 @@ export {
     handleGetProductByDiscount,
     revokeDiscount,
     applyDiscount,
+    createDiscount
 }
 
