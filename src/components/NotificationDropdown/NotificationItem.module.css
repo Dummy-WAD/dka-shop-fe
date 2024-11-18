@@ -1,0 +1,57 @@
+.containerNotificationItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  cursor: pointer;
+  height: 80px;
+}
+
+.containerNotificationItem:hover {
+  background-color: #e5e7eb;
+}
+
+.unseen {
+  background-color: #f3f4f6;
+}
+
+.iconContainer {
+  margin-left: 8px;
+  height: 100%;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 4px;
+}
+
+.contentText {
+  height: 2.5rem;
+  margin-top: 4px;
+  padding-bottom: 4px;
+  margin-right: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contentTextSeen {
+  color: #2d3748;
+}
+
+.contentTextUnseen {
+  color: black;
+  font-weight: 500;
+}
+
+.timestamp {
+  margin-right: 8px;
+  font-size: 0.75rem;
+  color: #a0aec0;
+  text-align: right;
+}
