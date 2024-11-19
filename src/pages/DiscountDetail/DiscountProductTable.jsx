@@ -47,6 +47,9 @@ const DiscountProductTable = ({
                 Origin price
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
+                Current price
+              </TableCell>
+              <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
                 Discounted price
               </TableCell>
               <TableCell></TableCell>
@@ -60,6 +63,7 @@ const DiscountProductTable = ({
                   productName,
                   categoryName,
                   originPrice,
+                  currentPrice,
                   priceDiscounted,
                 }) => (
                   <TableRow key={productId} className={classes.table_row}>
@@ -67,6 +71,7 @@ const DiscountProductTable = ({
                     <TableCell>{productName}</TableCell>
                     <TableCell>{categoryName}</TableCell>
                     <TableCell>$ {originPrice}</TableCell>
+                    <TableCell>$ {currentPrice}</TableCell>
                     <TableCell>$ {priceDiscounted}</TableCell>
 
                     <TableCell
