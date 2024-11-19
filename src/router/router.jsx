@@ -29,6 +29,7 @@ import Cart from "../pages/Cart/Cart";
 import OrderListCustomer from "../pages/OrdersListCustomer/OrderListCustomer";
 import DetailOrderCustomer from "../pages/DetailOrderCustomer/DetailOrderCustomer";
 import OrderAdmin from "../pages/OrderAdmin/OrderAdmin";
+import DiscountAdmin from "../pages/DiscountListAdmin/DiscountAdmin";
 
 import DetailOrderAdmin from "../pages/DetailOrderAdmin/DetailOrderAdmin";
 import OrderStatistics from "../pages/Statistics/OrderStatistics";
@@ -197,6 +198,10 @@ const router = createBrowserRouter(
           path: "order/:id",
           element: <DetailOrderAdmin />,
         },
+        {
+          path: "discount",
+          element: <DiscountAdmin />,
+        }
       ],
     },
     {
