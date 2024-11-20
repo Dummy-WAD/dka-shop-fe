@@ -24,4 +24,20 @@ const deleteDiscountById = (discountId) => {
   return axiosInstance.delete(`/admin/discounts/${discountId}`);
 };
 
-export { getAllDiscountsForAdmin, deleteDiscountById };
+const handleGetProductListAppliedByDiscount = (discountId, params) => {
+  return axiosInstance.get(`/admin/discounts/products/${discountId}`, {
+    params
+  });
+}
+
+const handleGetDiscountDetail = (discountId) => {
+    return axiosInstance.get(`/admin/discounts/${discountId}`)
+}
+
+export {
+    handleGetProductListAppliedByDiscount,
+    handleGetDiscountDetail,
+    getAllDiscountsForAdmin, 
+    deleteDiscountById
+}
+
