@@ -39,6 +39,7 @@ import TopCategoryStatistics from "../pages/Statistics/TopCategoryStatistics";
 import RevenueStatistics from "../pages/Statistics/RevenueStatistics";
 import DiscountDetail from "../pages/DiscountDetail/DiscountDetail";
 import ApplyDiscount from "../pages/ApplyDiscount/ApplyDiscount";
+import EditDiscount from "../pages/EditDiscount/EditDiscount";
 
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
@@ -203,7 +204,8 @@ const router = createBrowserRouter(
         {
           path: "discount",
           element: <DiscountAdmin />,
-        }, {
+        }, 
+        {
           path: "discount/:id",
           element: <DiscountDetail />,
         },
@@ -211,6 +213,10 @@ const router = createBrowserRouter(
           path: "discount/apply/:id",
           element: <ApplyDiscount />,
         },
+        {
+          path: "discount/edit/:id",
+          element: <EditDiscount/>
+        }
       ],
     },
     {

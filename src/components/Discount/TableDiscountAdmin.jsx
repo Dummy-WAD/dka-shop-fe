@@ -160,7 +160,7 @@ const TableDiscountAdmin = ({
                         <Visibility sx={{ color: "blue" }} />
                       </IconButton>
                     </Link>
-                    <Link to={`/admin/product/edit/${item.id}`}>
+                    <Link to={`/admin/discount/edit/${item.id}`}>
                       <IconButton>
                         <Edit sx={{ color: "green" }} />
                       </IconButton>
