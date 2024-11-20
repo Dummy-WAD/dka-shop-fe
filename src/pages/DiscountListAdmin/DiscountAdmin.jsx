@@ -7,7 +7,7 @@ import TableDiscountAdmin from "../../components/Discount/TableDiscountAdmin";
 import {
   getAllDiscountsForAdmin,
   deleteDiscountById,
-} from "../../api/Discount/index";
+} from "../../api/discount/index";
 import {
   setListDiscountInfo,
   setIdSelected,
@@ -165,7 +165,7 @@ const DiscountAdmin = () => {
       <div className={classes.main_title}>
         <div className={classes.title_page}>
           <CategoryIcon className={classes.icon_style} />
-          <p>Discount</p>
+          <p>DISCOUNT</p>
         </div>
         <div className={classes.action}>
           <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
