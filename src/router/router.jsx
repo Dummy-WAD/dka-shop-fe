@@ -202,7 +202,7 @@ const router = createBrowserRouter(
         {
           path: "discount",
           element: <DiscountAdmin />,
-        }
+        }, {
           path: "discount/:id",
           element: <DiscountDetail />,
         },
