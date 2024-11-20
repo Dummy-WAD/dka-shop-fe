@@ -10,6 +10,10 @@ export const INACTIVE = "INACTIVE";
 export const PERCENTAGE = "PERCENTAGE";
 export const PRICE = "PRICE";
 
+export const DISCOUNT_STATUS = {
+  EXPIRED: 'EXPIRED',
+}
+
 export const STATUS_STYLES = {
   [PENDING]: {
     backgroundColor: "grey",

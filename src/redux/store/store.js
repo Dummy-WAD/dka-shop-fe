@@ -17,7 +17,7 @@ const store = configureStore({
     customerAdmin: customerAdminSlice.reducer,
     cart: cartSlice.reducer,
     orderSlice: orderSlice.reducer,
-    discount: discountSlice.reducer
+    discount: discountSlice.reducer,
   },
 });
 export default store;
