@@ -24,7 +24,7 @@ const DeleteModal = ({ isOpen, handleClose, onSubmit, title, description, haveAc
                     <Typography sx={{mt: "1rem", textAlign: "center"}}>{description}</Typography>
                     {haveAction && (
                         <>
-                            <Box sx={{display: "flex", gap: "1.5rem", justifyContent: "center", mt: "2rem"}}>
+                            <Box sx={{display: "flex", gap: "1.5rem", justifyContent: "center", mt: "1.5rem"}}>
                                 <Button 
                                     variant="outlined" 
                                     sx={{ color: "var(--admin-color)", border: "1px solid var(--admin-color)"}} 

@@ -130,8 +130,8 @@ const TableShowProduct = ({
                 isOpen={isOpenModal}
                 handleClose={()=>setIsOpenModal(false)}
                 onSubmit={handleAcceptApplyNewDiscount}
-                title={"Are you sure"}
-                description={"This product is applied for other discount. Are you sure continue apply this discount"}
+                title={"Confirm"}
+                description={<>This product is applied for other discount.<br/> Are you sure continue apply this discount ?</>}
             />
         </>
     )
