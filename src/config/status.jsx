@@ -7,6 +7,9 @@ export const CANCELLED = "CANCELLED";
 export const ACTIVE = "ACTIVE";
 export const INACTIVE = "INACTIVE";
 
+export const PERCENTAGE = "PERCENTAGE";
+export const PRICE = "PRICE";
+
 export const STATUS_STYLES = {
   [PENDING]: {
     backgroundColor: "grey",
