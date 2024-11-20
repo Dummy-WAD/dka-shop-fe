@@ -1,0 +1,23 @@
+.detail{
+    margin: 2rem 0;
+}
+
+.container_table{
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.container_table .col_50 {
+    width: 50%;
+}
+
+.infoContainer {
+    margin: 2rem 0;
+}
+  
+.infoGroup {
+    display: flex;
+    gap: 30px;
+}
+  
