@@ -1,6 +1,5 @@
 import {TableBody, TableCell, TableContainer, TableRow, Table, TableHead, TablePagination, Grid2, Typography} from '@mui/material'
 import classes from "./Table.module.css"
-import TableSortLabelCustom from '../../components/TableSortLabelCustom/TableSortLabelCustom';
 import { useMemo, useState } from 'react';
 import IconButton from '../../components/IconButton/IconButton';
 import { Delete } from '@mui/icons-material';
@@ -29,7 +28,6 @@ const TableCurrentSelect = ({
 
     return (
         <>
-            <Typography sx={{fontWeight: 500, fontSize: "18px", color: "var(--admin-color)", mb: "-1rem"}}>List products are selecting</Typography>
             <TableContainer className={classes.container} 
                 sx={{border: "1px solid rgba(224, 224, 224, 1)", borderRadius: "5px"}}
             >

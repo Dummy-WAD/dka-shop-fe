@@ -11,6 +11,8 @@ const handleGetDiscountDetail = (discountId) => {
 }
 
 const handleGetProductByDiscount = (discountId, params) => {
+    const {keyword} = params;
+    if (!keyword) delete params.keyword; 
     return axiosInstance.get(`/admin/discounts/${discountId}/applied-products`, {params});
 }
 

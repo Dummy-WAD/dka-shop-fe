@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton/BackButton";
 import { Box, Button, CircularProgress, Grid2, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TableSelectedProduct from "./TableSelectedProduct";
 import TableShowProduct from "./TableShowProduct";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentPageSelected, setCurrentPageShow } from "../../redux/slice/discountSlice";
+import { setCurrentPageSelected, setCurrentPageShow, setKeywordApply } from "../../redux/slice/discountSlice";
 import classes from "./ApplyDiscount.module.css";
 import TableCurrentSelect from "./TableCurrentSelect";
 import { Sell } from "@mui/icons-material";
@@ -15,19 +15,53 @@ import { toast } from "react-toastify";
 import { DISCOUNT_STATUS } from "../../config/status";
 import MyTextField from "../../components/MyTextField/MyTextField";
 import moment from "moment/moment";
+import SearchInput from "../../components/SearchInput/SearchInput";
+import SelectFilter from "../../components/SelectFilter/SelectFilter";
 
 const rowsPerPage = 5;
+
+const FILTER_OPTIONS = [
+    {
+        key: "all",
+        value: "All",
+    },
+    {
+        key: "SELECTED",
+        value: "Selected",
+    }
+]
 
 const ApplyDiscount = ({}) => {
     const {id: discountId} = useParams();
     const dispatch = useDispatch();
+
+    const refInput = useRef(null);
     const [isLoading, setIsLoading] = useState(false);
-    const {pageSelected, pageShow, orderApply} = useSelector(state => state.discount);
+    const {pageSelected, pageShow, orderApply, searchApply} = useSelector(state => state.discount);
     const [listCurrentSelect, setListCurrentSelect] = useState([]);
     const [infoListSelected, setInfoListSelected] = useState();
     const [infoProduct, setInfoProduct] = useState();
     const [isConfirmApply, setIsConfirmApply] = useState(false);
     const [infoDiscount, setInfoDiscount] = useState();
+    const [statusFilter, setStatusFilter] = useState("all");
+
+    const handleSearch = () => {
+        dispatch(setKeywordApply(refInput.current.value.trim()));
+    }
+
+    const handleKeyPress = (event) => {
+        if (event.key === "Enter") {
+          handleSearch();
+        }
+    };
+    
+    useEffect(() => {
+        refInput?.current?.addEventListener("keypress", handleKeyPress);
+        return () => {
+          refInput?.current?.removeEventListener("keypress", handleKeyPress);
+          dispatch(setKeywordApply(""));
+        };
+    }, [infoDiscount, statusFilter]);
     
     const fetchDataDiscount = async () => {
         setIsLoading(true);
@@ -60,6 +94,7 @@ const ApplyDiscount = ({}) => {
                 exclude: true,
                 page: pageShow+1,
                 limit: rowsPerPage,
+                keyword: searchApply,
             })
             setInfoProduct(res);
         } catch (err) {
@@ -73,7 +108,7 @@ const ApplyDiscount = ({}) => {
 
     useEffect(()=>{
         fetchListProductCanApply();
-    },[pageShow, orderApply]);
+    },[pageShow, orderApply, searchApply]);
 
     useEffect(()=>{
         const fetchData = async () => {
@@ -110,6 +145,12 @@ const ApplyDiscount = ({}) => {
         setIsConfirmApply(false);
         setListCurrentSelect([]);
     }
+
+    useEffect(()=>{
+        if (statusFilter === "all") {
+            dispatch(setCurrentPageShow(0));
+        }
+    },[statusFilter])
 
     if (isLoading) {
         return (
@@ -201,8 +242,21 @@ const ApplyDiscount = ({}) => {
                     </div>
                     <div>
                         <Grid2 sx={{display: "flex", justifyContent: "space-between", mb: "-1rem"}}>
-                            <Typography variant="h6" sx={{fontWeight: 500}}>List product can apply</Typography>
-                            <Grid2>
+                            <Typography variant="h6" sx={{fontWeight: 500}}>{statusFilter === "all" ? "List product can apply" : "List products are selecting"}</Typography>
+                            <Grid2 sx={{display: "flex", gap: "1rem"}}>
+                                {statusFilter === "all" && (
+                                    <SearchInput 
+                                        placeholder="Search"
+                                        inputRef={refInput}
+                                        onSearch={handleSearch}
+                                    />
+                                )}
+                                <SelectFilter 
+                                    label="Filter"
+                                    value={statusFilter}
+                                    handleChange={(e) => setStatusFilter(e.target.value)}
+                                    menuList={FILTER_OPTIONS}
+                                />
                                 <Button
                                     sx={{ backgroundColor: "var(--admin-color)", color: "#fff" }}
                                     variant="contained"
@@ -213,32 +267,32 @@ const ApplyDiscount = ({}) => {
                                 </Button>
                             </Grid2>
                         </Grid2>
-                        <TableShowProduct 
-                            idDiscount={discountId}
-                            setListCurrent={setListCurrentSelect}
-                            listCurrentSelect={listCurrentSelect}   
-                            infoProduct={infoProduct}
-                            handleAfterRemoveSelected={handleAfterRemoveSelectedOrApply}
-                        />
-                    </div>
-                    <div className={classes.container_table}>
-                        <div className={classes.col_50}>
-                            <TableSelectedProduct 
+                        {statusFilter === "all" && (                          
+                            <TableShowProduct 
                                 idDiscount={discountId}
-                                rowsPerPage={rowsPerPage}
-                                limit={rowsPerPage}
-                                infoListSelected={infoListSelected}
+                                setListCurrent={setListCurrentSelect}
+                                listCurrentSelect={listCurrentSelect}   
+                                infoProduct={infoProduct}
                                 handleAfterRemoveSelected={handleAfterRemoveSelectedOrApply}
                             />
-                        </div>
-                        <div className={classes.col_50}>
+                        )}
+                        {statusFilter === "SELECTED" && (
                             <TableCurrentSelect 
                                 listCurrentSelected={listCurrentSelect}
                                 rowsPerPage={rowsPerPage}
                                 setListCurrentSelect={setListCurrentSelect}
                             />
-                        </div>
+                        )}
                     </div>
+                    <Grid2 sx={{mt: "2rem"}}>
+                        <TableSelectedProduct 
+                            idDiscount={discountId}
+                            rowsPerPage={rowsPerPage}
+                            limit={rowsPerPage}
+                            infoListSelected={infoListSelected}
+                            handleAfterRemoveSelected={handleAfterRemoveSelectedOrApply}
+                        />
+                    </Grid2>
                     <ConfirmModal 
                         isOpen={isConfirmApply}
                         handleClose={()=> setIsConfirmApply(false)}

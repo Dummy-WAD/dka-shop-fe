@@ -70,9 +70,10 @@ const initialState = {
     orderDirection: "",
   },
   activeDiscount: null,
+  searchApply: "",
 };
 export const discountSlice = createSlice({
-  name: "product",
+  name: "discount",
   initialState,
   reducers: {
     setListDataSelect: (state, action) => {
@@ -96,6 +97,13 @@ export const discountSlice = createSlice({
             orderApply: action.payload,
             pageShow: 0,
         }
+    },
+    setKeywordApply: (state, action) => {
+        return {
+            ...state,
+            searchApply: action.payload,
+            pageShow: 0,
+        }
     }
   },
   extraReducers: () => {},
@@ -104,4 +112,4 @@ export const discountSlice = createSlice({
 // Export the reducer
 export default discountSlice;
 
-export const { setListDataSelect, setProductSelected, setCurrentPageShow, setCurrentPageSelected, setOrderApply, setActiveDiscount } = discountSlice.actions;
+export const { setListDataSelect, setProductSelected, setCurrentPageShow, setCurrentPageSelected, setOrderApply, setActiveDiscount, setKeywordApply } = discountSlice.actions;
