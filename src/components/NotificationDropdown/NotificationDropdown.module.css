@@ -12,16 +12,17 @@
   display: flex;
   justify-content: space-between;
   padding: 12px;
+  align-items: center;
 }
 .title {
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.125rem;
   font-weight: 600;
 }
 
 .markAllButton {
   background: none;
   border: none;
-  color: #3b82f6; /* Tailwind's text-blue-500 */
+  color: #3b82f6;
   cursor: pointer;
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
 }

@@ -8,7 +8,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
+import NotificationDropdown from "../../../components/NotificationDropdown/NotificationDropdown";
 const NavbarAdmin = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isOpenNotification, setIsOpenNotification] = useState(false);
+  const handleNotificationClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setIsOpenNotification((prev) => !prev);
+  };
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleClickToLogout = () => {
@@ -40,8 +47,21 @@ const NavbarAdmin = () => {
         <img alt="logo" src="/logo.png" />
       </div>
       <div className={classNames(css.userMenu)}>
-        <Link to="/" style={{textDecoration: 'underline', color: 'var(--admin-color)'}}>User page</Link>
-        <NotificationIcon />
+        <Link
+          to="/"
+          style={{ textDecoration: "underline", color: "var(--admin-color)" }}
+        >
+          User page
+        </Link>
+        <NotificationIcon
+          onClick={handleNotificationClick}
+          className={css.notification}
+        />
+        <NotificationDropdown
+          isOpen={isOpenNotification}
+          anchorEl={anchorEl}
+          setIsOpen={setIsOpenNotification}
+        />
         <div onClick={handleClickToLogout} style={{ cursor: "pointer" }}>
           <LogoutIcon />
         </div>

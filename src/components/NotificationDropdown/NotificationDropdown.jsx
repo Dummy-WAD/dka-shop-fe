@@ -1,72 +1,79 @@
 import { Popover, Button } from "@mui/material";
-import { useState } from "react";
 import css from "./NotificationDropdown.module.css";
 import NotificationItem from "./NotificationItem";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import { useEffect, useState, useCallback } from "react";
+import { getNotificationsForAdmin } from "../../api/notification";
+import { useSelector } from "react-redux";
+import PropTypes from "prop-types";
+import { debounce } from "lodash";
+
+const removeDuplicateUsingCheckArray = (array) => {
+  const checkedArray = new Array(array.length).fill(false);
+  const result = [];
+  for (let i = 0; i < array.length; i++) {
+    if (!checkedArray[array[i].id]) {
+      checkedArray[array[i].id] = true;
+      result.push(array[i]);
+    }
+  }
+  return result;
+};
+
 const NotificationDropdown = ({ isOpen, anchorEl, setIsOpen }) => {
+  const userRole = useSelector((state) => state.auth.userInfo.role);
+
   const handleClose = () => {
     setIsOpen(false);
   };
 
-  const notifications = [
-    {
-      id: 1,
-      type: "SUCCESS",
-      content: "Your order has been successfully placed!",
-      createdAt: "2024-11-19T09:30:00Z",
-      seen: true,
-    },
-    {
-      id: 2,
-      type: "ERROR",
-      content: "There was an issue with your payment. Please try again.",
-      createdAt: "2024-11-18T14:15:00Z",
-      seen: true,
-    },
-    {
-      id: 3,
-      type: "WARNING",
-      content: "Your subscription is about to expire. Renew soon.",
-      createdAt: "2024-11-17T08:45:00Z",
-      seen: true,
-    },
-    {
-      id: 4,
-      type: "INFORMATION",
-      content: "New features have been added to your account. Check them out.",
-      createdAt: "2024-11-16T12:00:00Z",
-      seen: false,
-    },
-    {
-      id: 5,
-      type: "SUCCESS",
-      content: "Your password has been changed successfully.",
-      createdAt: "2024-11-15T16:20:00Z",
-      seen: false,
-    },
-    {
-      id: 6,
-      type: "ERROR",
-      content: "Failed to fetch your data. Please try again later.",
-      createdAt: "2024-11-14T10:10:00Z",
-      seen: false,
-    },
-    {
-      id: 7,
-      type: "WARNING",
-      content: "Your profile information is incomplete. Please update it.",
-      createdAt: "2024-11-13T11:00:00Z",
-      seen: false,
-    },
-    {
-      id: 8,
-      type: "INFORMATION",
-      content: "We have updated our privacy policy. Review it here.",
-      createdAt: "2024-11-12T09:45:00Z",
-      seen: false,
-    },
-  ];
+  const [notifications, setNotifications] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const limit = 5;
+
+  const fetchNotifications = async () => {
+    if (isLoading || page > totalPage) return;
+    setIsLoading(true);
+    try {
+      const params = {
+        page: page,
+        limit: limit,
+      };
+      const response = await getNotificationsForAdmin(userRole, params);
+      if (response) {
+        setNotifications((prev) =>
+          removeDuplicateUsingCheckArray([...prev, ...response.results])
+        );
+        setTotalPage(response.totalPages);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleScroll = useCallback(
+    debounce(() => {
+      if (!isLoading && page < totalPage) {
+        setPage((prev) => prev + 1);
+      }
+    }, 300),
+    [isLoading, page, totalPage]
+  );
+
+  useEffect(() => {
+    return () => {
+      handleScroll.cancel();
+    };
+  }, [handleScroll]);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [page]);
 
   return (
     <Popover
@@ -82,7 +89,7 @@ const NotificationDropdown = ({ isOpen, anchorEl, setIsOpen }) => {
         horizontal: "right",
       }}
     >
-      <PerfectScrollbar onYReachEnd={() => console.log("check")}>
+      <PerfectScrollbar onYReachEnd={handleScroll}>
         <div className={css.dropdownContent}>
           <div className={css.header}>
             <h3 className={css.title}>Notifications</h3>
@@ -91,18 +98,23 @@ const NotificationDropdown = ({ isOpen, anchorEl, setIsOpen }) => {
             </Button>
           </div>
           <div>
-            {notifications &&
-              notifications.map((notification) => (
-                <NotificationItem
-                  notification={notification}
-                  key={notification.id}
-                />
-              ))}
+            {notifications.map((notification) => (
+              <NotificationItem
+                notification={notification}
+                key={notification.id}
+              />
+            ))}
           </div>
         </div>
       </PerfectScrollbar>
     </Popover>
   );
+};
+
+NotificationDropdown.propTypes = {
+  isOpen: PropTypes.bool,
+  anchorEl: PropTypes.any,
+  setIsOpen: PropTypes.func,
 };
 
 export default NotificationDropdown;

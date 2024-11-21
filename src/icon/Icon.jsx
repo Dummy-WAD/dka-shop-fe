@@ -380,19 +380,16 @@ export const CircleCheck = ({
   onClick = () => {},
 }) => (
   <svg
-    width={width}
-    height={height}
-    onClick={onClick}
-    viewBox="0 0 24 24"
-    fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    height={height}
+    width={width}
+    onClick={onClick}
+    viewBox="0 0 512 512"
     className={className}
   >
     <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M12 0C5.373 0 0 5.373 0 12C0 18.627 5.373 24 12 24C18.627 24 24 18.627 24 12C24 5.373 18.627 0 12 0ZM9.5 16.5L4.5 11.5L5.91 10.09L9.5 13.67L18.09 5.08L19.5 6.49L9.5 16.5Z"
-      fill="#00B341"
+      fill="#63E6BE"
+      d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
     />
   </svg>
 );
@@ -404,19 +401,16 @@ export const CircleX = ({
   onClick = () => {},
 }) => (
   <svg
-    width={width}
-    height={height}
-    onClick={onClick}
-    viewBox="0 0 24 24"
-    fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    height={height}
+    width={width}
+    onClick={onClick}
+    viewBox="0 0 512 512"
     className={className}
   >
     <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M12 0C5.373 0 0 5.373 0 12C0 18.627 5.373 24 12 24C18.627 24 24 18.627 24 12C24 5.373 18.627 0 12 0ZM16.5 16.5L12 12L7.5 16.5L6.09 15.09L10.59 10.59L6.09 6.09L7.5 4.68L12 9.18L16.5 4.68L18.91 6.09L14.41 10.59L18.91 15.09L16.5 16.5Z"
-      fill="#FF0000"
+      fill="#df1130"
+      d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
     />
   </svg>
 );
@@ -428,19 +422,16 @@ export const TriangleAlert = ({
   onClick = () => {},
 }) => (
   <svg
+    xmlns="http://www.w3.org/2000/svg"
     width={width}
     height={height}
     onClick={onClick}
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 512 512"
     className={className}
   >
     <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M12 0C5.373 0 0 5.373 0 12C0 18.627 5.373 24 12 24C18.627 24 24 18.627 24 12C24 5.373 18.627 0 12 0ZM12 2.4C17.4 2.4 21.6 6.6 21.6 12C21.6 17.4 17.4 21.6 12 21.6C6.6 21.6 2.4 17.4 2.4 12C2.4 6.6 6.6 2.4 12 2.4ZM12 6C11.4 6 11 6.6 11 7.2V15.6C11 16.2 11.4 16.8 12 16.8C12.6 16.8 13 16.2 13 15.6V7.2C13 6.6 12.6 6 12 6ZM12 17.4C11.4 17.4 11 17.8 11 18.4C11 19 11.4 19.4 12 19.4C12.6 19.4 13 19 13 18.4C13 17.8 12.6 17.4 12 17.4Z"
-      fill="#FFC700"
+      fill="#FFD43B"
+      d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480L40 480c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24l0 112c0 13.3 10.7 24 24 24s24-10.7 24-24l0-112c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"
     />
   </svg>
 );
@@ -452,19 +443,16 @@ export const CircleAlert = ({
   onClick = () => {},
 }) => (
   <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 512 512"
     width={width}
     height={height}
     onClick={onClick}
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
     className={className}
   >
     <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M12 0C5.373 0 0 5.373 0 12C0 18.627 5.373 24 12 24C18.627 24 24 18.627 24 12C24 5.373 18.627 0 12 0ZM12 2.4C17.4 2.4 21.6 6.6 21.6 12C21.6 17.4 17.4 21.6 12 21.6C6.6 21.6 2.4 17.4 2.4 12C2.4 6.6 6.6 2.4 12 2.4ZM12 6C11.4 6 11 6.6 11 7.2V15.6C11 16.2 11.4 16.8 12 16.8C12.6 16.8 13 16.2 13 15.6V7.2C13 6.6 12.6 6 12 6ZM12 17.4C11.4 17.4 11 17.8 11 18.4C11 19 11.4 19.4 12 19.4C12.6 19.4 13 19 13 18.4C13 17.8 12.6 17.4 12 17.4Z"
-      fill="#FF0000"
+      fill="#74C0FC"
+      d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24l0 112c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-112c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
     />
   </svg>
 );

@@ -2,9 +2,9 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px;
+  padding: 4px 8px;
   cursor: pointer;
-  height: 80px;
+  height: 90px;
 }
 
 .containerNotificationItem:hover {
@@ -12,10 +12,11 @@
 }
 
 .unseen {
-  background-color: #f3f4f6;
+  background-color: #f9f9f9;
 }
 
 .iconContainer {
+  margin-top: 4px;
   margin-left: 8px;
   height: 100%;
 }
@@ -25,19 +26,25 @@
   flex-direction: column;
   flex-grow: 1;
   gap: 4px;
+  height: 100%;
 }
 
 .contentText {
-  height: 2.5rem;
-  margin-top: 4px;
-  padding-bottom: 4px;
+  height: 100%;
   margin-right: 8px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+}
+
+.title {
+  font-weight: 500;
+  color: black;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.content {
   font-size: 14px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 20px;
+  color: rgb(113, 113, 113);
 }
 
 .contentTextSeen {

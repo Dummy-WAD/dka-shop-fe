@@ -32,7 +32,7 @@ const NavbarUser = () => {
   const [isOpenNotification, setIsOpenNotification] = useState(false);
   const handleNotificationClick = (event) => {
     setAnchorEl(event.currentTarget);
-    setIsOpenNotification((prev) => !prev); // Toggle dropdown visibility
+    setIsOpenNotification((prev) => !prev);
   };
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -128,7 +128,7 @@ const NavbarUser = () => {
                   onClick={handleNotificationClick}
                 >
                   <NotificationIcon className={css.actionIconDetail} />
-                  <span className={css.countItemCart}>12</span>
+                  {/* <span className={css.countItemCart}></span> */}
                 </div>
 
                 <NotificationDropdown

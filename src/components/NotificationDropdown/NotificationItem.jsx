@@ -1,17 +1,6 @@
-import React from "react";
-// import {
-//   CircleCheck,
-//   CircleX,
-//   TriangleAlert,
-//   CircleAlert,
-// } from "../../../icon/Icon";
 import styles from "./NotificationItem.module.css";
-import {
-  CircleAlert,
-  CircleCheck,
-  CircleX,
-  TriangleAlert,
-} from "../../icon/Icon";
+import { CircleAlert } from "../../icon/Icon";
+import PropTypes from "prop-types";
 
 function timeAgo(inputTime) {
   const now = new Date();
@@ -50,18 +39,7 @@ const NotificationItem = ({ notification }) => {
       }`}
     >
       <div className={styles.iconContainer}>
-        {notification.type === "SUCCESS" && (
-          <CircleCheck width={24} height={24} color="green" />
-        )}
-        {notification.type === "ERROR" && (
-          <CircleX width={24} height={24} color="red" />
-        )}
-        {notification.type === "WARNING" && (
-          <TriangleAlert width={24} height={24} color="orange" />
-        )}
-        {notification.type === "INFORMATION" && (
-          <CircleAlert width={24} height={24} color="blue" />
-        )}
+        <CircleAlert width={24} height={24} color="blue" />
       </div>
 
       <div className={styles.contentContainer}>
@@ -73,7 +51,8 @@ const NotificationItem = ({ notification }) => {
           }`}
           title={notification.content}
         >
-          <span>{notification.content}</span>
+          <div className={styles.title}>{notification.title}</div>
+          <span className={styles.content}>{notification.content}</span>
         </div>
         <div className={styles.timestamp}>
           {timeAgo(notification.createdAt)}
@@ -81,6 +60,17 @@ const NotificationItem = ({ notification }) => {
       </div>
     </div>
   );
+};
+
+NotificationItem.propTypes = {
+  notification: PropTypes.shape({
+    id: PropTypes.number,
+    type: PropTypes.string,
+    title: PropTypes.string,
+    content: PropTypes.string,
+    seen: PropTypes.bool,
+    createdAt: PropTypes.string,
+  }),
 };
 
 export default NotificationItem;
