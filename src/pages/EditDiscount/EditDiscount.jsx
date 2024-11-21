@@ -91,15 +91,16 @@ const EditDiscount = () => {
         await handleEditDiscount(discountId, {
           discountType,
           discountValue: parseFloat(discountValue),
-          startDate: moment(startDate).toDate(),
-          expirationDate: moment(expirationDate).toDate(),
+          startDate: moment(startDate).format("YYYY-MM-DDTHH:mm:ssZ"),
+          expirationDate: moment(expirationDate).format("YYYY-MM-DDTHH:mm:ssZ"),
         });
         toast.success("Edit discount successfully", {
           autoClose: 3000,
         });
         setIsReload(!isReload);
       } catch (error) {
-        toast.error(get(error, 'response.message.data'), {
+        console.error(error)
+        toast.error(get(error, 'response.message.data', 'Update discount failed'), {
           autoClose: 3000,
         });
       }
