@@ -3,11 +3,12 @@ import React, { useState } from "react";
 import SelectCustom from "../SelectCustom/SelectCustom";
 import { Add } from "@mui/icons-material";
 import MyTextField from "../MyTextField/MyTextField";
-import DateInput from "../DateInput/DateInput";
 import classes from "./NewDiscount.module.css";
 import dayjs from "dayjs";
 import { createDiscount } from "../../api/discount";
 import { toast } from "react-toastify";
+import DateInput from "../DateInput/DateInput";
+import moment from "moment";
 
 const discountType = [
   {
@@ -33,7 +34,13 @@ function NewDiscount({ handleClose }) {
     let isValid = true;
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
-    isValid = startDate && endDate && type != "" && value != "";
+    isValid =
+      !isNaN(startDate) &&
+      !isNaN(endDate) &&
+      startDate &&
+      endDate &&
+      type != "" &&
+      value != "";
     if (!isValid)
       return { isValid: false, message: "Please fill all information" };
     else if (type == "PERCENTAGE" && value > 100)
@@ -49,7 +56,12 @@ function NewDiscount({ handleClose }) {
         message:
           "Expiration Date must be greater than or equal to the Start Date",
       };
-    else return { isValid: true };
+    else if (isNaN(value) || parseFloat(value) <= 0) {
+      return {
+        isValid: false,
+        message: "Discount value must be a positive number",
+      };
+    } else return { isValid: true };
   };
   const handleSubmit = async () => {
     const { isValid, message } = validate();
@@ -107,7 +119,7 @@ function NewDiscount({ handleClose }) {
             onChange={(e) => setValue(e.target.value)}
             style={{
               "& .MuiInputBase-input": {
-                padding: "0.7rem",
+                paddingY: "0.7rem",
               },
               ...(type == "" && { width: "calc(50% - 8px)" }),
             }}
