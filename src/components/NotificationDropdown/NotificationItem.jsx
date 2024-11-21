@@ -51,7 +51,7 @@ const NotificationItem = ({ notification }) => {
     <div
       key={notification.id}
       className={`${styles.containerNotificationItem} ${
-        !notification.seen ? styles.unseen : ""
+        !notification.seen ? styles.unseen : styles.seen
       }`}
       onClick={() =>
         clickNotification(notification.type, notification.artifactId)

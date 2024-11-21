@@ -4,10 +4,14 @@ import NotificationItem from "./NotificationItem";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { useEffect, useState, useCallback } from "react";
-import { getNotificationsForAdmin } from "../../api/notification";
-import { useSelector } from "react-redux";
+import {
+  getNotificationsForAdmin,
+  markNotificationsAsRead,
+} from "../../api/notification";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { debounce } from "lodash";
+import { setTotalNotificationItems } from "../../redux/slice/notificationSlice";
 
 const removeDuplicateUsingCheckArray = (array) => {
   const checkedArray = new Array(array.length).fill(false);
@@ -33,6 +37,8 @@ const NotificationDropdown = ({ isOpen, anchorEl, setIsOpen }) => {
   const [totalPage, setTotalPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const limit = 5;
+
+  const dispatch = useDispatch();
 
   const fetchNotifications = async () => {
     if (isLoading || page > totalPage) return;
@@ -64,7 +70,19 @@ const NotificationDropdown = ({ isOpen, anchorEl, setIsOpen }) => {
     }, 300),
     [isLoading, page, totalPage]
   );
-
+  const markAsRead = async () => {
+    try {
+      const response = await markNotificationsAsRead(userRole);
+      if (response) {
+        setNotifications((prev) =>
+          prev.map((notification) => ({ ...notification, seen: true }))
+        );
+        dispatch(setTotalNotificationItems(0));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
     return () => {
       handleScroll.cancel();
@@ -93,7 +111,11 @@ const NotificationDropdown = ({ isOpen, anchorEl, setIsOpen }) => {
         <div className={css.dropdownContent}>
           <div className={css.header}>
             <h3 className={css.title}>Notifications</h3>
-            <Button variant="text" className={css.markAllButton}>
+            <Button
+              variant="text"
+              className={css.markAllButton}
+              onClick={markAsRead}
+            >
               Mark all as read
             </Button>
           </div>

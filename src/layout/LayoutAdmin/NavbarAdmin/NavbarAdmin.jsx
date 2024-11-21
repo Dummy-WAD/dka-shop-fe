@@ -6,12 +6,13 @@ import { handleLogout } from "../../../api/user";
 import authSlice from "../../../redux/slice/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import NotificationDropdown from "../../../components/NotificationDropdown/NotificationDropdown";
 const NavbarAdmin = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isOpenNotification, setIsOpenNotification] = useState(false);
+  const { totalNotificationItems } = useSelector((state) => state.notification);
   const handleNotificationClick = (event) => {
     setAnchorEl(event.currentTarget);
     setIsOpenNotification((prev) => !prev);
@@ -53,10 +54,13 @@ const NavbarAdmin = () => {
         >
           User page
         </Link>
-        <NotificationIcon
-          onClick={handleNotificationClick}
-          className={css.notification}
-        />
+        <div className={css.iconNotification} onClick={handleNotificationClick}>
+          <NotificationIcon className={css.notification} />
+          {totalNotificationItems > 0 && (
+            <span className={css.countItemCart}>{totalNotificationItems}</span>
+          )}
+        </div>
+
         <NotificationDropdown
           isOpen={isOpenNotification}
           anchorEl={anchorEl}

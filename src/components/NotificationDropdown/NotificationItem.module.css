@@ -11,6 +11,10 @@
   background-color: #e5e7eb;
 }
 
+.seen {
+  background-color: white;
+}
+
 .unseen {
   background-color: #f9f9f9;
 }

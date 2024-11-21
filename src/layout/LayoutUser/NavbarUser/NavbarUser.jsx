@@ -26,6 +26,7 @@ const NavbarUser = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
   const { role } = useSelector((state) => state.auth.userInfo);
   const { totalCartItems } = useSelector((state) => state.cart);
+  const { totalNotificationItems } = useSelector((state) => state.notification);
   const [isShowUserMenu, setShowUserMenu] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -128,7 +129,12 @@ const NavbarUser = () => {
                   onClick={handleNotificationClick}
                 >
                   <NotificationIcon className={css.actionIconDetail} />
-                  {/* <span className={css.countItemCart}></span> */}
+                  {totalNotificationItems > 0 && (
+                    <span className={css.countItemCart}>
+                      {totalNotificationItems}
+                    </span>
+                  )}
+                  <div>Notification</div>
                 </div>
 
                 <NotificationDropdown
