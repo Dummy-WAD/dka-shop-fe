@@ -168,6 +168,9 @@ const TableDiscountAdmin = ({
                     <IconButton onClick={() => handleViewDelete(item.id)}>
                       <Delete sx={{ color: "red" }} />
                     </IconButton>
+                    <Link to={`/admin/discount/apply/${item.id}`}>
+                      <IconButton>Apply</IconButton>
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))
