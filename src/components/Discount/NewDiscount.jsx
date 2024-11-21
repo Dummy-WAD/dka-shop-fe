@@ -7,7 +7,7 @@ import classes from "./NewDiscount.module.css";
 import dayjs from "dayjs";
 import { createDiscount } from "../../api/discount";
 import { toast } from "react-toastify";
-import DateInput from "../DateInput/DateInput";
+import DateInput from "../DateInput/DateInputPro";
 import moment from "moment";
 
 const discountType = [
@@ -70,8 +70,8 @@ function NewDiscount({ handleClose }) {
         await createDiscount({
           discountType: type,
           discountValue: value,
-          startDate: startDate,
-          expirationDate: endDate,
+          startDate: moment(startDate).format("YYYY-MM-DDTHH:mm:ssZ"),
+          expirationDate: moment(endDate).format("YYYY-MM-DDTHH:mm:ssZ"),
         });
         toast.success("Create discount successfully", {
           autoClose: 3000,
