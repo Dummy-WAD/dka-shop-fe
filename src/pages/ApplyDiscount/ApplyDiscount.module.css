@@ -1,0 +1,13 @@
+.detail{
+    margin: 2rem 0;
+}
+
+.infoContainer {
+    margin: 2rem 0;
+}
+  
+.infoGroup {
+    display: flex;
+    gap: 30px;
+}
+  

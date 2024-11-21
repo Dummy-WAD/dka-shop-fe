@@ -10,9 +10,11 @@ import { email, password } from "../../validator";
 import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 import { BackIcon } from "../../icon/Icon";
 import { toast } from "react-toastify";
-import { ADMIN } from "../../config/roles";
+import { ADMIN, CUSTOMER } from "../../config/roles";
 import { getTotalCartItems } from "../../api/cart";
 import { setTotalCartItems } from "../../redux/slice/cartSlice";
+import { getTotalNotifications } from "../../api/notification";
+import { setTotalNotificationItems } from "../../redux/slice/notificationSlice";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -62,10 +64,21 @@ function Login() {
                 );
                 localStorage.setItem("accessToken", tokens?.access?.token);
                 localStorage.setItem("refreshToken", tokens?.refresh?.token);
-                const response = await getTotalCartItems();
-                if (response) {
-                  dispatch(setTotalCartItems(response.totalCartItems));
+                if (user.role === CUSTOMER) {
+                  const response = await getTotalCartItems();
+                  if (response) {
+                    dispatch(setTotalCartItems(response.totalCartItems));
+                  }
                 }
+                const notificationCount = await getTotalNotifications(
+                  user.role
+                );
+                if (notificationCount)
+                  dispatch(
+                    setTotalNotificationItems(
+                      notificationCount.notificationsCount
+                    )
+                  );
                 return user.role === ADMIN ? navigate("/admin") : navigate("/");
               } catch (err) {
                 console.error(err);

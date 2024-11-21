@@ -29,6 +29,7 @@ import Cart from "../pages/Cart/Cart";
 import OrderListCustomer from "../pages/OrdersListCustomer/OrderListCustomer";
 import DetailOrderCustomer from "../pages/DetailOrderCustomer/DetailOrderCustomer";
 import OrderAdmin from "../pages/OrderAdmin/OrderAdmin";
+import DiscountAdmin from "../pages/DiscountListAdmin/DiscountAdmin";
 
 import DetailOrderAdmin from "../pages/DetailOrderAdmin/DetailOrderAdmin";
 import OrderStatistics from "../pages/Statistics/OrderStatistics";
@@ -36,6 +37,9 @@ import UserStatistics from "../pages/Statistics/UserStatistics";
 import TopProductStatistics from "../pages/Statistics/TopProductStatistics";
 import TopCategoryStatistics from "../pages/Statistics/TopCategoryStatistics";
 import RevenueStatistics from "../pages/Statistics/RevenueStatistics";
+import DiscountDetail from "../pages/DiscountDetail/DiscountDetail";
+import ApplyDiscount from "../pages/ApplyDiscount/ApplyDiscount";
+import EditDiscount from "../pages/EditDiscount/EditDiscount";
 
 const ProtectedRouteAuth = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
@@ -197,6 +201,22 @@ const router = createBrowserRouter(
           path: "order/:id",
           element: <DetailOrderAdmin />,
         },
+        {
+          path: "discount",
+          element: <DiscountAdmin />,
+        }, 
+        {
+          path: "discount/:id",
+          element: <DiscountDetail />,
+        },
+        {
+          path: "discount/apply/:id",
+          element: <ApplyDiscount />,
+        },
+        {
+          path: "discount/edit/:id",
+          element: <EditDiscount/>
+        }
       ],
     },
     {

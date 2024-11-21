@@ -102,17 +102,15 @@ const OrderStatistics = () => {
                   {label}
                 </Typography>
                 <BarChart
-                  xAxis={[
-                    {
-                      id: "barOrder",
-                      data: data?.map(({ period }) => period),
-                      scaleType: "band",
-                    },
-                  ]}
+                  dataset={data}
                   series={[
+                    { dataKey: 'count', label: 'Orders created' },
+                    { dataKey: 'completedOrdersCount', label: 'Orders completed' },
+                  ]}
+                  xAxis={[{ scaleType: 'band', dataKey: 'period' }]}
+                  yAxis={[
                     {
-                      data: data?.map(({ count }) => count),
-                      color: 'var(--user-color)',
+                      label: 'Number of orders',
                     },
                   ]}
                   width={500}

@@ -18,6 +18,7 @@ import {
   setSearchText,
 } from "../../../redux/slice/searchSlice";
 import { ADMIN, CUSTOMER } from "../../../config/roles";
+import NotificationDropdown from "../../../components/NotificationDropdown/NotificationDropdown";
 
 const NavbarUser = () => {
   const refInput = useRef(null);
@@ -25,7 +26,15 @@ const NavbarUser = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
   const { role } = useSelector((state) => state.auth.userInfo);
   const { totalCartItems } = useSelector((state) => state.cart);
+  const { totalNotificationItems } = useSelector((state) => state.notification);
   const [isShowUserMenu, setShowUserMenu] = useState(false);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isOpenNotification, setIsOpenNotification] = useState(false);
+  const handleNotificationClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setIsOpenNotification((prev) => !prev);
+  };
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -115,17 +124,34 @@ const NavbarUser = () => {
                 )}
               </div>
               <div className={css.actionItem}>
-                <div className={css.actionIcon}>
+                <div
+                  className={css.actionIcon}
+                  onClick={handleNotificationClick}
+                >
                   <NotificationIcon className={css.actionIconDetail} />
-                  <span className={css.count}></span>
+                  {totalNotificationItems > 0 && (
+                    <span className={css.countItemCart}>
+                      {totalNotificationItems}
+                    </span>
+                  )}
+                  <div>Notification</div>
                 </div>
-                <div>Notification</div>
+
+                <NotificationDropdown
+                  isOpen={isOpenNotification}
+                  anchorEl={anchorEl}
+                  setIsOpen={setIsOpenNotification}
+                />
               </div>
               <Link to="/cart">
                 <div className={css.actionItem}>
                   <div className={css.actionIcon}>
                     <CartIcon className={css.actionIconDetail} />
-                    {totalCartItems > 0 && (<span className={css.countItemCart}>{totalCartItems}</span>)}
+                    {totalCartItems > 0 && (
+                      <span className={css.countItemCart}>
+                        {totalCartItems}
+                      </span>
+                    )}
                   </div>
                   <div>Cart</div>
                 </div>

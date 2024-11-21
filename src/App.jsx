@@ -10,6 +10,8 @@ import authSlice from "./redux/slice/authSlice";
 import { CUSTOMER } from "./config/roles";
 import { getTotalCartItems } from "./api/cart";
 import cartSlice from "./redux/slice/cartSlice";
+import { getTotalNotifications } from "./api/notification";
+import { setTotalNotificationItems } from "./redux/slice/notificationSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,8 +30,15 @@ function App() {
 
         if (res?.role === CUSTOMER) {
           const cartsCount = await getTotalCartItems();
-          dispatch(cartSlice.actions.setTotalCartItems(cartsCount.totalCartItems));
-        };
+          dispatch(
+            cartSlice.actions.setTotalCartItems(cartsCount.totalCartItems)
+          );
+        }
+        const notificationCount = await getTotalNotifications(res?.role);
+        if (notificationCount)
+          dispatch(
+            setTotalNotificationItems(notificationCount.notificationsCount)
+          );
       } catch (err) {
         console.error(err);
       } finally {

@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 
-const DateInput = forwardRef(({color, fullWidth, smallSize, style, value, ...props}, ref) => {
+const DateInput = forwardRef(({color, fullWidth, smallSize, style, value, onChange, ...props}, ref) => {
     return (
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateField
@@ -13,6 +13,7 @@ const DateInput = forwardRef(({color, fullWidth, smallSize, style, value, ...pro
             inputRef={ref}
             value={value ? dayjs(value) : null}
             format={"DD/MM/YYYY"}
+            onBlur={onChange}
             InputLabelProps={{
                 sx: {
                     color: color,

@@ -13,7 +13,7 @@ const SidebarAdmin = () => {
     <div className={classNames(css.sidebar)}>
       <h2>Admin Panel</h2>
       <ul>
-      <li>
+        <li>
           <NavLink
             to="/admin/statistics"
             className={({ isActive }) => (isActive ? css.active : css.nav_link)}
@@ -52,6 +52,14 @@ const SidebarAdmin = () => {
             to="/admin/customer"
           >
             Customer
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            className={({ isActive }) => (isActive ? css.active : css.nav_link)}
+            to="/admin/discount"
+          >
+            Discount
           </NavLink>
         </li>
       </ul>
