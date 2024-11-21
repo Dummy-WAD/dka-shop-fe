@@ -121,6 +121,11 @@ const RevenueStatistics = () => {
                         color: "var(--user-color)",
                       },
                     ]}
+                    yAxis={[
+                      {
+                        label: 'Dollars',
+                      },
+                    ]}
                     width={500}
                     height={300}
                   />

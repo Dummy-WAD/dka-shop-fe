@@ -115,6 +115,11 @@ const UserStatistics = () => {
                       color: 'var(--user-color)',
                     },
                   ]}
+                  yAxis={[
+                    {
+                      label: 'Number of users',
+                    },
+                  ]}
                   width={500}
                   height={300}
                 />

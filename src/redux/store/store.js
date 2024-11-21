@@ -6,6 +6,8 @@ import productSlice from "../slice/productSlice";
 import customerAdminSlice from "../slice/customerAdminSlice";
 import cartSlice from "../slice/cartSlice";
 import orderSlice from "../slice/orderSlice";
+import discountSlice from "../slice/discountSlice";
+import notificationSlice from "../slice/notificationSlice";
 
 const store = configureStore({
   reducer: {
@@ -15,7 +17,9 @@ const store = configureStore({
     product: productSlice.reducer,
     customerAdmin: customerAdminSlice.reducer,
     cart: cartSlice.reducer,
-    orderSlice: orderSlice.reducer
+    orderSlice: orderSlice.reducer,
+    discount: discountSlice.reducer,
+    notification: notificationSlice.reducer,
   },
 });
 export default store;
