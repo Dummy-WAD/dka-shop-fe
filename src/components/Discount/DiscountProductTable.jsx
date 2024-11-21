@@ -13,7 +13,7 @@ import {
 import { Visibility } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import classes from "./DiscountProductTable.module.css";
-import IconButton from "../../components/IconButton/IconButton";
+import IconButton from "../IconButton/IconButton";
 
 const DiscountProductTable = ({
   data,

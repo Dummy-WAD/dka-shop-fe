@@ -49,6 +49,10 @@ const applyDiscount = (discountId, listProductId) => {
     return axiosInstance.post(`/admin/discounts/${discountId}/applied-products`, {productIds: listProductId} );
 }
 
+const handleEditDiscount = (discountId, body) => {
+  return axiosInstance.patch(`/admin/discounts/${discountId}`, body)
+}
+
 export {
     handleGetProductListAppliedByDiscount,
     handleGetDiscountDetail,
@@ -57,5 +61,6 @@ export {
     handleGetProductByDiscount,
     revokeDiscount,
     applyDiscount,
+    handleEditDiscount
 }
 

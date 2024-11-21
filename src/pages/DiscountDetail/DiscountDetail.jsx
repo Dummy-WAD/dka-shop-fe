@@ -11,7 +11,7 @@ import {
   handleGetProductListAppliedByDiscount,
 } from "../../api/discount";
 import moment from "moment";
-import DiscountProductTable from "./DiscountProductTable";
+import DiscountProductTable from "../../components/Discount/DiscountProductTable";
 
 const limit = 5;
 
