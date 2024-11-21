@@ -1,6 +1,8 @@
 import styles from "./NotificationItem.module.css";
 import { CircleAlert } from "../../icon/Icon";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function timeAgo(inputTime) {
   const now = new Date();
@@ -31,12 +33,29 @@ function timeAgo(inputTime) {
   }
 }
 const NotificationItem = ({ notification }) => {
+  const userRole = useSelector((state) => state.auth.userInfo.role);
+  const navigate = useNavigate();
+  const clickNotification = (type, id) => {
+    const routes = {
+      ORDER: userRole === "ADMIN" ? `/admin/order/${id}` : `/orders/${id}`,
+      DISCOUNT: `/cart`,
+    };
+
+    if (routes[type]) {
+      navigate(routes[type]);
+    } else {
+      console.error(`Unknown notification type: ${type}`);
+    }
+  };
   return (
     <div
       key={notification.id}
       className={`${styles.containerNotificationItem} ${
         !notification.seen ? styles.unseen : ""
       }`}
+      onClick={() =>
+        clickNotification(notification.type, notification.artifactId)
+      }
     >
       <div className={styles.iconContainer}>
         <CircleAlert width={24} height={24} color="blue" />
@@ -70,6 +89,7 @@ NotificationItem.propTypes = {
     content: PropTypes.string,
     seen: PropTypes.bool,
     createdAt: PropTypes.string,
+    artifactId: PropTypes.string,
   }),
 };
 
