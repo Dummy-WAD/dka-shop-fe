@@ -131,8 +131,8 @@ const TableDiscountAdmin = ({
                   <TableCell>{item.discountType}</TableCell>
                   <TableCell>
                     {item.discountType === PERCENTAGE
-                      ? `$${item.discountValue}`
-                      : `${item.discountValue}%`}
+                      ? `${item.discountValue}%`
+                      : `$ ${item.discountValue.toFixed(2)}`}
                   </TableCell>
                   <TableCell>{item.status}</TableCell>
                   <TableCell>

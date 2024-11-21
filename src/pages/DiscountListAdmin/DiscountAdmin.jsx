@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import classes from "./DiscountAdmin.module.css";
 import { CategoryIcon } from "../../icon/Icon";
 import TableDiscountAdmin from "../../components/Discount/TableDiscountAdmin";
@@ -17,6 +23,9 @@ import DateInput from "../../components/DateInput/DateInputPro";
 import DeleteModal from "../../components/Modal/DeleteModal";
 import moment from "moment";
 import { toast } from "react-toastify";
+import { Add } from "@mui/icons-material";
+import NewDiscount from "../../components/Discount/NewDiscount";
+import ModalCustom from "../../components/Modal/BasicModal";
 
 const DiscountAdmin = () => {
   const dispatch = useDispatch();
@@ -36,6 +45,7 @@ const DiscountAdmin = () => {
   } = useSelector((state) => state.discount);
   const refInput = useRef(null);
   const [isOpenDelete, setIsOpenDelete] = useState(false);
+  const [isOpenCreate, setIsOpenCreate] = useState(false);
 
   const handleViewDelete = (discountId) => {
     setIsOpenDelete(true);
@@ -158,6 +168,7 @@ const DiscountAdmin = () => {
     type,
     startDate,
     expirationDate,
+    isOpenCreate
   ]);
 
   return (
@@ -240,6 +251,14 @@ const DiscountAdmin = () => {
               onSearch={handleSearchDiscount}
             />
           </div>
+          <Button
+          variant="contained"
+          sx={{ backgroundColor: "var(--admin-color)", color: "#FFF" }}
+          startIcon={<Add />}
+          onClick={() => setIsOpenCreate(true)}
+        >
+          Create
+        </Button>
         </div>
       </div>
       <div>
@@ -260,6 +279,14 @@ const DiscountAdmin = () => {
           title="Delete discount"
           description="Are you sure delete this discount ?"
         />
+      )}
+      {isOpenCreate && (
+        <ModalCustom
+          isOpen={isOpenCreate}
+          handleClose={() => setIsOpenCreate(false)}
+        >
+          <NewDiscount handleClose={() => setIsOpenCreate(false)} />
+        </ModalCustom>
       )}
     </>
   );
