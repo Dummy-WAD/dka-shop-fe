@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { checkApplyDiscountProduct } from '../../api/product';
 import { setCurrentPageShow, setOrderApply, setProductSelected } from '../../redux/slice/discountSlice';
 import DeleteModal from '../../components/Modal/DeleteModal';
+import { formatPrice } from '../../helper';
 
 const LIMIT = 5;
 
@@ -102,7 +103,7 @@ const TableShowProduct = ({
                                 </TableCell>
                                 <TableCell>{item.productId}</TableCell>
                                 <TableCell>{item.productName}</TableCell>
-                                <TableCell>{item.originPrice}</TableCell>
+                                <TableCell>{formatPrice(item.originPrice)}</TableCell>
                                 <TableCell>{item?.categoryName || ""}</TableCell>
                             </TableRow>
                         ))}

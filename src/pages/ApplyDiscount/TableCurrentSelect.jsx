@@ -3,6 +3,7 @@ import classes from "./Table.module.css"
 import { useMemo, useState } from 'react';
 import IconButton from '../../components/IconButton/IconButton';
 import { Delete } from '@mui/icons-material';
+import { formatPrice } from '../../helper';
 
 const TableCurrentSelect = ({
     rowsPerPage, 
@@ -46,7 +47,7 @@ const TableCurrentSelect = ({
                             <TableRow key={item.productId} className={classes.table_row}>
                                 <TableCell>{item?.productId}</TableCell>
                                 <TableCell>{item?.productName}</TableCell>
-                                <TableCell>{item?.originPrice}</TableCell>
+                                <TableCell>{formatPrice(item?.originPrice)}</TableCell>
                                 <TableCell>{item?.categoryName || ""}</TableCell>
                                 <TableCell sx={{paddingRight: "1rem", display: 'flex', gap: '1rem', justifyContent: 'flex-end'}}>
                                     <IconButton onClick={()=> handleRemoveCurrent(item.productId)}>
