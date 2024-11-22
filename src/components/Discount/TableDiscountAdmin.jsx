@@ -155,7 +155,7 @@ const TableDiscountAdmin = ({
                       justifyContent: "flex-end",
                     }}
                   >
-                    <Link to={`/admin/discount/apply/${item.id}`}>
+                    <Link to={`/admin/discount/${item.id}`}>
                       <IconButton>
                         <Visibility sx={{ color: "blue" }} />
                       </IconButton>
