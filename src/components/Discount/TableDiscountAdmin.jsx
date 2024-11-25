@@ -155,7 +155,7 @@ const TableDiscountAdmin = ({
                       justifyContent: "flex-end",
                     }}
                   >
-                    <Link to={`${item.id}`}>
+                    <Link to={`/admin/discount/${item.id}`}>
                       <IconButton>
                         <Visibility sx={{ color: "blue" }} />
                       </IconButton>
@@ -168,9 +168,6 @@ const TableDiscountAdmin = ({
                     <IconButton onClick={() => handleViewDelete(item.id)}>
                       <Delete sx={{ color: "red" }} />
                     </IconButton>
-                    <Link to={`/admin/discount/apply/${item.id}`}>
-                      <IconButton>Apply</IconButton>
-                    </Link>
                   </TableCell>
                 </TableRow>
               ))
