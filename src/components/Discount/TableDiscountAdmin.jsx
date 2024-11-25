@@ -28,6 +28,7 @@ const TableDiscountAdmin = ({
   totalResults,
   handleSetDiscountBy,
   handleViewDelete,
+  handleViewEdit
 }) => {
   const dispatch = useDispatch();
 
@@ -160,7 +161,7 @@ const TableDiscountAdmin = ({
                         <Visibility sx={{ color: "blue" }} />
                       </IconButton>
                     </Link>
-                    <Link to={`/admin/discount/edit/${item.id}`}>
+                    <Link onClick={() => handleViewEdit(item)}>
                       <IconButton>
                         <Edit sx={{ color: "green" }} />
                       </IconButton>

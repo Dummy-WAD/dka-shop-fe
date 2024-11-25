@@ -17,6 +17,7 @@ import {
 import {
   setListDiscountInfo,
   setIdSelected,
+  setCurrentDiscountSelected,
 } from "../../redux/slice/discountSlice";
 import SearchInput from "../../components/SearchInput/SearchInput";
 import DateInput from "../../components/DateInput/DateInputPro";
@@ -26,6 +27,8 @@ import { toast } from "react-toastify";
 import { Add } from "@mui/icons-material";
 import NewDiscount from "../../components/Discount/NewDiscount";
 import ModalCustom from "../../components/Modal/BasicModal";
+import { useBoolean } from "../../hook/useBoolean";
+import EditDiscount from "../../components/Discount/EditDiscount";
 
 const DiscountAdmin = () => {
   const dispatch = useDispatch();
@@ -46,11 +49,17 @@ const DiscountAdmin = () => {
   const refInput = useRef(null);
   const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [isOpenCreate, setIsOpenCreate] = useState(false);
+  const editDiscountModal = useBoolean();
 
   const handleViewDelete = (discountId) => {
     setIsOpenDelete(true);
     dispatch(setIdSelected(discountId));
   };
+
+  const handleViewEdit = (item) => {
+    editDiscountModal.setTrue()
+    dispatch(setCurrentDiscountSelected(item))
+  }
 
   const handleClose = () => setIsOpenDelete(false);
 
@@ -252,13 +261,13 @@ const DiscountAdmin = () => {
             />
           </div>
           <Button
-          variant="contained"
-          sx={{ backgroundColor: "var(--admin-color)", color: "#FFF" }}
-          startIcon={<Add />}
-          onClick={() => setIsOpenCreate(true)}
-        >
-          Create
-        </Button>
+            variant="contained"
+            sx={{ backgroundColor: "var(--admin-color)", color: "#FFF" }}
+            startIcon={<Add />}
+            onClick={() => setIsOpenCreate(true)}
+          >
+            Create
+          </Button>
         </div>
       </div>
       <div>
@@ -269,6 +278,7 @@ const DiscountAdmin = () => {
           totalResults={totalResults}
           handleSetDiscountBy={handleSetDiscountBy}
           handleViewDelete={handleViewDelete}
+          handleViewEdit={handleViewEdit}
         />
       </div>
       {isOpenDelete && (
@@ -288,6 +298,12 @@ const DiscountAdmin = () => {
           <NewDiscount handleClose={() => setIsOpenCreate(false)} />
         </ModalCustom>
       )}
+      <ModalCustom
+        isOpen={editDiscountModal.value}
+        handleClose={editDiscountModal.setFalse}
+      >
+        <EditDiscount handleClose={editDiscountModal.setFalse} fetchDataDiscount={fetchDataDiscount}/>
+      </ModalCustom>
     </>
   );
 };
