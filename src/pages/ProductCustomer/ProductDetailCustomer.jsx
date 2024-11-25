@@ -60,7 +60,7 @@ function ProductDetailCustomer() {
 
   useEffect(() => {
     getSelectedVariantQuantity(selectedColor, selectedSize);
-  }, [selectedColor, selectedSize]);
+  }, [selectedColor, selectedSize, product]);
 
   const getAvailabelSizes = (selectedColor) => {
     setAvailableSizes(
@@ -130,7 +130,8 @@ function ProductDetailCustomer() {
         toast.success("Add product to cart successfully");
         setErrorMessage(null);
       } catch (err) {
-        toast.error(err);
+        setErrorMessage(err.response.data.message)
+        fetchProductDetail(productId)
       }
     } else {
       setErrorMessage(error);
