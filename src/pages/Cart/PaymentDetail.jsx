@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CheckoutSummary from "./CheckoutSummary";
 import ProductTable from "./ProductTablePaymentDetail";
 import ShippingAddress from "./ShippingAddress";
 import { getTotalCartItems, placeOrder } from "../../api/cart";
 import cartSlice from "../../redux/slice/cartSlice";
 import css from "./PaymentDetail.module.css";
+import { getTotalNotifications } from "../../api/notification";
+import { setTotalNotificationItems } from "../../redux/slice/notificationSlice";
 
 const PaymentDetail = ({
   valuePaymentDetails,
@@ -35,6 +37,8 @@ const PaymentDetail = ({
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
+
+  const userRole = useSelector((state) => state.auth.userInfo.role);
 
   const createCartData = (
     preparedOrderItems,
@@ -63,7 +67,15 @@ const PaymentDetail = ({
       const response = await placeOrder(data);
       if (response) {
         toast.success("Order placed successfully");
-        const cartsCount = await getTotalCartItems();
+        const [cartsCount, notificationCount] = await Promise.all([
+          getTotalCartItems(),
+          getTotalNotifications(userRole),
+        ]);
+
+        if (notificationCount)
+          dispatch(
+            setTotalNotificationItems(notificationCount.notificationsCount)
+          );
         dispatch(
           cartSlice.actions.setTotalCartItems(cartsCount.totalCartItems)
         );

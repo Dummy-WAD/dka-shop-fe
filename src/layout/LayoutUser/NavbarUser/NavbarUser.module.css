@@ -133,3 +133,6 @@
   align-items: center;
   justify-content: center;
 }
+.iconBellContainer {
+  position: relative;
+}
