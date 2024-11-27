@@ -128,12 +128,15 @@ const NavbarUser = () => {
                   className={css.actionIcon}
                   onClick={handleNotificationClick}
                 >
-                  <NotificationIcon className={css.actionIconDetail} />
-                  {totalNotificationItems > 0 && (
-                    <span className={css.countItemCart}>
-                      {totalNotificationItems}
-                    </span>
-                  )}
+                  <div className={css.iconBellContainer}>
+                    <NotificationIcon className={css.actionIconDetail} />
+                    {totalNotificationItems > 0 && (
+                      <span className={css.countItemCart}>
+                        {totalNotificationItems}
+                      </span>
+                    )}
+                  </div>
+
                   <div>Notification</div>
                 </div>
 
