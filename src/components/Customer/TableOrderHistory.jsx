@@ -15,6 +15,8 @@ import StatusChip from "../StatusChip/StatusChip";
 import { Link } from "react-router-dom";
 import moment from "moment/moment";
 import TableSortLabelCustom from "../TableSortLabelCustom/TableSortLabelCustom";
+import IconButton from "../IconButton/IconButton.jsx";
+import {Visibility} from "@mui/icons-material";
 
 function TableOrderHistory({
   page,
@@ -73,11 +75,10 @@ function TableOrderHistory({
                   ${(order.total + order.deliveryFee).toFixed(2)}
                 </TableCell>
                 <TableCell>
-                  <Link
-                    style={{ color: "#000000", textDecoration: "underline" }}
-                    to={`/admin/order/${order.id}`}
-                  >
-                    View Details
+                  <Link to={`/admin/order/${order.id}`}>
+                    <IconButton>
+                      <Visibility sx={{ color: "blue" }} />
+                    </IconButton>
                   </Link>
                 </TableCell>
               </TableRow>
