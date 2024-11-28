@@ -70,15 +70,7 @@ const TableProductAdmin = ({
                 </TableSortLabelCustom>
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
-                <TableSortLabelCustom
-                  name="price"
-                  color="#FFF"
-                  onClick={() => handleSetOrderBy("price")}
-                  orderDirection={order}
-                  orderBy={sortBy}
-                >
-                  Current Price
-                </TableSortLabelCustom>
+                Current Price
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
                 Category
