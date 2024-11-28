@@ -77,28 +77,6 @@ const TableDiscountAdmin = ({
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
                 <TableSortLabelCustom
-                  name="createdAt"
-                  color="#FFF"
-                  onClick={() => handleSetDiscountBy("createdAt")}
-                  orderDirection={discount}
-                  orderBy={sortBy}
-                >
-                  Created Date
-                </TableSortLabelCustom>
-              </TableCell>
-              <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
-                <TableSortLabelCustom
-                  name="updatedAt"
-                  color="#FFF"
-                  onClick={() => handleSetDiscountBy("updatedAt")}
-                  orderDirection={discount}
-                  orderBy={sortBy}
-                >
-                  Last Updated
-                </TableSortLabelCustom>
-              </TableCell>
-              <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
-                <TableSortLabelCustom
                   name="startDate"
                   color="#FFF"
                   onClick={() => handleSetDiscountBy("startDate")}
@@ -136,12 +114,6 @@ const TableDiscountAdmin = ({
                       : `$ ${item.discountValue.toFixed(2)}`}
                   </TableCell>
                   <TableCell>{item.status}</TableCell>
-                  <TableCell>
-                    {moment(item.createdAt).format("DD/MM/YYYY")}
-                  </TableCell>
-                  <TableCell>
-                    {moment(item.updatedAt).format("DD/MM/YYYY")}
-                  </TableCell>
                   <TableCell>
                     {moment(item.startDate).format("DD/MM/YYYY")}
                   </TableCell>
