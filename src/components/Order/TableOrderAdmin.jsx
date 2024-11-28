@@ -141,11 +141,10 @@ const TableOrderAdmin = ({
 
                   {/* Actions */}
                   <TableCell>
-                    <Link
-                      to={`${item.orderId}`}
-                      style={{ color: "#000000", textDecoration: "underline" }}
-                    >
-                      View details
+                    <Link to={`${item.orderId}`}>
+                      <IconButton>
+                        <Visibility sx={{ color: "blue" }} />
+                      </IconButton>
                     </Link>
                   </TableCell>
                 </TableRow>

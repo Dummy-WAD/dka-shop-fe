@@ -7,8 +7,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getDetailProductForCustomerById } from "../../api/product";
 import { toast } from "react-toastify";
 import { addProductToCart } from "../../api/cart";
-import { useDispatch } from "react-redux";
-import { setTotalCartItems } from '../../redux/slice/cartSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { setTotalCartItems } from "../../redux/slice/cartSlice";
 
 function ProductDetailCustomer() {
   const { productId } = useParams();
@@ -25,6 +25,8 @@ function ProductDetailCustomer() {
   const [quantity, setQuantity] = useState(null); // Initial value set to 1
   const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();
+
+  const userRole = useSelector((state) => state.auth.userInfo.role);
 
   const fetchProductDetail = async (productId) => {
     try {
@@ -60,7 +62,7 @@ function ProductDetailCustomer() {
 
   useEffect(() => {
     getSelectedVariantQuantity(selectedColor, selectedSize);
-  }, [selectedColor, selectedSize]);
+  }, [selectedColor, selectedSize, product]);
 
   const getAvailabelSizes = (selectedColor) => {
     setAvailableSizes(
@@ -130,7 +132,8 @@ function ProductDetailCustomer() {
         toast.success("Add product to cart successfully");
         setErrorMessage(null);
       } catch (err) {
-        toast.error(err);
+        setErrorMessage(err.response.data.message);
+        fetchProductDetail(productId);
       }
     } else {
       setErrorMessage(error);
@@ -246,26 +249,28 @@ function ProductDetailCustomer() {
                 <PlusIcon />
               </div>
             </div>
-            <Button
-              variant="outlined"
-              startIcon={<CartIcon />}
-              sx={{
-                color: "var(--user-second-color)",
-                flex: 1,
-                padding: 1,
-                fontSize: "16px",
-                borderColor: "var(--user-second-color)",
-                borderRadius: "10px",
-                "&:hover": {
-                  backgroundColor: "var(--user-second-color)",
-                  color: "white",
-                },
-                flex: 0.6,
-              }}
-              onClick={handleSubmit}
-            >
-              Add To Cart
-            </Button>
+            {userRole === "CUSTOMER" && (
+              <Button
+                variant="outlined"
+                startIcon={<CartIcon />}
+                sx={{
+                  color: "var(--user-second-color)",
+                  flex: 1,
+                  padding: 1,
+                  fontSize: "16px",
+                  borderColor: "var(--user-second-color)",
+                  borderRadius: "10px",
+                  "&:hover": {
+                    backgroundColor: "var(--user-second-color)",
+                    color: "white",
+                  },
+                  flex: 0.6,
+                }}
+                onClick={handleSubmit}
+              >
+                Add To Cart
+              </Button>
+            )}
           </div>
           <Typography
             variant="h6"

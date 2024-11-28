@@ -29,7 +29,6 @@ const TableProductAdmin = ({
   handleViewDelete,
 }) => {
   const dispatch = useDispatch();
-
   const handleChangePage = (e, newPage) => {
     dispatch(setCurrentPage(newPage));
   };
@@ -71,7 +70,10 @@ const TableProductAdmin = ({
                 </TableSortLabelCustom>
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
-                  Category
+                Current Price
+              </TableCell>
+              <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
+                Category
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
                 <TableSortLabelCustom
@@ -111,10 +113,11 @@ const TableProductAdmin = ({
                   {/* Price */}
                   <TableCell>${item.price}</TableCell>
 
+                  {/* Current Price */}
+                  <TableCell>${item.currentPrice}</TableCell>
+
                   {/* Category */}
-                  <TableCell>
-                    {item?.category?.name}
-                  </TableCell>
+                  <TableCell>{item?.category?.name}</TableCell>
 
                   {/* Created At */}
                   <TableCell>
@@ -145,7 +148,7 @@ const TableProductAdmin = ({
                         <Edit sx={{ color: "green" }} />
                       </IconButton>
                     </Link>
-                    <IconButton onClick={()=>handleViewDelete(item.id)}>
+                    <IconButton onClick={() => handleViewDelete(item.id)}>
                       <Delete sx={{ color: "red" }} />
                     </IconButton>
                   </TableCell>
@@ -155,7 +158,7 @@ const TableProductAdmin = ({
         </Table>
       </TableContainer>
       {data.length == 0 && (
-        <Grid2 sx={{textAlign: "center", padding: "1rem 0"}}>
+        <Grid2 sx={{ textAlign: "center", padding: "1rem 0" }}>
           No result found
         </Grid2>
       )}

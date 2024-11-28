@@ -7,13 +7,14 @@ import {
   TableHead,
   TablePagination,
   Grid2,
-  Typography,
+  Typography, IconButton,
 } from "@mui/material";
 import classes from "./TableCustomer.module.css";
 import { useSelector } from "react-redux";
 import TableSortLabelCustom from "../../components/TableSortLabelCustom/TableSortLabelCustom";
 import moment from "moment/moment";
 import { Link } from "react-router-dom";
+import {Visibility} from "@mui/icons-material";
 
 const TableCustomer = ({
   customersList,
@@ -103,11 +104,10 @@ const TableCustomer = ({
                       justifyContent: "flex-center",
                     }}
                   >
-                    <Link
-                      to={`/admin/customer/${id}`}
-                      style={{ color: "#000000", textDecoration: "underline" }}
-                    >
-                      View details
+                    <Link to={`/admin/customer/${id}`}>
+                      <IconButton>
+                        <Visibility sx={{ color: "blue" }} />
+                      </IconButton>
                     </Link>
                   </TableCell>
                 </TableRow>
