@@ -1,7 +1,7 @@
 import classes from "./IconButton.module.css"
-const IconButton = ({onClick, children, type}) => {
+const IconButton = ({onClick, children, type, ...rest}) => {
     return (
-        <div className={classes.icon_button} onClick={onClick}>
+        <div className={classes.icon_button} onClick={onClick} {...rest}>
             {children}
         </div>
     )
