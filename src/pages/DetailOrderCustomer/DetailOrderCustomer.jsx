@@ -7,7 +7,7 @@ import OrderCustomerInfo from "../../components/OrderCustomerInfo/OrderCustomerI
 import OrderHistory from "../../components/OrderHistory/OrderHistory";
 import classNames from "classnames";
 import OrderCardItem from "../../components/OrderCard/OrderCardItem";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getDetailOrderByCustomer } from "../../api/order";
 import { toast } from "react-toastify";
 import { CUSTOMER } from "../../config/roles";
@@ -20,19 +20,20 @@ const DetailOrderCustomer = () => {
     (state) => state.auth
   );
   const { role, firstName: firstNameProfile, lastName: lastNameProfile } = user;
+
+  const getOrder = useCallback(async () => {
+    try {
+      const orderResponse = await getDetailOrderByCustomer(id);
+      setOrder(orderResponse);
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response.data.message);
+    }
+  }, [id]);
   
   useEffect(() => {
-    const getOrder = async () => {
-      try {
-        const orderResponse = await getDetailOrderByCustomer(id);
-        setOrder(orderResponse);
-      } catch (err) {
-        console.error(err);
-        toast.error(err.response.data.message);
-      }
-    };
     getOrder();
-  }, [id]);
+  }, [id, getOrder]);
 
   if (!isAuthenticated || role !== CUSTOMER)
     return <Navigate to="/unauthorized" />;
@@ -72,7 +73,7 @@ const DetailOrderCustomer = () => {
             </Typography>
             <div style={{ marginTop: "5px" }}>
               {order?.orderItems.map((item, index) => {
-                const { orderItem, product, product_id: productId } = item;
+                const { orderItem, product, product_id: productId, isReviewed } = item;
                 const {
                   color,
                   price,
@@ -96,7 +97,12 @@ const DetailOrderCustomer = () => {
                         productImageUrl,
                         price,
                         quantity,
+                        isReviewed,
+                        orderItemId: orderItem?.id
                       }}
+                      orderStatus={order?.status}
+                      isFromDetailOrder
+                      onGetOrderDetail={getOrder}
                     />
                   </div>
                 );
