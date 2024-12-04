@@ -34,10 +34,15 @@ const changeStatusOrder = (id, status) => {
   };
   return axiosInstance.patch(`/admin/orders/${id}`, data);
 };
+
+const cancelOrder = (id, data) => {
+  return axiosInstance.patch(`/customer/orders/${id}/cancel`, data);
+};
 export {
   getAllOrder,
   getDetailOrderByCustomer,
   getAllOrdersForAdmin,
   getDetailOrderByAdmin,
   changeStatusOrder,
+  cancelOrder,
 };
