@@ -7,6 +7,10 @@ import { getAllReviewOfProduct } from "../../api/review";
 
 const RATING_OPTIONS = [
     {
+        key: "all",
+        value: "All",
+    },
+    {
         key: 5,
         value: "5 stars",
     },
@@ -32,7 +36,7 @@ const LIMIT = 10;
 
 const ReviewContainer = ({productId}) => {
     const [page, setPage] = useState(1);
-    const [ratingFilter, setRatingFilter] = useState(5);
+    const [ratingFilter, setRatingFilter] = useState("all");
     const [listReview, setListReview] = useState();
 
     const fetchListReview = async () => {
