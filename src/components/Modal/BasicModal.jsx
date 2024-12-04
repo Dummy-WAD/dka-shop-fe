@@ -11,6 +11,7 @@ const ModalCustom = ({children, isOpen, handleClose}) => {
                     borderRadius: '8px',
                 } 
             }}
+            onClick={(e) => e.stopPropagation()}
         >
             <DialogContent>
                 <Box>

@@ -28,10 +28,7 @@ const getDetailOrderByAdmin = (id) => {
   return axiosInstance.get(`admin/orders/${id}`);
 };
 
-const changeStatusOrder = (id, status) => {
-  const data = {
-    status: status,
-  };
+const changeStatusOrder = (id, data) => {
   return axiosInstance.patch(`/admin/orders/${id}`, data);
 };
 

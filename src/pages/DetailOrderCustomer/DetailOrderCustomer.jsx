@@ -17,8 +17,11 @@ import OrderCustomerInfo from "../../components/OrderCustomerInfo/OrderCustomerI
 import OrderHistory from "../../components/OrderHistory/OrderHistory";
 import classNames from "classnames";
 import OrderCardItem from "../../components/OrderCard/OrderCardItem";
-import { useEffect, useState } from "react";
-import { getDetailOrderByCustomer, cancelOrder } from "../../api/order"; // Assuming cancelOrder exists
+
+import { getDetailOrderByCustomer, cancelOrder } from "../../api/order"; 
+
+import { useCallback, useEffect, useState } from "react";
+
 import { toast } from "react-toastify";
 import { CUSTOMER } from "../../config/roles";
 
@@ -44,21 +47,20 @@ const DetailOrderCustomer = () => {
     "Other",
   ];
 
-  const getOrder = async () => {
+  const getOrder = useCallback(async () => {
     try {
       const orderResponse = await getDetailOrderByCustomer(id);
       setOrder(orderResponse);
     } catch (err) {
-      console.error(err);
       toast.error(
         err.response?.data?.message || "Failed to load order details."
       );
     }
-  };
-
+  }, [id]);
+  
   useEffect(() => {
     getOrder();
-  }, [id]);
+  }, [id, getOrder]);
 
   const handleReasonChange = (event) => {
     setSelectedReason(event.target.value);
@@ -117,7 +119,7 @@ const DetailOrderCustomer = () => {
             </Typography>
             <div style={{ marginTop: "5px" }}>
               {order?.orderItems.map((item, index) => {
-                const { orderItem, product, product_id: productId } = item;
+                const { orderItem, product, product_id: productId, isReviewed } = item;
                 const {
                   color,
                   price,
@@ -141,7 +143,12 @@ const DetailOrderCustomer = () => {
                         productImageUrl,
                         price,
                         quantity,
+                        isReviewed,
+                        orderItemId: orderItem?.id
                       }}
+                      orderStatus={order?.status}
+                      isFromDetailOrder
+                      onGetOrderDetail={getOrder}
                     />
                   </div>
                 );

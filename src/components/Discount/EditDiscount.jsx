@@ -93,7 +93,7 @@ function EditDiscount({ handleClose, fetchDataDiscount }) {
       } catch (error) {
         console.error(error);
         toast.error(
-          get(error, "response.message.data", "Update discount failed"),
+          get(error, "response.data.message", "Update discount failed"),
           {
             autoClose: 3000,
           }
