@@ -3,7 +3,30 @@ import { useEffect, useState } from "react"
 import SelectFilter from "../SelectFilter/SelectFilter";
 import PaginationCustom from "../Pagination/Pagination";
 import ReviewItem from "./ReviewItem";
-import { getAllReviewOfProduct } from "../../api/rating";
+import { getAllReviewOfProduct } from "../../api/review";
+
+const RATING_OPTIONS = [
+    {
+        key: 5,
+        value: "5 stars",
+    },
+    {
+        key: 4,
+        value: "4 stars",
+    },
+    {
+        key: 3,
+        value: "3 stars",
+    },
+    {
+        key: 2,
+        value: "2 stars",
+    },
+    {
+        key: 1,
+        value: "1 stars",
+    },
+]
 
 const LIMIT = 10;
 
