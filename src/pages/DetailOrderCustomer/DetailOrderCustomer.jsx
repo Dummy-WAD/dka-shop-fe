@@ -18,7 +18,7 @@ import OrderHistory from "../../components/OrderHistory/OrderHistory";
 import classNames from "classnames";
 import OrderCardItem from "../../components/OrderCard/OrderCardItem";
 
-import { getDetailOrderByCustomer, cancelOrder } from "../../api/order"; 
+import { getDetailOrderByCustomer, cancelOrder } from "../../api/order";
 
 import { useCallback, useEffect, useState } from "react";
 
@@ -57,7 +57,7 @@ const DetailOrderCustomer = () => {
       );
     }
   }, [id]);
-  
+
   useEffect(() => {
     getOrder();
   }, [id, getOrder]);
@@ -119,7 +119,12 @@ const DetailOrderCustomer = () => {
             </Typography>
             <div style={{ marginTop: "5px" }}>
               {order?.orderItems.map((item, index) => {
-                const { orderItem, product, product_id: productId, isReviewed } = item;
+                const {
+                  orderItem,
+                  product,
+                  product_id: productId,
+                  isReviewed,
+                } = item;
                 const {
                   color,
                   price,
@@ -144,7 +149,7 @@ const DetailOrderCustomer = () => {
                         price,
                         quantity,
                         isReviewed,
-                        orderItemId: orderItem?.id
+                        orderItemId: orderItem?.id,
                       }}
                       orderStatus={order?.status}
                       isFromDetailOrder
@@ -183,16 +188,23 @@ const DetailOrderCustomer = () => {
               <div>
                 <div className={classes.lineItem}>
                   <div className={classes.label}>Subtotal</div>
-                  <div className={classes.value}>$ {order?.total}</div>
+                  <div className={classes.value}>
+                    $ {order?.total?.toFixed(2)}
+                  </div>
                 </div>
                 <div className={classes.lineItem}>
                   <div className={classes.label}>Shipping fee</div>
-                  <div className={classes.value}>$ {order?.deliveryFee}</div>
+                  <div className={classes.value}>
+                    $ {order?.deliveryFee?.toFixed(2)}
+                  </div>
                 </div>
                 <div className={classNames(classes.lineItem, classes.active)}>
                   <div className={classes.label}>Total amount</div>
                   <div className={classes.value}>
-                    $ {Number(order?.total) + Number(order?.deliveryFee)}
+                    ${" "}
+                    {(
+                      Number(order?.total) + Number(order?.deliveryFee)
+                    ).toFixed(2)}
                   </div>
                 </div>
               </div>
