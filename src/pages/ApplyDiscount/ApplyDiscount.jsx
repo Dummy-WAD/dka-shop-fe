@@ -171,77 +171,88 @@ const ApplyDiscount = ({}) => {
         <div>
             <div>
                 <BackButton />
-                <Typography variant="h5" sx={{textAlign: "center", mt: "-2rem", fontWeight: 500}}>Apply discount on product</Typography>
+                <Typography variant="h5" sx={{textAlign: "center", mt: "-2rem", fontWeight: 500}}>Discount details</Typography>
             </div>
-            {infoDiscount && infoDiscount?.status !== DISCOUNT_STATUS.EXPIRED && (
+            <div className={classes.infoContainer}>
+                <Typography variant="h6" sx={{ fontWeight: "500", mb: "20px" }}>
+                    Discount Information
+                </Typography>
+                <div className={classes.infoGroup}>
+                    <MyTextField
+                        id="id"
+                        label="ID"
+                        variant="outlined"
+                        color="var(--admin-color)"
+                        disabled
+                        style={{ mb: "1.5rem", width: "100%" }}
+                        value={infoDiscount?.id}
+                    />
+                    <MyTextField
+                        id="discountValue"
+                        label="Discount value"
+                        variant="outlined"
+                        color="var(--admin-color)"
+                        disabled
+                        style={{ mb: "1.5rem", width: "100%" }}
+                        value={infoDiscount?.discountValue}
+                    />
+                </div>
+                <div className={classes.infoGroup}>
+                    <MyTextField
+                        id="discountType"
+                        label="Discount type"
+                        variant="outlined"
+                        color="var(--admin-color)"
+                        disabled
+                        style={{ mb: "1.5rem", width: "100%" }}
+                        value={infoDiscount?.discountType}
+                    />
+                    <MyTextField
+                        id="status"
+                        label="Status"
+                        variant="outlined"
+                        color="var(--admin-color)"
+                        disabled
+                        style={{ mb: "1.5rem", width: "100%" }}
+                        value={infoDiscount?.status}
+                    />
+                </div>
+                <div className={classes.infoGroup}>
+                    <MyTextField
+                        id="startDate"
+                        label="Start date"
+                        variant="outlined"
+                        color="var(--admin-color)"
+                        disabled
+                        style={{ mb: "1.5rem", width: "100%" }}
+                        value={moment(infoDiscount?.startDate).format("DD/MM/YYYY")}
+                    />
+                    <MyTextField
+                        id="expirationDate"
+                        label="Expired date"
+                        variant="outlined"
+                        color="var(--admin-color)"
+                        disabled
+                        style={{ mb: "1.5rem", width: "100%" }}
+                        value={moment(infoDiscount?.expirationDate).format("DD/MM/YYYY")}
+                    />
+                </div>
+            </div>       
+            <Grid2 sx={{mt: "-1.5rem"}}>
+                <TableSelectedProduct 
+                    idDiscount={discountId}
+                    rowsPerPage={rowsPerPage}
+                    limit={rowsPerPage}
+                    infoListSelected={infoListSelected}
+                    handleAfterRemoveSelected={handleAfterRemoveSelectedOrApply}
+                />
+            </Grid2>
+            <Grid2>
+                <Typography variant="h5" sx={{textAlign: "center", fontWeight: 500}}>Apply discount on product</Typography>
+                {infoDiscount && infoDiscount?.status !== DISCOUNT_STATUS.EXPIRED && (
                 <>
-                    <div className={classes.infoContainer}>
-                        <Typography variant="h6" sx={{ fontWeight: "500", mb: "20px" }}>
-                            Discount Information
-                        </Typography>
-                        <div className={classes.infoGroup}>
-                            <MyTextField
-                                id="id"
-                                label="ID"
-                                variant="outlined"
-                                color="var(--admin-color)"
-                                disabled
-                                style={{ mb: "1.5rem", width: "100%" }}
-                                value={infoDiscount?.id}
-                            />
-                            <MyTextField
-                                id="discountValue"
-                                label="Discount value"
-                                variant="outlined"
-                                color="var(--admin-color)"
-                                disabled
-                                style={{ mb: "1.5rem", width: "100%" }}
-                                value={infoDiscount?.discountValue}
-                            />
-                        </div>
-                        <div className={classes.infoGroup}>
-                            <MyTextField
-                                id="discountType"
-                                label="Discount type"
-                                variant="outlined"
-                                color="var(--admin-color)"
-                                disabled
-                                style={{ mb: "1.5rem", width: "100%" }}
-                                value={infoDiscount?.discountType}
-                            />
-                            <MyTextField
-                                id="status"
-                                label="Status"
-                                variant="outlined"
-                                color="var(--admin-color)"
-                                disabled
-                                style={{ mb: "1.5rem", width: "100%" }}
-                                value={infoDiscount?.status}
-                            />
-                        </div>
-                        <div className={classes.infoGroup}>
-                            <MyTextField
-                                id="startDate"
-                                label="Start date"
-                                variant="outlined"
-                                color="var(--admin-color)"
-                                disabled
-                                style={{ mb: "1.5rem", width: "100%" }}
-                                value={moment(infoDiscount?.startDate).format("DD/MM/YYYY")}
-                            />
-                            <MyTextField
-                                id="expirationDate"
-                                label="Expired date"
-                                variant="outlined"
-                                color="var(--admin-color)"
-                                disabled
-                                style={{ mb: "1.5rem", width: "100%" }}
-                                value={moment(infoDiscount?.expirationDate).format("DD/MM/YYYY")}
-                            />
-                        </div>
-                    </div>
                     <div>
-                        <Grid2 sx={{display: "flex", justifyContent: "space-between", mb: "-1rem"}}>
+                        <Grid2 sx={{display: "flex", justifyContent: "space-between", mt: "2rem", mb: "-1rem"}}>
                             <Typography variant="h6" sx={{fontWeight: 500}}>{statusFilter === "all" ? "List product can apply" : "List products are selecting"}</Typography>
                             <Grid2 sx={{display: "flex", gap: "1rem"}}>
                                 {statusFilter === "all" && (
@@ -284,15 +295,6 @@ const ApplyDiscount = ({}) => {
                             />
                         )}
                     </div>
-                    <Grid2 sx={{mt: "2rem"}}>
-                        <TableSelectedProduct 
-                            idDiscount={discountId}
-                            rowsPerPage={rowsPerPage}
-                            limit={rowsPerPage}
-                            infoListSelected={infoListSelected}
-                            handleAfterRemoveSelected={handleAfterRemoveSelectedOrApply}
-                        />
-                    </Grid2>
                     <ConfirmModal 
                         isOpen={isConfirmApply}
                         handleClose={()=> setIsConfirmApply(false)}
@@ -301,13 +303,13 @@ const ApplyDiscount = ({}) => {
                         title={listCurrentSelect.length > 0 ? "Apply discount" : "Can't apply"}
                         description={listCurrentSelect.length > 0 ? "Are you sure apply discount to list product are selecting ?" : "You need select at least one product"}
                     />                
-                </>
-            )}
-            {infoDiscount && infoDiscount?.status === DISCOUNT_STATUS.EXPIRED && (
-                <Box sx={{mt: "2rem"}}>
-                    <Typography variant="p" sx={{fontStyle: "italic"}}>* This discount has been expired</Typography>
-                </Box>
-            )}
+                </>)}
+                {infoDiscount && infoDiscount?.status === DISCOUNT_STATUS.EXPIRED && (
+                    <Box sx={{mt: "1rem", textAlign: "center"}}>
+                        <Typography variant="p" sx={{fontStyle: "italic"}}>* This discount has been expired</Typography>
+                    </Box>
+                )}
+            </Grid2>
         </div>
     )
 }

@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
 import ListImage from "../../components/ListImage/ListImage";
 import classes from "./ProductDetailCustomer.module.css";
-import { Button, Divider, Typography } from "@mui/material";
+import { Button, Divider, Rating, Typography } from "@mui/material";
 import { CartIcon, MinusIcon, PlusIcon } from "../../icon/Icon";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDetailProductForCustomerById } from "../../api/product";
 import { toast } from "react-toastify";
 import { addProductToCart } from "../../api/cart";
-import { useDispatch } from "react-redux";
-import { setTotalCartItems } from '../../redux/slice/cartSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { setTotalCartItems } from "../../redux/slice/cartSlice";
+import ReviewContainer from "../../components/Review/ReviewContainer";
 
 function ProductDetailCustomer() {
   const { productId } = useParams();
   const navigate = useNavigate();
 
   const [product, setProduct] = useState({ primaryImage: "", otherImages: [] });
+  const [rating, setRating] = useState(0);
   const [colors, setColors] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [availableSizes, setAvailableSizes] = useState([]);
@@ -26,10 +28,13 @@ function ProductDetailCustomer() {
   const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();
 
+  const userRole = useSelector((state) => state.auth.userInfo.role);
+
   const fetchProductDetail = async (productId) => {
     try {
       const res = await getDetailProductForCustomerById(productId);
       setProduct(res);
+      setRating(res.averageRating);
       setColors([...new Set(res.productVariants.map((item) => item.color))]);
       setSizes([...new Set(res.productVariants.map((item) => item.size))]);
     } catch (error) {
@@ -60,7 +65,7 @@ function ProductDetailCustomer() {
 
   useEffect(() => {
     getSelectedVariantQuantity(selectedColor, selectedSize);
-  }, [selectedColor, selectedSize]);
+  }, [selectedColor, selectedSize, product]);
 
   const getAvailabelSizes = (selectedColor) => {
     setAvailableSizes(
@@ -130,13 +135,13 @@ function ProductDetailCustomer() {
         toast.success("Add product to cart successfully");
         setErrorMessage(null);
       } catch (err) {
-        toast.error(err);
+        setErrorMessage(err.response.data.message);
+        fetchProductDetail(productId);
       }
     } else {
       setErrorMessage(error);
     }
   };
-
   return (
     <div className="wrapper" style={{ minHeight: "60vh", marginTop: "2rem" }}>
       <div className={classes.container}>
@@ -147,6 +152,7 @@ function ProductDetailCustomer() {
           />
         </div>
         <div className={classes.container_right}>
+          <Rating value={rating} readOnly size="medium" precision={0.5} />
           <Typography variant="h5" sx={{ fontWeight: 600 }}>
             {product.name}
           </Typography>
@@ -246,26 +252,28 @@ function ProductDetailCustomer() {
                 <PlusIcon />
               </div>
             </div>
-            <Button
-              variant="outlined"
-              startIcon={<CartIcon />}
-              sx={{
-                color: "var(--user-second-color)",
-                flex: 1,
-                padding: 1,
-                fontSize: "16px",
-                borderColor: "var(--user-second-color)",
-                borderRadius: "10px",
-                "&:hover": {
-                  backgroundColor: "var(--user-second-color)",
-                  color: "white",
-                },
-                flex: 0.6,
-              }}
-              onClick={handleSubmit}
-            >
-              Add To Cart
-            </Button>
+            {userRole === "CUSTOMER" && (
+              <Button
+                variant="outlined"
+                startIcon={<CartIcon />}
+                sx={{
+                  color: "var(--user-second-color)",
+                  flex: 1,
+                  padding: 1,
+                  fontSize: "16px",
+                  borderColor: "var(--user-second-color)",
+                  borderRadius: "10px",
+                  "&:hover": {
+                    backgroundColor: "var(--user-second-color)",
+                    color: "white",
+                  },
+                  flex: 0.6,
+                }}
+                onClick={handleSubmit}
+              >
+                Add To Cart
+              </Button>
+            )}
           </div>
           <Typography
             variant="h6"
@@ -288,6 +296,8 @@ function ProductDetailCustomer() {
           </div>
         </div>
       </div>
+      <Divider sx={{ borderWidth: "2px" }} />
+      <ReviewContainer productId={productId} />
     </div>
   );
 }

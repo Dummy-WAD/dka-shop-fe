@@ -1,4 +1,14 @@
-import { Box, Button, Modal, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Modal,
+  Typography,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  TextField,
+} from "@mui/material";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import { changeStatusOrder } from "../../api/order";
 import { toast } from "react-toastify";
@@ -10,18 +20,30 @@ const ModalConfirmChangeStatusOrder = ({
   id,
   getOrder,
 }) => {
+  const [selectedReason, setSelectedReason] = useState("");
+  const [customReason, setCustomReason] = useState("");
+
+  const cancelReasons = [
+    "Product does not meet quality standards",
+    "Product is currently out of stock",
+    "Discrepancy in the provided shipping information",
+    "Cancellation due to company policy",
+    "Other",
+  ];
+
   const successMessage = {
-    CANCELLED: "Order has been successfully cancelled.",
+    CANCELLED: "Order has been successfully cancelled by admin.",
     PACKAGING: "Order is now being prepared for packaging.",
     DELIVERING: "Order is now out for delivery.",
     COMPLETED: "Order has been successfully completed.",
   };
+
   const getModalContent = () => {
     switch (statusWantToChange) {
       case "CANCELLED":
         return {
           title: "Cancel Order",
-          message: "Are you sure you want to cancel this order?",
+          message: "Choose a reason for cancellation",
         };
       case "PACKAGING":
         return {
@@ -49,7 +71,16 @@ const ModalConfirmChangeStatusOrder = ({
 
   const callAPIChangeStatus = async (id, status) => {
     try {
-      const response = await changeStatusOrder(id, status);
+      const reason = selectedReason === "Other" ? customReason : selectedReason;
+      if (!reason.trim()) {
+        toast.error("The other reason field is required.");
+        return;
+      }
+      const data =
+        status === "CANCELLED"
+          ? { status, cancelReason: reason.trim() }
+          : { status };
+      const response = await changeStatusOrder(id, data);
       if (response) {
         toast.success(successMessage[status]);
         setOpenModal(false);
@@ -110,6 +141,41 @@ const ModalConfirmChangeStatusOrder = ({
         >
           {message}
         </Typography>
+
+        {statusWantToChange === "CANCELLED" && (
+          <>
+            <RadioGroup
+              value={selectedReason}
+              onChange={(e) => setSelectedReason(e.target.value)}
+            >
+              {cancelReasons.map((reason, index) => (
+                <FormControlLabel
+                  key={index}
+                  value={reason}
+                  control={<Radio />}
+                  label={reason}
+                />
+              ))}
+            </RadioGroup>
+
+            {selectedReason === "Other" && (
+              <TextField
+                label="Other reason"
+                variant="outlined"
+                fullWidth
+                multiline
+                rows={4}
+                value={customReason}
+                inputProps={{
+                  maxLength: 255,
+                }}
+                onChange={(e) => setCustomReason(e.target.value)}
+                style={{ marginTop: "16px" }}
+              />
+            )}
+          </>
+        )}
+
         <div
           style={{
             display: "flex",

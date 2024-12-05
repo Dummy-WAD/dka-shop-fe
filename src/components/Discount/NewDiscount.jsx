@@ -9,6 +9,7 @@ import { createDiscount } from "../../api/discount";
 import { toast } from "react-toastify";
 import DateInput from "../DateInput/DateInputPro";
 import moment from "moment";
+import { LoadingButton } from "@mui/lab";
 
 const discountType = [
   {
@@ -29,6 +30,7 @@ function NewDiscount({ handleClose }) {
   const [required, setRequired] = useState(true);
   const [valid, setValid] = useState(true);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
 
   const validate = () => {
     let isValid = true;
@@ -67,6 +69,7 @@ function NewDiscount({ handleClose }) {
     const { isValid, message } = validate();
     if (isValid) {
       try {
+        setIsLoading(true)
         await createDiscount({
           discountType: type,
           discountValue: value,
@@ -81,6 +84,8 @@ function NewDiscount({ handleClose }) {
         toast.error("Create discount failed", {
           autoClose: 3000,
         });
+      } finally {
+        setIsLoading(false)
       }
     } else {
       setError(message);
@@ -166,8 +171,10 @@ function NewDiscount({ handleClose }) {
           </div>
         )}
       </Box>
-      <Button
+      <LoadingButton
         variant="contained"
+        loading={isLoading}
+        loadingPosition="start"
         sx={{
           backgroundColor: "var(--admin-color)",
           color: "#FFF",
@@ -179,7 +186,7 @@ function NewDiscount({ handleClose }) {
         onClick={handleSubmit}
       >
         Create
-      </Button>
+      </LoadingButton>
     </Box>
   );
 }

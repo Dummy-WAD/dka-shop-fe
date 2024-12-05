@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { checkApplyDiscountProduct } from '../../api/product';
 import { setCurrentPageShow, setOrderApply, setProductSelected } from '../../redux/slice/discountSlice';
 import DeleteModal from '../../components/Modal/DeleteModal';
+import { formatPrice } from '../../helper';
+import { Link } from 'react-router-dom';
 
 const LIMIT = 5;
 
@@ -16,6 +18,7 @@ const TableShowProduct = ({
 }) => {
     const dispatch = useDispatch();
     const {productSelected, pageShow: page, orderApply: order} = useSelector(state => state.discount);
+    const [activeDiscountId, setActiveDiscountId] = useState(null);
 
     const [isOpenModal, setIsOpenModal] = useState(false); 
 
@@ -38,10 +41,11 @@ const TableShowProduct = ({
             setListCurrent((prev) => prev.filter((prevItem) => prevItem.productId !== item.productId));
         } else {
             try {
-                const { isDiscounted } = await checkApplyDiscountProduct(item.productId);
+                const { isDiscounted, activeDiscount } = await checkApplyDiscountProduct(item.productId);
                 dispatch(setProductSelected(item));
                 if (isDiscounted) {
                     setIsOpenModal(true);
+                    setActiveDiscountId(activeDiscount.id);
                 } else {
                     setListCurrent((prev) => [item, ...prev]);
                 }
@@ -54,6 +58,10 @@ const TableShowProduct = ({
     const handleAcceptApplyNewDiscount = () => {
         setListCurrent((prev) => [productSelected, ...prev]);
         setIsOpenModal(false);
+    }
+
+    const handleNavigate = () => {
+        window.open(`/admin/discount/${activeDiscountId}`,'_blank');
     }
 
     return (
@@ -102,7 +110,7 @@ const TableShowProduct = ({
                                 </TableCell>
                                 <TableCell>{item.productId}</TableCell>
                                 <TableCell>{item.productName}</TableCell>
-                                <TableCell>{item.originPrice}</TableCell>
+                                <TableCell>{formatPrice(item.originPrice)}</TableCell>
                                 <TableCell>{item?.categoryName || ""}</TableCell>
                             </TableRow>
                         ))}
@@ -130,7 +138,13 @@ const TableShowProduct = ({
                 handleClose={()=>setIsOpenModal(false)}
                 onSubmit={handleAcceptApplyNewDiscount}
                 title={"Confirm"}
-                description={<>This product is applied for other discount.<br/> Are you sure continue apply this discount ?</>}
+                description={
+                    <>
+                        This product is applied for other discount
+                        <br/><Link onClick={handleNavigate}>Link to discount ID {activeDiscountId}</Link>
+                        <br/> Are you sure continue apply this discount ?
+                    </>
+                }
             />
         </>
     )

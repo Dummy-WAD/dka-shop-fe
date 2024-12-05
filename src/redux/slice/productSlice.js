@@ -6,13 +6,14 @@ const initialProduct = {
   otherImages: [],
   name: "",
   price: "",
+  currentPrice: "",
   description: "",
   category: {
-      id: "",
-      name: "",
+    id: "",
+    name: "",
   },
   productVariants: [],
-}
+};
 
 const initialState = {
   product: initialProduct,
@@ -55,4 +56,5 @@ export const productSlice = createSlice({
 // Export the reducer
 export default productSlice;
 
-export const { setListProductInfo, setCurrentPage, setIdSelected } = productSlice.actions;
+export const { setListProductInfo, setCurrentPage, setIdSelected } =
+  productSlice.actions;

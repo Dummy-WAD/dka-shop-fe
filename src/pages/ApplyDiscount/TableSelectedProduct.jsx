@@ -10,6 +10,7 @@ import { setCurrentPageSelected, setProductSelected } from '../../redux/slice/di
 import DeleteModal from '../../components/Modal/DeleteModal';
 import { revokeDiscount } from '../../api/discount';
 import { toast } from 'react-toastify';
+import { formatPrice } from '../../helper';
 
 const TableSelectedProduct = ({
     infoListSelected,
@@ -58,7 +59,9 @@ const TableSelectedProduct = ({
                         <TableRow>
                             <TableCell sx={{color: "#FFF", fontWeight: "bold"}}>ID</TableCell>
                             <TableCell sx={{color: "#FFF", fontWeight: "bold"}}>Name</TableCell>
-                            <TableCell sx={{color: "#FFF", fontWeight: "bold"}}>Price</TableCell>
+                            <TableCell sx={{color: "#FFF", fontWeight: "bold"}}>Origin price</TableCell>
+                            <TableCell sx={{color: "#FFF", fontWeight: "bold"}}>Discounted price</TableCell>
+                            <TableCell sx={{color: "#FFF", fontWeight: "bold"}}>Current price</TableCell>
                             <TableCell sx={{color: "#FFF", fontWeight: "bold"}}>Category</TableCell>
                             <TableCell></TableCell>
                         </TableRow>
@@ -66,10 +69,12 @@ const TableSelectedProduct = ({
                     <TableBody>
                         {infoListSelected && infoListSelected?.results.map(item => (
                             <TableRow key={item.productId} className={classes.table_row}>
-                                <TableCell>{item.productId}</TableCell>
-                                <TableCell>{item.productName}</TableCell>
-                                <TableCell>{item.originPrice}</TableCell>
-                                <TableCell>{item.categoryName || ""}</TableCell>
+                                <TableCell>{item?.productId}</TableCell>
+                                <TableCell>{item?.productName}</TableCell>
+                                <TableCell>{formatPrice(item?.originPrice)}</TableCell>
+                                <TableCell>{formatPrice(item?.priceDiscounted)}</TableCell>
+                                <TableCell>{formatPrice(item?.currentPrice)}</TableCell>
+                                <TableCell>{item?.categoryName || ""}</TableCell>
                                 <TableCell sx={{paddingRight: "1rem", display: 'flex', gap: '1rem', justifyContent: 'flex-end'}}>
                                     <IconButton onClick={()=> handleRemove(item)}>
                                         <Delete sx={{color: 'red'}}/>

@@ -22,38 +22,41 @@ const removeDuplicateUsingCheckArray = (array) => {
       result.push(array[i]);
     }
   }
-  return result;
+  return result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 };
 
 const NotificationDropdown = ({ isOpen, anchorEl, setIsOpen }) => {
   const userRole = useSelector((state) => state.auth.userInfo.role);
 
-  const handleClose = () => {
-    setIsOpen(false);
-  };
-
   const [notifications, setNotifications] = useState([]);
-  const [page, setPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(1);
+  const [after, setAfter] = useState(null);
+  const [isLastNotification, setIsLastNotification] = useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
   const limit = 5;
 
   const dispatch = useDispatch();
 
+  const handleClose = () => {
+    setAfter(null);
+    setIsOpen(false);
+  };
+
   const fetchNotifications = async () => {
-    if (isLoading || page > totalPage) return;
+    if (isLoading) return;
     setIsLoading(true);
     try {
       const params = {
-        page: page,
-        limit: limit,
+        after,
+        limit,
       };
       const response = await getNotificationsForAdmin(userRole, params);
       if (response) {
         setNotifications((prev) =>
           removeDuplicateUsingCheckArray([...prev, ...response.results])
         );
-        setTotalPage(response.totalPages);
+        setAfter(response.nextCursor);
+        setIsLastNotification(response.isLast);
       }
     } catch (err) {
       console.error(err);
@@ -63,12 +66,14 @@ const NotificationDropdown = ({ isOpen, anchorEl, setIsOpen }) => {
   };
 
   const handleScroll = useCallback(
-    debounce(() => {
-      if (!isLoading && page < totalPage) {
-        setPage((prev) => prev + 1);
-      }
-    }, 300),
-    [isLoading, page, totalPage]
+    debounce(
+      () => {
+        if (!isLastNotification) fetchNotifications();
+      },
+      300,
+      { trailing: true, leading: false }
+    ),
+    [isLastNotification, fetchNotifications]
   );
   const markAsRead = async () => {
     try {
@@ -83,6 +88,7 @@ const NotificationDropdown = ({ isOpen, anchorEl, setIsOpen }) => {
       console.error(error);
     }
   };
+
   useEffect(() => {
     return () => {
       handleScroll.cancel();
@@ -90,8 +96,8 @@ const NotificationDropdown = ({ isOpen, anchorEl, setIsOpen }) => {
   }, [handleScroll]);
 
   useEffect(() => {
-    fetchNotifications();
-  }, [page]);
+    if (isOpen && !isLastNotification) fetchNotifications();
+  }, [isOpen]);
 
   return (
     <Popover

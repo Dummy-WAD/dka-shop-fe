@@ -16,7 +16,7 @@ import TableSortLabelCustom from "../TableSortLabelCustom/TableSortLabelCustom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentPage } from "../../redux/slice/discountSlice";
 import { Link } from "react-router-dom";
-import { PERCENTAGE } from "../../config/status";
+import { DISCOUNT_STATUS, PERCENTAGE } from "../../config/status";
 import moment from "moment";
 import IconButton from "../IconButton/IconButton";
 import { Delete, Edit, Visibility } from "@mui/icons-material";
@@ -28,6 +28,7 @@ const TableDiscountAdmin = ({
   totalResults,
   handleSetDiscountBy,
   handleViewDelete,
+  handleViewEdit,
 }) => {
   const dispatch = useDispatch();
 
@@ -76,28 +77,6 @@ const TableDiscountAdmin = ({
               </TableCell>
               <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
                 <TableSortLabelCustom
-                  name="createdAt"
-                  color="#FFF"
-                  onClick={() => handleSetDiscountBy("createdAt")}
-                  orderDirection={discount}
-                  orderBy={sortBy}
-                >
-                  Created Date
-                </TableSortLabelCustom>
-              </TableCell>
-              <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
-                <TableSortLabelCustom
-                  name="updatedAt"
-                  color="#FFF"
-                  onClick={() => handleSetDiscountBy("updatedAt")}
-                  orderDirection={discount}
-                  orderBy={sortBy}
-                >
-                  Last Updated
-                </TableSortLabelCustom>
-              </TableCell>
-              <TableCell sx={{ color: "#FFF", fontWeight: "bold" }}>
-                <TableSortLabelCustom
                   name="startDate"
                   color="#FFF"
                   onClick={() => handleSetDiscountBy("startDate")}
@@ -125,55 +104,62 @@ const TableDiscountAdmin = ({
           </TableHead>
           <TableBody>
             {data.length > 0 ? (
-              data.map((item) => (
-                <TableRow key={item.id} className={classes.table_row}>
-                  <TableCell>{item.id}</TableCell>
-                  <TableCell>{item.discountType}</TableCell>
-                  <TableCell>
-                    {item.discountType === PERCENTAGE
-                      ? `${item.discountValue}%`
-                      : `$ ${item.discountValue.toFixed(2)}`}
-                  </TableCell>
-                  <TableCell>{item.status}</TableCell>
-                  <TableCell>
-                    {moment(item.createdAt).format("DD/MM/YYYY")}
-                  </TableCell>
-                  <TableCell>
-                    {moment(item.updatedAt).format("DD/MM/YYYY")}
-                  </TableCell>
-                  <TableCell>
-                    {moment(item.startDate).format("DD/MM/YYYY")}
-                  </TableCell>
-                  <TableCell>
-                    {moment(item.expirationDate).format("DD/MM/YYYY")}
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      paddingRight: "1rem",
-                      display: "flex",
-                      gap: "1rem",
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    <Link to={`${item.id}`}>
-                      <IconButton>
-                        <Visibility sx={{ color: "blue" }} />
+              data.map((item) => {
+                const isExpired = item.status === DISCOUNT_STATUS.EXPIRED;
+                return (
+                  <TableRow key={item.id} className={classes.table_row}>
+                    <TableCell>{item.id}</TableCell>
+                    <TableCell>{item.discountType}</TableCell>
+                    <TableCell>
+                      {item.discountType === PERCENTAGE
+                        ? `${item.discountValue}%`
+                        : `$ ${item.discountValue.toFixed(2)}`}
+                    </TableCell>
+                    <TableCell>{item.status}</TableCell>
+                    <TableCell>
+                      {moment(item.startDate).format("DD/MM/YYYY")}
+                    </TableCell>
+                    <TableCell>
+                      {moment(item.expirationDate).format("DD/MM/YYYY")}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        paddingRight: "1rem",
+                        display: "flex",
+                        gap: "1rem",
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      <Link to={`/admin/discount/${item.id}`}>
+                        <IconButton>
+                          <Visibility sx={{ color: "blue" }} />
+                        </IconButton>
+                      </Link>
+                      <Link
+                        onClick={() => {
+                          if (!isExpired) handleViewEdit(item);
+                        }}
+                      >
+                        <IconButton
+                          style={{
+                            cursor: isExpired ? "auto" : "pointer",
+                          }}
+                        >
+                          <Edit
+                            sx={{
+                              cursor: isExpired ? "auto" : "pointer",
+                              color: !isExpired ? "green" : "#ccc",
+                            }}
+                          />
+                        </IconButton>
+                      </Link>
+                      <IconButton onClick={() => handleViewDelete(item.id)}>
+                        <Delete sx={{ color: "red" }} />
                       </IconButton>
-                    </Link>
-                    <Link to={`/admin/discount/edit/${item.id}`}>
-                      <IconButton>
-                        <Edit sx={{ color: "green" }} />
-                      </IconButton>
-                    </Link>
-                    <IconButton onClick={() => handleViewDelete(item.id)}>
-                      <Delete sx={{ color: "red" }} />
-                    </IconButton>
-                    <Link to={`/admin/discount/apply/${item.id}`}>
-                      <IconButton>Apply</IconButton>
-                    </Link>
-                  </TableCell>
-                </TableRow>
-              ))
+                    </TableCell>
+                  </TableRow>
+                );
+              })
             ) : (
               <TableRow>
                 <TableCell

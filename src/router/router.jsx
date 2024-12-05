@@ -37,7 +37,6 @@ import UserStatistics from "../pages/Statistics/UserStatistics";
 import TopProductStatistics from "../pages/Statistics/TopProductStatistics";
 import TopCategoryStatistics from "../pages/Statistics/TopCategoryStatistics";
 import RevenueStatistics from "../pages/Statistics/RevenueStatistics";
-import DiscountDetail from "../pages/DiscountDetail/DiscountDetail";
 import ApplyDiscount from "../pages/ApplyDiscount/ApplyDiscount";
 import EditDiscount from "../pages/EditDiscount/EditDiscount";
 
@@ -207,10 +206,6 @@ const router = createBrowserRouter(
         }, 
         {
           path: "discount/:id",
-          element: <DiscountDetail />,
-        },
-        {
-          path: "discount/apply/:id",
           element: <ApplyDiscount />,
         },
         {

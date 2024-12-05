@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import NotificationDropdown from "../../../components/NotificationDropdown/NotificationDropdown";
+import { logout } from "../../../helper";
 const NavbarAdmin = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isOpenNotification, setIsOpenNotification] = useState(false);
@@ -19,28 +20,15 @@ const NavbarAdmin = () => {
   };
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handleClickToLogout = () => {
-    const logout = async () => {
-      try {
-        const refreshToken = localStorage.getItem("refreshToken");
-        await handleLogout(refreshToken);
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        dispatch(
-          authSlice.actions.setAuthInfo({
-            isAuthenticated: false,
-            userInfo: {},
-          })
-        );
-        navigate("/login");
-      } catch (err) {
-        console.error(err);
-        toast.error(err.response.data.message, {
-          autoClose: 3000,
-        });
-      }
-    };
-    logout();
+  const handleClickToLogout = async () => {
+    await logout();
+    dispatch(
+      authSlice.actions.setAuthInfo({
+        isAuthenticated: false,
+        userInfo: {},
+      })
+    );
+    navigate("/login");
   };
   return (
     <nav className={classNames(css.navbar)}>

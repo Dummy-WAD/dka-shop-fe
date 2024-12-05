@@ -19,6 +19,7 @@ import {
 } from "../../../redux/slice/searchSlice";
 import { ADMIN, CUSTOMER } from "../../../config/roles";
 import NotificationDropdown from "../../../components/NotificationDropdown/NotificationDropdown";
+import { logout } from "../../../helper";
 
 const NavbarUser = () => {
   const refInput = useRef(null);
@@ -38,28 +39,15 @@ const NavbarUser = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleClickToLogout = () => {
-    const logout = async () => {
-      try {
-        const refreshToken = localStorage.getItem("refreshToken");
-        await handleLogout(refreshToken);
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        dispatch(
-          authSlice.actions.setAuthInfo({
-            isAuthenticated: false,
-            userInfo: {},
-          })
-        );
-        navigate("/login");
-      } catch (err) {
-        console.error(err);
-        toast.error(err.response.data.message, {
-          autoClose: 3000,
-        });
-      }
-    };
-    logout();
+  const handleClickToLogout = async () => {
+    await logout();
+    dispatch(
+      authSlice.actions.setAuthInfo({
+        isAuthenticated: false,
+        userInfo: {},
+      })
+    );
+    navigate("/login");
   };
 
   const handleKeyPress = (event) => {
@@ -128,12 +116,15 @@ const NavbarUser = () => {
                   className={css.actionIcon}
                   onClick={handleNotificationClick}
                 >
-                  <NotificationIcon className={css.actionIconDetail} />
-                  {totalNotificationItems > 0 && (
-                    <span className={css.countItemCart}>
-                      {totalNotificationItems}
-                    </span>
-                  )}
+                  <div className={css.iconBellContainer}>
+                    <NotificationIcon className={css.actionIconDetail} />
+                    {totalNotificationItems > 0 && (
+                      <span className={css.countItemCart}>
+                        {totalNotificationItems}
+                      </span>
+                    )}
+                  </div>
+
                   <div>Notification</div>
                 </div>
 
