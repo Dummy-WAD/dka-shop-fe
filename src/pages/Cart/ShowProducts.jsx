@@ -34,7 +34,13 @@ const DeliveryOptions = ({ options, selectedOption, setSelectedOption }) => {
             onChange={() => setSelectedOption(option.id)}
             className={css.radioInput}
           />
-          <span className={css.labelText}>{option.name}</span>
+
+          <span className={css.labelText}>
+            {option.name}
+            <span style={{ fontSize: 14, color: "gray", opacity: 0.6 }}>
+              ({option.description})
+            </span>
+          </span>
           <span
             className={`${css.price} ${
               option.deliveryFee === 0 ? css.freePrice : ""

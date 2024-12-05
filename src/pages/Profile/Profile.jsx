@@ -104,7 +104,6 @@ const Profile = () => {
         handleSetAttribute(profile);
         setIsEdited(false);
     })
-    if (!isAuthenticated || role !== CUSTOMER) return <Navigate to="/unauthorized" />
     return (
         <>
             {isAuthenticated && role == CUSTOMER && (

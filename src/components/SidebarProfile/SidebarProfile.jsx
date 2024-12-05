@@ -3,9 +3,26 @@ import classes from "./SidebarProfile.module.css"
 import avatar from "../../assets/avatar.jpeg"
 import ButtonProfile from "../ButtonProfile/ButtonProfile"
 import { LocationOn, Lock, Logout, Payment, ContactEmergency } from "@mui/icons-material"
-import { NavLink } from "react-router-dom"
+import { Link, NavLink, useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { logout } from "../../helper"
+import authSlice from "../../redux/slice/authSlice"
 
 const SidebarProfile = ({firstName, lastName}) => {
+    
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const handleClickToLogout = async () => {
+        await logout();
+        dispatch(
+          authSlice.actions.setAuthInfo({
+            isAuthenticated: false,
+            userInfo: {},
+          })
+        );
+        navigate("/login");
+    };
+
     return (
         <Box className={classes.container}>
             <div className={classes.avatar}>
@@ -37,16 +54,9 @@ const SidebarProfile = ({firstName, lastName}) => {
                         <ButtonProfile icon={<Payment />} text="Purchase history" active={isActive} />
                     )}
                 </NavLink>
-                <NavLink to="/signout">
-                    {({isActive}) => (
-                        <ButtonProfile icon={<Logout />} text="Sign out" active={isActive} />
-                    )}
-                </NavLink>
-                {/* <ButtonProfile active={activeTab == "profile"} icon={<ContactEmergency />} text="My profile" />
-                <ButtonProfile active={activeTab == "changePassword"} icon={<Lock />} text="Change password" />               
-                <ButtonProfile active={activeTab == "address"} icon={<LocationOn />} text="Address" />               
-                <ButtonProfile active={activeTab == "purchase"} icon={<Payment />} text="Purchase history" />               
-                <ButtonProfile active={activeTab == "signOut"} icon={<Logout />} text="Sign out" />                */}
+                <Link onClick={handleClickToLogout}>
+                    <ButtonProfile icon={<Logout />} text="Sign out" active={false} />
+                </Link>
             </div>
         </Box>
     )
