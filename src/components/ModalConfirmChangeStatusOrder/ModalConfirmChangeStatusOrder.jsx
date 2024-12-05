@@ -71,26 +71,35 @@ const ModalConfirmChangeStatusOrder = ({
 
   const callAPIChangeStatus = async (id, status) => {
     try {
-      const reason = selectedReason === "Other" ? customReason : selectedReason;
-      if (!reason.trim()) {
-        toast.error("The other reason field is required.");
-        return;
+      let data = { status };
+
+      if (status === "CANCELLED") {
+        let reason = selectedReason.trim();
+
+        if (selectedReason === "Other") {
+          reason = customReason.trim();
+        }
+
+        if (!reason) {
+          toast.error("Please provide a reason for cancellation.");
+          return;
+        }
+
+        data.cancelReason = reason;
       }
-      const data =
-        status === "CANCELLED"
-          ? { status, cancelReason: reason.trim() }
-          : { status };
+
       const response = await changeStatusOrder(id, data);
       if (response) {
-        toast.success(successMessage[status]);
+        toast.success(successMessage[status] || "Status updated successfully.");
         setOpenModal(false);
         getOrder();
       }
     } catch (err) {
-      console.error(err);
-      toast.error(
-        err.response?.data?.message || "Failed to update order status"
-      );
+      console.error("Error updating order status:", err);
+
+      const errorMessage =
+        err.response?.data?.message || "Failed to update order status.";
+      toast.error(errorMessage);
     }
   };
 
