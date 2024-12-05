@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ListImage from "../../components/ListImage/ListImage";
 import classes from "./ProductDetailCustomer.module.css";
-import { Button, Divider, Typography } from "@mui/material";
+import { Button, Divider, Rating, Typography } from "@mui/material";
 import { CartIcon, MinusIcon, PlusIcon } from "../../icon/Icon";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDetailProductForCustomerById } from "../../api/product";
@@ -16,6 +16,7 @@ function ProductDetailCustomer() {
   const navigate = useNavigate();
 
   const [product, setProduct] = useState({ primaryImage: "", otherImages: [] });
+  const [rating, setRating] = useState(0);
   const [colors, setColors] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [availableSizes, setAvailableSizes] = useState([]);
@@ -33,6 +34,7 @@ function ProductDetailCustomer() {
     try {
       const res = await getDetailProductForCustomerById(productId);
       setProduct(res);
+      setRating(res.averageRating);
       setColors([...new Set(res.productVariants.map((item) => item.color))]);
       setSizes([...new Set(res.productVariants.map((item) => item.size))]);
     } catch (error) {
@@ -140,7 +142,6 @@ function ProductDetailCustomer() {
       setErrorMessage(error);
     }
   };
-
   return (
     <div className="wrapper" style={{ minHeight: "60vh", marginTop: "2rem" }}>
       <div className={classes.container}>
@@ -151,6 +152,7 @@ function ProductDetailCustomer() {
           />
         </div>
         <div className={classes.container_right}>
+          <Rating value={rating} readOnly size="medium" precision={0.5} />
           <Typography variant="h5" sx={{ fontWeight: 600 }}>
             {product.name}
           </Typography>
@@ -294,8 +296,8 @@ function ProductDetailCustomer() {
           </div>
         </div>
       </div>
-      <Divider sx={{borderWidth: "2px"}}/>
-      <ReviewContainer productId={productId}/>
+      <Divider sx={{ borderWidth: "2px" }} />
+      <ReviewContainer productId={productId} />
     </div>
   );
 }

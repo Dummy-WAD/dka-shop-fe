@@ -72,8 +72,14 @@ const ModalConfirmChangeStatusOrder = ({
   const callAPIChangeStatus = async (id, status) => {
     try {
       const reason = selectedReason === "Other" ? customReason : selectedReason;
+      if (!reason.trim()) {
+        toast.error("The other reason field is required.");
+        return;
+      }
       const data =
-        status === "CANCELLED" ? { status, cancelReason: reason } : { status };
+        status === "CANCELLED"
+          ? { status, cancelReason: reason.trim() }
+          : { status };
       const response = await changeStatusOrder(id, data);
       if (response) {
         toast.success(successMessage[status]);
@@ -158,8 +164,11 @@ const ModalConfirmChangeStatusOrder = ({
                 variant="outlined"
                 fullWidth
                 multiline
-                rows={3}
+                rows={4}
                 value={customReason}
+                inputProps={{
+                  maxLength: 255,
+                }}
                 onChange={(e) => setCustomReason(e.target.value)}
                 style={{ marginTop: "16px" }}
               />
