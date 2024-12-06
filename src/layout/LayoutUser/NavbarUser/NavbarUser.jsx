@@ -106,7 +106,7 @@ const NavbarUser = () => {
                       onClick={handleClickToLogout}
                       className={css.menuLink}
                     >
-                      Log out
+                      Sign out
                     </Link>
                   </div>
                 )}
