@@ -82,7 +82,9 @@ const DetailOrderCustomer = () => {
       setIsModalOpen(false);
       await getOrder(); // Reload order details
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to cancel the order.");
+      toast.error(
+        "Failed to cancel the order. Please choose one reason or try again later."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -261,7 +263,6 @@ const DetailOrderCustomer = () => {
                 multiline
                 rows={3}
                 variant="outlined"
-                label="Other"
                 placeholder="Enter your reason..."
                 value={cancelReason}
                 onChange={(e) => setCancelReason(e.target.value)}
@@ -284,6 +285,20 @@ const DetailOrderCustomer = () => {
           </Box>
           <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
             <Button
+              variant="outlined"
+              onClick={() => setIsModalOpen(false)}
+              fullWidth
+              sx={{
+                color: "black",
+                borderColor: "black",
+                "&:hover": {
+                  backgroundColor: "#f0f0f0",
+                },
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
               variant="contained"
               onClick={handleCancelOrder}
               disabled={isLoading}
@@ -297,20 +312,6 @@ const DetailOrderCustomer = () => {
               }}
             >
               {isLoading ? "Processing..." : "Confirm"}
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={() => setIsModalOpen(false)}
-              fullWidth
-              sx={{
-                color: "black",
-                borderColor: "black",
-                "&:hover": {
-                  backgroundColor: "#f0f0f0",
-                },
-              }}
-            >
-              Cancel
             </Button>
           </Box>
         </Box>
