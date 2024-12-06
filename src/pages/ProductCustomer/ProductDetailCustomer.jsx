@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { addProductToCart } from "../../api/cart";
 import { useDispatch, useSelector } from "react-redux";
 import { setTotalCartItems } from "../../redux/slice/cartSlice";
+import ReviewContainer from "../../components/Review/ReviewContainer";
 
 function ProductDetailCustomer() {
   const { productId } = useParams();
@@ -293,6 +294,8 @@ function ProductDetailCustomer() {
           </div>
         </div>
       </div>
+      <Divider sx={{borderWidth: "2px"}}/>
+      <ReviewContainer productId={productId}/>
     </div>
   );
 }

@@ -100,7 +100,7 @@ const EditDiscount = () => {
         setIsReload(!isReload);
       } catch (error) {
         console.error(error)
-        toast.error(get(error, 'response.message.data', 'Update discount failed'), {
+        toast.error(get(error, 'response.data.message', 'Update discount failed'), {
           autoClose: 3000,
         });
       }
