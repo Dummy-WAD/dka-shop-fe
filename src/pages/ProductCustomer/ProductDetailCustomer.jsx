@@ -142,6 +142,7 @@ function ProductDetailCustomer() {
       setErrorMessage(error);
     }
   };
+
   return (
     <div className="wrapper" style={{ minHeight: "60vh", marginTop: "2rem" }}>
       <div className={classes.container}>
@@ -152,7 +153,21 @@ function ProductDetailCustomer() {
           />
         </div>
         <div className={classes.container_right}>
-          <Rating value={rating} readOnly size="medium" precision={0.5} />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            <Rating value={rating} readOnly size="medium" precision={0.5} />
+            {product?.totalReviews > 0 && (
+              <span>
+                {product?.totalReviews}{" "}
+                {product?.totalReviews >= 2 ? "reviews" : "review"}
+              </span>
+            )}
+          </div>
           <Typography variant="h5" sx={{ fontWeight: 600 }}>
             {product.name}
           </Typography>
