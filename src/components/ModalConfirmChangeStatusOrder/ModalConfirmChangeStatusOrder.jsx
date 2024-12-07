@@ -198,13 +198,13 @@ const ModalConfirmChangeStatusOrder = ({
             fullWidth
             style={{
               padding: "6px",
-              backgroundColor: "#274c50",
-              color: "#ffffff",
+              backgroundColor: "white",
+              color: "black",
               fontSize: "16px",
               fontWeight: "bold",
               borderRadius: "8px",
-              transition: "background-color 0.3s",
               width: "170px",
+              border: "1px solid black",
             }}
             onClick={() => setOpenModal(false)}
           >
