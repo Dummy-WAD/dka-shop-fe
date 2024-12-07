@@ -24,6 +24,9 @@ import { useCallback, useEffect, useState } from "react";
 
 import { toast } from "react-toastify";
 import { CUSTOMER } from "../../config/roles";
+import ModalCustom from "../../components/Modal/BasicModal";
+import { useBoolean } from "../../hook/useBoolean";
+import CreateReview from "../../components/Review/CreateReview";
 
 const DetailOrderCustomer = () => {
   const { id } = useParams();
@@ -37,6 +40,8 @@ const DetailOrderCustomer = () => {
     (state) => state.auth
   );
   const { role, firstName: firstNameProfile, lastName: lastNameProfile } = user;
+  const [currentProductReviewed, setCurrentProductReviewed] = useState(null)
+  const reviewModal = useBoolean();
 
   const reasons = [
     "Want to change delivery address",
@@ -135,6 +140,17 @@ const DetailOrderCustomer = () => {
                   quantity,
                 } = orderItem;
                 const productImageUrl = product?.productImages[0]?.image_url;
+                const currentProduct = {
+                  productId,
+                  size,
+                  color,
+                  productName,
+                  productImageUrl,
+                  price,
+                  quantity,
+                  isReviewed,
+                  orderItemId: orderItem?.id,
+                }
                 return (
                   <div
                     key={index}
@@ -142,20 +158,15 @@ const DetailOrderCustomer = () => {
                     onClick={() => navigate(`/product/${productId}`)}
                   >
                     <OrderCardItem
-                      product={{
-                        productId,
-                        size,
-                        color,
-                        productName,
-                        productImageUrl,
-                        price,
-                        quantity,
-                        isReviewed,
-                        orderItemId: orderItem?.id,
-                      }}
+                      product={currentProduct}
                       orderStatus={order?.status}
                       isFromDetailOrder
                       onGetOrderDetail={getOrder}
+                      handleClickOnReviewButton={(e) => {
+                        e.stopPropagation()
+                        setCurrentProductReviewed(currentProduct)
+                        reviewModal.setTrue()
+                      }}
                     />
                   </div>
                 );
@@ -214,6 +225,13 @@ const DetailOrderCustomer = () => {
           </div>
         </Grid2>
       </div>
+
+      <ModalCustom
+        isOpen={reviewModal.value}
+        handleClose={reviewModal.setFalse}
+      >
+        <CreateReview handleClose={reviewModal.setFalse} product={currentProductReviewed} onGetOrderDetail={getOrder}/>
+      </ModalCustom>
 
       {/* Modal */}
       <Modal

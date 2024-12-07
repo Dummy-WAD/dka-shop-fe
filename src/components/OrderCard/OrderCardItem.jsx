@@ -4,12 +4,7 @@ import ModalCustom from "../Modal/BasicModal";
 import { useBoolean } from "../../hook/useBoolean";
 import CreateReview from "../Review/CreateReview";
 import { COMPLETED } from "../../config/status";
-const OrderCardItem = ({ product, isFromDetailOrder, orderStatus, onGetOrderDetail }) => {
-  const reviewModal = useBoolean();
-  const handleClickOnReviewButton = (e) => {
-    e.stopPropagation();
-    reviewModal.setTrue();
-  };
+const OrderCardItem = ({ product, isFromDetailOrder, orderStatus, onGetOrderDetail, handleClickOnReviewButton }) => {
 
   return (
     <div className={classes.container}>
@@ -53,12 +48,7 @@ const OrderCardItem = ({ product, isFromDetailOrder, orderStatus, onGetOrderDeta
         )}
         {orderStatus === COMPLETED && isFromDetailOrder && product?.isReviewed && <div style={{color: "grey"}}>Reviewed</div>}
       </div>
-      <ModalCustom
-        isOpen={reviewModal.value}
-        handleClose={reviewModal.setFalse}
-      >
-        <CreateReview handleClose={reviewModal.setFalse} product={product} onGetOrderDetail={onGetOrderDetail}/>
-      </ModalCustom>
+      
     </div>
   );
 };
