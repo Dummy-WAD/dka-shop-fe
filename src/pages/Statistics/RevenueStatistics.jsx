@@ -13,25 +13,25 @@ const { YEAR, QUARTER, MONTH, WEEK } = statisticsUnit;
 const initialValue = [
   {
     id: WEEK,
-    label: "Revenue in nearest weeks",
+    label: "Revenue in nearest weeks ($)",
     limit: 12,
     data: [],
   },
   {
     id: MONTH,
-    label: "Revenue in nearest months",
+    label: "Revenue in nearest months ($)",
     limit: 12,
     data: [],
   },
   {
     id: QUARTER,
-    label: "Revenue in nearest quarters",
+    label: "Revenue in nearest quarters ($)",
     limit: 4,
     data: [],
   },
   {
     id: YEAR,
-    label: "Revenue in nearest years",
+    label: "Revenue in nearest years ($)",
     limit: 4,
     data: [],
   },
@@ -113,17 +113,16 @@ const RevenueStatistics = () => {
                         id: "barRevenue",
                         data: xAxis,
                         scaleType: "band",
+                        tickLabelStyle: {
+                          angle: -45,
+                          textAnchor: 'end',
+                        },
                       },
                     ]}
                     series={[
                       {
                         data: series,
                         color: "var(--user-color)",
-                      },
-                    ]}
-                    yAxis={[
-                      {
-                        label: 'Dollars',
                       },
                     ]}
                     width={500}

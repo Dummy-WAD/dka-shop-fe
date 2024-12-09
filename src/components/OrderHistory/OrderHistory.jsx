@@ -13,8 +13,8 @@ import { CANCELLED, COMPLETED, DELIVERING, PACKAGING, PENDING } from "../../conf
 const statusMessages = {
   [PENDING]: "Order is being processed.",
   [PACKAGING]: "Order has been packaged and is ready for shipment.",
-  [DELIVERING]: "Order is on its way. Please keep an eye on your phone.",
-  [COMPLETED]: "Order has been delivered. Thank you for shopping with us!",
+  [DELIVERING]: "Order is on its way.",
+  [COMPLETED]: "Order has been delivered.",
   [CANCELLED]: "Order has been cancelled.",
 };
 
@@ -137,6 +137,7 @@ const OrderHistory = ({ order, className }) => {
                     {CANCELLED}
                   </div>
                   <div>{statusMessages.CANCELLED}</div>
+                  <div style={{fontStyle: 'italic', marginTop: '5px'}}>Reason: {cancelled?.cancelReason}</div>
                 </div>
               </TimelineContent>
             </TimelineItem>
