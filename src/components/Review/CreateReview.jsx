@@ -20,7 +20,7 @@ const getLabelText = (value) => {
 };
 
 const CreateReview = ({ product, handleClose, onGetOrderDetail }) => {
-  const [rating, setRating] = useState(4);
+  const [rating, setRating] = useState(5);
   const [hover, setHover] = useState(-1);
   const [reviewText, setReviewText] = useState("");
   const [isLoading, setIsLoading] = useState(false);

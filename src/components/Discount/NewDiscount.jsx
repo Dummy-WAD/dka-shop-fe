@@ -37,8 +37,6 @@ function NewDiscount({ handleClose }) {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
     isValid =
-      !isNaN(startDate) &&
-      !isNaN(endDate) &&
       startDate &&
       endDate &&
       type != "" &&
@@ -47,16 +45,16 @@ function NewDiscount({ handleClose }) {
       return { isValid: false, message: "Please fill all information" };
     else if (type == "PERCENTAGE" && value > 100)
       return { isValid: false, message: "Discount value cannot exceed 100%" };
-    else if (startDate < currentDate)
+    else if (moment(startDate).valueOf() < moment(currentDate).valueOf())
       return {
         isValid: false,
-        message: "Start Date must be greater than or equal to the Current Date",
+        message: "Start date must be greater than or equal to the current date",
       };
-    else if (endDate < startDate)
+    else if (moment(endDate).valueOf() < moment(startDate).valueOf())
       return {
         isValid: false,
         message:
-          "Expiration Date must be greater than or equal to the Start Date",
+          "Expiration date must be greater than or equal to the start date",
       };
     else if (isNaN(value) || parseFloat(value) <= 0) {
       return {
@@ -147,10 +145,8 @@ function NewDiscount({ handleClose }) {
             color="var(--admin-color)"
             smallSize
             style={{ width: "60%" }}
-            value={startDate && new Date(startDate)}
-            onChange={(e) => {
-              setStartDate(new Date(dayjs(e.target.value, "DD/MM/YYYY")));
-            }}
+            onChange={(e) => setStartDate(e.target.value)}
+            value={moment(startDate).format("DD/MM/YYYY")}
           />
           <DateInput
             id="endDate"
@@ -159,10 +155,8 @@ function NewDiscount({ handleClose }) {
             color="var(--admin-color)"
             smallSize
             style={{ width: "60%" }}
-            value={endDate && new Date(endDate)}
-            onChange={(e) => {
-              setEndDate(new Date(dayjs(e.target.value, "DD/MM/YYYY")));
-            }}
+            onChange={(e) => setEndDate(e.target.value)}
+            value={moment(endDate).format("DD/MM/YYYY")}
           />
         </div>
         {error && (
