@@ -107,6 +107,10 @@ const UserStatistics = () => {
                       id: "barOrder",
                       data: data?.map(({ period }) => period),
                       scaleType: "band",
+                      tickLabelStyle: {
+                        angle: -45,
+                        textAnchor: 'end',
+                      },
                     },
                   ]}
                   series={[
