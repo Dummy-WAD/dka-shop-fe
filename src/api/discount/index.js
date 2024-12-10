@@ -8,6 +8,7 @@ const getAllDiscountsForAdmin = (config) => {
   const {
     keyword,
     type,
+    status,
     startDate,
     expirationDate,
     sortBy,
@@ -18,7 +19,8 @@ const getAllDiscountsForAdmin = (config) => {
   return axiosInstance.get(
     `/admin/discounts?page=${page}&limit=${limit}${
       sortBy ? `&sortBy=${sortBy}&order=${discount}` : ""
-    }${keyword ? `&keyword=${keyword}` : ""}${type ? `&type=${type}` : ""}${
+    }${keyword ? `&keyword=${keyword}` : ""}${type ? `&type=${type}` : ""}${status ? `&status=${status}` : ""}
+    ${
       startDate ? `&startDate=${startDate}` : ""
     }${expirationDate ? `&expirationDate=${expirationDate}` : ""}`
   );
