@@ -40,6 +40,7 @@ const DiscountAdmin = () => {
     discount,
     search,
     type,
+    status,
     totalResults,
     totalPages,
     startDate,
@@ -57,9 +58,9 @@ const DiscountAdmin = () => {
   };
 
   const handleViewEdit = (item) => {
-    editDiscountModal.setTrue()
-    dispatch(setCurrentDiscountSelected(item))
-  }
+    editDiscountModal.setTrue();
+    dispatch(setCurrentDiscountSelected(item));
+  };
 
   const handleClose = () => setIsOpenDelete(false);
 
@@ -87,6 +88,7 @@ const DiscountAdmin = () => {
         discount,
         sortBy,
         type,
+        status,
         startDate,
         expirationDate,
       });
@@ -118,10 +120,18 @@ const DiscountAdmin = () => {
   };
 
   const handleSetDiscountByType = (type) => {
-    console.log(type);
     dispatch(
       setListDiscountInfo({
         type: type === "All type" ? "" : type,
+        page: 0,
+      })
+    );
+  };
+
+  const handleSetDiscountByStatus = (status) => {
+    dispatch(
+      setListDiscountInfo({
+        status: status === "All status" ? "" : status,
         page: 0,
       })
     );
@@ -157,6 +167,7 @@ const DiscountAdmin = () => {
           search: "",
           limit: 10,
           type: "",
+          status: "",
           startDate: "",
           expirationDate: "",
         })
@@ -175,9 +186,10 @@ const DiscountAdmin = () => {
     sortBy,
     search,
     type,
+    status,
     startDate,
     expirationDate,
-    isOpenCreate
+    isOpenCreate,
   ]);
 
   return (
@@ -188,6 +200,35 @@ const DiscountAdmin = () => {
           <p>DISCOUNT</p>
         </div>
         <div className={classes.action}>
+          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+            <InputLabel id="status-select-label">Status</InputLabel>
+            <Select
+              sx={{
+                "& .MuiOutlinedInput-notchedOutline": {
+                  color: "#ccc",
+                  borderColor: "#ccc",
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  color: "#ccc",
+                  borderColor: "#ccc",
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#ccc",
+                  borderWidth: "1px",
+                  color: "#ccc",
+                },
+              }}
+              labelId="status-select-label"
+              id="status-select"
+              label="status"
+              value={status === "" ? "All status" : status}
+              onChange={(e) => handleSetDiscountByStatus(e.target.value)}
+            >
+              <MenuItem value="All status">All status</MenuItem>
+              <MenuItem value="ACTIVE">Active</MenuItem>
+              <MenuItem value="EXPIRED">Expired</MenuItem>
+            </Select>
+          </FormControl>
           <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
             <InputLabel id="status-select-label">Type</InputLabel>
             <Select
@@ -302,7 +343,10 @@ const DiscountAdmin = () => {
         isOpen={editDiscountModal.value}
         handleClose={editDiscountModal.setFalse}
       >
-        <EditDiscount handleClose={editDiscountModal.setFalse} fetchDataDiscount={fetchDataDiscount}/>
+        <EditDiscount
+          handleClose={editDiscountModal.setFalse}
+          fetchDataDiscount={fetchDataDiscount}
+        />
       </ModalCustom>
     </>
   );
