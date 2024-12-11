@@ -122,7 +122,7 @@ const DiscountAdmin = () => {
   const handleSetDiscountByType = (type) => {
     dispatch(
       setListDiscountInfo({
-        type: type === "All type" ? "" : type,
+        type: type === "All type" ? "" : type.trim(),
         page: 0,
       })
     );
@@ -131,7 +131,7 @@ const DiscountAdmin = () => {
   const handleSetDiscountByStatus = (status) => {
     dispatch(
       setListDiscountInfo({
-        status: status === "All status" ? "" : status,
+        status: status === "All status" ? "" : status.trim(),
         page: 0,
       })
     );
@@ -225,6 +225,7 @@ const DiscountAdmin = () => {
               onChange={(e) => handleSetDiscountByStatus(e.target.value)}
             >
               <MenuItem value="All status">All status</MenuItem>
+              <MenuItem value="UPCOMING">Upcoming</MenuItem>
               <MenuItem value="ACTIVE">Active</MenuItem>
               <MenuItem value="EXPIRED">Expired</MenuItem>
             </Select>
@@ -274,7 +275,7 @@ const DiscountAdmin = () => {
                   })
                 );
               }}
-              value={moment(startDate).format("DD/MM/YYYY")}
+              value={startDate && moment(startDate).format("DD/MM/YYYY")}
             />
             <DateInput
               id="toDate"
@@ -291,7 +292,9 @@ const DiscountAdmin = () => {
                   })
                 );
               }}
-              value={moment(expirationDate).format("DD/MM/YYYY")}
+              value={
+                expirationDate && moment(expirationDate).format("DD/MM/YYYY")
+              }
             />
           </div>
           <div className={classes.search_create}>

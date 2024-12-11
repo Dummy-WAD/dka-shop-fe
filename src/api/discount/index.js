@@ -1,8 +1,8 @@
 import axiosInstance from "../../utils/axios";
 
 const createDiscount = (data) => {
-  return axiosInstance.post("/admin/discounts", data)
-}
+  return axiosInstance.post("/admin/discounts", data);
+};
 
 const getAllDiscountsForAdmin = (config) => {
   const {
@@ -16,14 +16,19 @@ const getAllDiscountsForAdmin = (config) => {
     page,
     limit,
   } = config;
-  return axiosInstance.get(
-    `/admin/discounts?page=${page}&limit=${limit}${
-      sortBy ? `&sortBy=${sortBy}&order=${discount}` : ""
-    }${keyword ? `&keyword=${keyword}` : ""}${type ? `&type=${type}` : ""}${status ? `&status=${status}` : ""}
-    ${
-      startDate ? `&startDate=${startDate}` : ""
-    }${expirationDate ? `&expirationDate=${expirationDate}` : ""}`
-  );
+
+  const queryParams = new URLSearchParams({
+    page,
+    limit,
+    ...(sortBy && { sortBy, order: discount }),
+    ...(keyword && { keyword }),
+    ...(type && { type }),
+    ...(status && { status }),
+    ...(startDate && { startDate }),
+    ...(expirationDate && { expirationDate }),
+  });
+
+  return axiosInstance.get(`/admin/discounts?${queryParams.toString()}`);
 };
 
 const deleteDiscountById = (discountId) => {
@@ -32,42 +37,48 @@ const deleteDiscountById = (discountId) => {
 
 const handleGetProductListAppliedByDiscount = (discountId, params) => {
   return axiosInstance.get(`/admin/discounts/products/${discountId}`, {
-    params
+    params,
   });
-}
+};
 
 const handleGetDiscountDetail = (discountId) => {
-    return axiosInstance.get(`/admin/discounts/${discountId}`)
-}
+  return axiosInstance.get(`/admin/discounts/${discountId}`);
+};
 
 const handleGetProductByDiscount = (discountId, params) => {
-    const {keyword} = params;
-    if (!keyword) delete params.keyword; 
-    return axiosInstance.get(`/admin/discounts/${discountId}/applied-products`, {params});
-}
+  const { keyword } = params;
+  if (!keyword) delete params.keyword;
+  return axiosInstance.get(`/admin/discounts/${discountId}/applied-products`, {
+    params,
+  });
+};
 
 const revokeDiscount = (discountId, productId) => {
-    const data = {productId}
-    return axiosInstance.delete(`/admin/discounts/${discountId}/applied-products`, {data} );
-}
+  const data = { productId };
+  return axiosInstance.delete(
+    `/admin/discounts/${discountId}/applied-products`,
+    { data }
+  );
+};
 
 const applyDiscount = (discountId, listProductId) => {
-    return axiosInstance.post(`/admin/discounts/${discountId}/applied-products`, {productIds: listProductId} );
-}
+  return axiosInstance.post(`/admin/discounts/${discountId}/applied-products`, {
+    productIds: listProductId,
+  });
+};
 
 const handleEditDiscount = (discountId, body) => {
-  return axiosInstance.patch(`/admin/discounts/${discountId}`, body)
-}
+  return axiosInstance.patch(`/admin/discounts/${discountId}`, body);
+};
 
 export {
-    handleGetProductListAppliedByDiscount,
-    handleGetDiscountDetail,
-    getAllDiscountsForAdmin, 
-    deleteDiscountById,
-    handleGetProductByDiscount,
-    revokeDiscount,
-    applyDiscount,
-    handleEditDiscount,
-    createDiscount,
-}
-
+  handleGetProductListAppliedByDiscount,
+  handleGetDiscountDetail,
+  getAllDiscountsForAdmin,
+  deleteDiscountById,
+  handleGetProductByDiscount,
+  revokeDiscount,
+  applyDiscount,
+  handleEditDiscount,
+  createDiscount,
+};
