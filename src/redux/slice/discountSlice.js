@@ -26,6 +26,7 @@ const initialState = {
   search: "",
   idSelected: "",
   type: "",
+  status: "",
   productSelected: null,
   pageShow: 0,
   pageSelected: 0,

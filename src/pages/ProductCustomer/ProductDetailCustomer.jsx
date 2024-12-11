@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ListImage from "../../components/ListImage/ListImage";
 import classes from "./ProductDetailCustomer.module.css";
 import { Button, Divider, Rating, Typography } from "@mui/material";
@@ -22,10 +22,12 @@ function ProductDetailCustomer() {
   const [availableSizes, setAvailableSizes] = useState([]);
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
+  const [showMore, setShowMore] = useState("");
   const [selectedQuantity, setSelectedQuantity] = useState(1);
-  const [selectedId, setSelectedId] = useState("");
+  const [selectedId, setSelectedId] = useState("less");
   const [quantity, setQuantity] = useState(null); // Initial value set to 1
   const [errorMessage, setErrorMessage] = useState("");
+  const containerRef = useRef(null);
   const dispatch = useDispatch();
 
   const userRole = useSelector((state) => state.auth.userInfo.role);
@@ -142,6 +144,18 @@ function ProductDetailCustomer() {
       setErrorMessage(error);
     }
   };
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      if (containerRef.current && containerRef.current.scrollHeight > 120) {
+        setShowMore("more");
+      } else {
+        setShowMore("");
+      }
+    };
+    checkOverflow();
+  }, [product]);
+
   return (
     <div className="wrapper" style={{ minHeight: "60vh", marginTop: "2rem" }}>
       <div className={classes.container}>
@@ -152,7 +166,21 @@ function ProductDetailCustomer() {
           />
         </div>
         <div className={classes.container_right}>
-          <Rating value={rating} readOnly size="medium" precision={0.5} />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            <Rating value={rating} readOnly size="medium" precision={0.5} />
+            {product?.totalReviews > 0 && (
+              <span>
+                {product?.totalReviews}{" "}
+                {product?.totalReviews >= 2 ? "reviews" : "review"}
+              </span>
+            )}
+          </div>
           <Typography variant="h5" sx={{ fontWeight: 600 }}>
             {product.name}
           </Typography>
@@ -283,16 +311,26 @@ function ProductDetailCustomer() {
           </Typography>
           <Divider />
           <div className={classes.description}>
-            {product.description &&
-              product.description
-                .toString()
-                .split("\\n")
-                .map((line, index) => (
-                  <div key={index}>
-                    {line}
-                    <br />
-                  </div>
-                ))}
+            <div className={`${classes.content} ${showMore && (showMore === "more" ? classes.collapse : classes.expand)}`} ref={containerRef}>
+              {product.description &&
+                product.description
+                  .toString()
+                  .split("\\n")
+                  .map((line, index) => (
+                    <div key={index}>
+                      {line}
+                      <br />
+                    </div>
+                  ))}
+            </div>
+            {showMore && 
+              <div 
+                className={classes.showMoreBtn}
+                onClick={()=>setShowMore(prev => prev === "more" ? "less" : "more")}
+              >
+                {showMore === "more" ? "Show more" : "Show less"}
+              </div>
+            }
           </div>
         </div>
       </div>
