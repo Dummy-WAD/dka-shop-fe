@@ -38,6 +38,7 @@ function EditDiscount({ handleClose, fetchDataDiscount }) {
     startDate,
     expirationDate,
   });
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   if (!currentDiscount) return null;
 
@@ -102,14 +103,14 @@ function EditDiscount({ handleClose, fetchDataDiscount }) {
         setIsLoading(false);
       }
     } else {
-      toast.error(message);
+      setError(message);
     }
   };
 
   return (
     <Box sx={{ width: "500px" }}>
       <Typography variant="h5" sx={{ fontWeight: "500", textAlign: "center" }}>
-        New Discount
+        Edit Discount
       </Typography>
       <Box sx={{ mt: "1rem" }}>
         <div className={classes.row}>
@@ -205,6 +206,11 @@ function EditDiscount({ handleClose, fetchDataDiscount }) {
             value={moment(formData?.expirationDate).format("DD/MM/YYYY")}
           />
         </div>
+        {error && (
+          <div style={{display: "flex", gap: "1rem", marginTop: "1rem", alignItems: "center"}}>
+            <p style={{color: "#d32f2f"}}>{error}</p>
+          </div>
+        )}
       </Box>
       <LoadingButton
         variant="contained"

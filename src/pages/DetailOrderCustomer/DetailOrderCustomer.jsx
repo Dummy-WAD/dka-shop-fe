@@ -24,6 +24,9 @@ import { useCallback, useEffect, useState } from "react";
 
 import { toast } from "react-toastify";
 import { CUSTOMER } from "../../config/roles";
+import ModalCustom from "../../components/Modal/BasicModal";
+import { useBoolean } from "../../hook/useBoolean";
+import CreateReview from "../../components/Review/CreateReview";
 
 const DetailOrderCustomer = () => {
   const { id } = useParams();
@@ -37,6 +40,8 @@ const DetailOrderCustomer = () => {
     (state) => state.auth
   );
   const { role, firstName: firstNameProfile, lastName: lastNameProfile } = user;
+  const [currentProductReviewed, setCurrentProductReviewed] = useState(null)
+  const reviewModal = useBoolean();
 
   const reasons = [
     "Want to change delivery address",
@@ -82,7 +87,9 @@ const DetailOrderCustomer = () => {
       setIsModalOpen(false);
       await getOrder(); // Reload order details
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to cancel the order.");
+      toast.error(
+        "Failed to cancel the order. Please choose one reason or try again later."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -133,6 +140,17 @@ const DetailOrderCustomer = () => {
                   quantity,
                 } = orderItem;
                 const productImageUrl = product?.productImages[0]?.image_url;
+                const currentProduct = {
+                  productId,
+                  size,
+                  color,
+                  productName,
+                  productImageUrl,
+                  price,
+                  quantity,
+                  isReviewed,
+                  orderItemId: orderItem?.id,
+                }
                 return (
                   <div
                     key={index}
@@ -140,20 +158,15 @@ const DetailOrderCustomer = () => {
                     onClick={() => navigate(`/product/${productId}`)}
                   >
                     <OrderCardItem
-                      product={{
-                        productId,
-                        size,
-                        color,
-                        productName,
-                        productImageUrl,
-                        price,
-                        quantity,
-                        isReviewed,
-                        orderItemId: orderItem?.id,
-                      }}
+                      product={currentProduct}
                       orderStatus={order?.status}
                       isFromDetailOrder
                       onGetOrderDetail={getOrder}
+                      handleClickOnReviewButton={(e) => {
+                        e.stopPropagation()
+                        setCurrentProductReviewed(currentProduct)
+                        reviewModal.setTrue()
+                      }}
                     />
                   </div>
                 );
@@ -213,6 +226,13 @@ const DetailOrderCustomer = () => {
         </Grid2>
       </div>
 
+      <ModalCustom
+        isOpen={reviewModal.value}
+        handleClose={reviewModal.setFalse}
+      >
+        <CreateReview handleClose={reviewModal.setFalse} product={currentProductReviewed} onGetOrderDetail={getOrder}/>
+      </ModalCustom>
+
       {/* Modal */}
       <Modal
         open={isModalOpen}
@@ -261,7 +281,6 @@ const DetailOrderCustomer = () => {
                 multiline
                 rows={3}
                 variant="outlined"
-                label="Other"
                 placeholder="Enter your reason..."
                 value={cancelReason}
                 onChange={(e) => setCancelReason(e.target.value)}
@@ -284,6 +303,20 @@ const DetailOrderCustomer = () => {
           </Box>
           <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
             <Button
+              variant="outlined"
+              onClick={() => setIsModalOpen(false)}
+              fullWidth
+              sx={{
+                color: "black",
+                borderColor: "black",
+                "&:hover": {
+                  backgroundColor: "#f0f0f0",
+                },
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
               variant="contained"
               onClick={handleCancelOrder}
               disabled={isLoading}
@@ -297,20 +330,6 @@ const DetailOrderCustomer = () => {
               }}
             >
               {isLoading ? "Processing..." : "Confirm"}
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={() => setIsModalOpen(false)}
-              fullWidth
-              sx={{
-                color: "black",
-                borderColor: "black",
-                "&:hover": {
-                  backgroundColor: "#f0f0f0",
-                },
-              }}
-            >
-              Cancel
             </Button>
           </Box>
         </Box>

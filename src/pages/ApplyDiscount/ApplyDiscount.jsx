@@ -137,7 +137,7 @@ const ApplyDiscount = ({}) => {
             })
         } catch (err) {
             console.error(err);
-            toast.error("Apply failed", {
+            toast.error(err.response.data.message, {
                 autoClose: 3000,
             })
         }

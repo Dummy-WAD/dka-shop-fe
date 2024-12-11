@@ -64,13 +64,20 @@ const CheckoutSummary = ({
             />
             Cash on delivery
           </label>
-          <label className={styles.paymentOption}>
+          <label
+            className={styles.paymentOption}
+            style={{
+              color: "#bdbdbd",
+              border: "1px solid #bdbdbd",
+            }}
+          >
             <input
               type="radio"
               name="payment"
               value="momo"
               checked={paymentMethod === "momo"}
               onChange={() => handlePaymentChange("momo")}
+              disabled
             />
             Pay with Momo
           </label>
